@@ -80,7 +80,6 @@ typedef void (__stdcall *SENDRECVCALLBACK)(ULONG current, ULONG all);
 typedef BOOLEAN (__stdcall *init)(int SERVER_PORT);
 
 //Usage:        Uninitialize DLL.
-//Parameters:   (NONE).
 //Return value: Success or fail (TRUE or FALSE).
 typedef BOOLEAN (__stdcall *uninit)();
 
