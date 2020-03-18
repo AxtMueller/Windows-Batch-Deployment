@@ -132,7 +132,7 @@ DWORD FunctionTest(void *parameter)
 			}
 			if(stricmp(g_szLatestClientVersion, szClientVersion))
 			{
-				printf("[%04ld]THE CLIENT NEED UPDATE.\n",p->id);
+				printf("[%04ld]THE CLIENT NEED TO BE UPDATED.\n",p->id);
 				if(_ClientUpdate(p->id,file))
 				{
 					printf("[%04ld]Update client successfully.\n",p->id);
@@ -146,7 +146,7 @@ DWORD FunctionTest(void *parameter)
 			}
 			else
 			{
-				printf("[%04ld]THE CLIENT DOES NOT NEED UPDATE.\n",p->id);
+				printf("[%04ld]THE CLIENT DOES NOT NEED TO BE UPDATED.\n",p->id);
 			}
 		}
 		else
@@ -162,12 +162,12 @@ DWORD FunctionTest(void *parameter)
 			}
 			if(_ClientUpdate(p->id,file))
 			{
-				printf("[%04ld]Test update successfully.\n",p->id);
+				printf("[%04ld]Update client (test) successfully.\n",p->id);
 				strcpy(szClientVersion, g_szLatestClientVersion);
 			}
 			else
 			{
-				printf("[%04ld]Test update unsuccessfully.\n",p->id);
+				printf("[%04ld]Update client (test) unsuccessfully.\n",p->id);
 				goto __exit;
 			}
 		}
