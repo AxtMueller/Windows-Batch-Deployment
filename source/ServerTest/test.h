@@ -1,9 +1,8 @@
-﻿/*
+/*
 	Author: Axt Müller
 	Description: Windows-Batch-Deployment DLL head file.
 	Warning: DO NOT MODIFY THIS FILE OR THE DLL WILL MALFUNCTION.
 */
-
 //################################################################################
 // Windows-Batch-Deployment constants
 //################################################################################
