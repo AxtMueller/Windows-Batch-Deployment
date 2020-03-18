@@ -72,7 +72,6 @@ typedef struct _BDP_FILE_INFO
 //################################################################################
 //Usage:        (internal use).
 //Parameters:   (internal use).
-//Return value: (internal use).
 typedef void (__stdcall *SENDRECVCALLBACK)(ULONG current, ULONG all);
 
 //Usage:        Initialize DLL.
