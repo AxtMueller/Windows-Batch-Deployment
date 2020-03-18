@@ -33,7 +33,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client files. As for negative report from Anti-Virus software, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
 # Screenshots
-Unfortunately, this software runs in the background, so there are no screenshots. These screenshots are the interface of the demonstration server program.
+These screenshots are the interface of the demonstration server program.
 ![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/1.png)
 ![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/2.png)
 ![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/3.png)
