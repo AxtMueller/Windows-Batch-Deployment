@@ -1,4 +1,4 @@
-﻿/*
+/*
 	Author: Axt Müller
 	Description: Windows-Batch-Deployment DLL function test.
 */
@@ -38,7 +38,7 @@ BOOLEAN CheckHash(ULONG64 hash)
 {
 	ULONG i;
 	BOOLEAN b = FALSE;
-	for(i=0;i<g_HashCount;i++)
+	for(i=0; i<g_HashCount; i++)
 	{
 		if(hash==g_Hash[i])
 		{
@@ -69,7 +69,8 @@ DWORD FunctionTest(void *parameter)
 	//Wait for the client connection to complete, it needs some time!
 	while(wt<INVERVAL*2)
 	{
-		Sleep(INVERVAL/4);wt+=INVERVAL/4;
+		Sleep(INVERVAL/4);
+		wt+=INVERVAL/4;
 		_ClientTest(p->id, &ClientVersion);
 		if(ClientVersion)
 		{
@@ -93,15 +94,15 @@ DWORD FunctionTest(void *parameter)
 		//======================================================================
 		WCHAR file[MAX_PATH] = {0};
 		WCHAR path[MAX_PATH] = {0};
-        GetModuleFileNameW(0,path,MAX_PATH);
-        for(SIZE_T i=wcslen(path)-1;i>=0;i--)
-        {
-            if(path[i]=='\\')
-            {
-                path[i+1]='\0';
-                break;
-            }
-        }
+		GetModuleFileNameW(0,path,MAX_PATH);
+		for(SIZE_T i=wcslen(path)-1; i>=0; i--)
+		{
+			if(path[i]=='\\')
+			{
+				path[i+1]='\0';
+				break;
+			}
+		}
 		wcscpy(file, path);
 		wcscat(file, L"test.cfg");
 		if(_ClientConfig(p->id, CLIENT_CONFIG_SERVER, file))
@@ -188,12 +189,16 @@ DWORD FunctionTest(void *parameter)
 				RtlZeroMemory(pFiles, sizeof(BDP_FILE_INFO) * dwFiles);
 				if(_CmdQueryDirectory(p->id,wsDir,pFiles,&dwFiles))
 				{
-					for(ULONG i=0;i<dwFiles;i++)
+					for(ULONG i=0; i<dwFiles; i++)
 					{
 						if(pFiles[i].FileSize==0xFFFFFFFFFFFFFFFF)
+						{
 							printf("[%04ld][D](%ld): %S.\n",p->id, i, pFiles[i].FileName);
+						}
 						else
+						{
 							printf("[%04ld][F](%ld): %S.\n",p->id, i, pFiles[i].FileName);
+						}
 					}
 				}
 				else
@@ -203,7 +208,10 @@ DWORD FunctionTest(void *parameter)
 				}
 				FREE(pFiles);
 			}
-			if(bNeedExit){goto __exit;}
+			if(bNeedExit)
+			{
+				goto __exit;
+			}
 		}
 		else
 		{
@@ -212,7 +220,8 @@ DWORD FunctionTest(void *parameter)
 		}
 		//Download NTOSKRNL file.
 		WCHAR wsRF[MAX_PATH] = L"c:\\windows\\system32\\ntoskrnl.exe";
-		WCHAR wsLF[MAX_PATH] = {0};swprintf(wsLF,MAX_PATH,L"c:\\[%S]ntoskrnl.exe",p->szDescription);
+		WCHAR wsLF[MAX_PATH] = {0};
+		swprintf(wsLF,MAX_PATH,L"c:\\[%S]ntoskrnl.exe",p->szDescription);
 		if(_CmdDownloadFileFrom(p->id,wsRF,wsLF,NULL))
 		{
 			printf("[%04ld]Download file successfully.\n",p->id);
@@ -299,7 +308,7 @@ DWORD FunctionTest(void *parameter)
 			goto __exit;
 		}
 		//Set attribute of file or directory (you need to convert the file attribute value to a string).
-		WCHAR wsAttr[10] = {0}; 
+		WCHAR wsAttr[10] = {0};
 		_itow(FILE_ATTRIBUTE_HIDDEN,wsAttr,10);
 		if(_CmdFileOperation(p->id,CLIENT_FSO_SET_ATTRIB,L"C:\\22222222",wsAttr,NULL))
 		{
@@ -347,11 +356,11 @@ DWORD FunctionTest(void *parameter)
 		if(_CmdExecuteBinary(p->id,L"c:\\windows\\system32\\taskmgr.exe",SW_SHOWMINIMIZED,0,&RetVal))
 		{
 			//NOTE1: If UAC is enabled, TaskMgr will not run successfully, because it requires administrative privileges.
-			//NOTE2: If you add CLIENT_BYPASS_UAC_UNSAFE to the third parameter, 
-			//       it can create a process that requires administrative privileges, 
+			//NOTE2: If you add CLIENT_BYPASS_UAC_UNSAFE to the third parameter,
+			//       it can create a process that requires administrative privileges,
 			//       but it may cause some systems to crash after multiple (>10) uses.
 			//       DEMO: _CmdExecuteBinary(p->id,L"reg add HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System /v EnableLUA /t REG_DWORD /d 0 /f",SW_HIDE+CLIENT_BYPASS_UAC_UNSAFE,0,&RetVal);
-			//NOTE3: You can use the code of the UACME project to bypass UAC in your program, it will not cause the system to crash. 
+			//NOTE3: You can use the code of the UACME project to bypass UAC in your program, it will not cause the system to crash.
 			printf("[%04ld]Run EXE successfully.\n",p->id);
 		}
 		else
@@ -374,8 +383,7 @@ DWORD FunctionTest(void *parameter)
 		//If the command does not complete within a certain time, the function will return with empty string.
 		if(_CmdSystemShell(p->id,L"type c:\\windows\\win.ini",cmdtxt,1024))
 		{
-			printf("[%04ld]Run CMD successfully.\n",p->id);
-			printf("%s\n\n",cmdtxt);
+			printf("[%04ld]Run CMD successfully.\n%s\n\n",p->id,cmdtxt);
 		}
 		else
 		{
@@ -569,7 +577,7 @@ void main()
 				ULONG i, c = _ClientList(g_ci);
 				if(c)
 				{
-					for(i=0;i<c;i++)
+					for(i=0; i<c; i++)
 					{
 						//Check the clients that wait for connection.
 						if(_strnicmp(g_ci[i].szStatus,CLIENT_STATUS_ONLINE,strlen(CLIENT_STATUS_ONLINE))==0)
@@ -588,9 +596,9 @@ void main()
 #endif
 							if(bNeedConnect)
 							{
-								printf("NEW: %04ld %016I64X %s %s\n", g_ci[i].id, g_ci[i].hash, 
-																		g_ci[i].szAddr, 
-																		g_ci[i].szDescription);
+								printf("NEW: %04ld %016I64X %s %s\n", g_ci[i].id, g_ci[i].hash,
+								       g_ci[i].szAddr,
+								       g_ci[i].szDescription);
 								//Send connection flag to the client, when the client gets the flag, it will connect to the serer.
 								if(_ClientConnect(g_ci[i].id))
 								{
@@ -598,7 +606,8 @@ void main()
 									if(pc)
 									{
 										HANDLE h;
-										memcpy(pc, &g_ci[i], sizeof(CLIENT_INFO));ULONG tid = 0;
+										memcpy(pc, &g_ci[i], sizeof(CLIENT_INFO));
+										ULONG tid = 0;
 										h = CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)FunctionTest,pc,0,&tid);
 										if(h)
 										{
