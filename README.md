@@ -32,12 +32,9 @@ Because I don't have a digital certificate, I have to use the leaked digital cer
 3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen.
 4. You are a voyeur and you want to take a screenshot every 10 seconds to monitor what your spouse is doing on his / her computer (just kidding, this is illegal).
 
-# Screenshots
-These screenshots are the interface of the demonstration server program.
+# [Screenshots](/screenshots)
+In order to optimize the page load speed in low quality network environments, I only placed one picture on this page. 
 ![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/1.png)
-![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/2.png)
-![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/3.png)
-![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/4.png)
 
 # Contact
 ### E-MAIL: AxtMueller#gmx.de (Replace # with @)
