@@ -30,7 +30,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 4. You are a voyeur and you want to take a screenshot every 10 seconds to monitor what your spouse is doing on his / her computer (just kidding, this is illegal).
 
 ### About digital signature and negative report from Anti-Virus softwares
-Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client files. As for negative report from Anti-Virus software, any program of this type is considered a virus by Anti-Virus software, so who cares.
+Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative report, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
 # Screenshots
 These screenshots are the interface of the demonstration server program.
