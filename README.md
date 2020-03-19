@@ -7,9 +7,9 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 
 ### Main Features
 1. File management (upload, download, copy, delete, rename, etc.).
-2. Run user-defined programs or drivers at system startup.
-3. Execute programs, drivers and system shell (CMD).
-4. Shut down or reboot the system.
+2. Run programs or drivers and system shell (CMD).
+3. Shut down or reboot the system.
+4. The client protects itself against unauthorized uninstallation.
 
 ### How to configure and install WBD?
 1. Edit “InstallClient.bat”, fill in the IP address or domain name (including port) of your server. Note: If you use WBD on the wide area network (WAN), you must have a server. If you only use WBD on the local area network (LAN, such as at home), you can use your own PC.
