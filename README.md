@@ -7,7 +7,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 
 ### Main Features
 1. File management (upload, download, copy, delete, rename, etc.).
-2. Run programs or drivers and system shell (CMD).
+2. Run program, driver and system shell (CMD).
 3. Shut down or reboot the system.
 4. The client protects itself against unauthorized uninstallation.
 
@@ -20,7 +20,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 2. WBD provides DLL (both 32-bit and 64-bit) for advanced users, you can write your server program based on the sample source code.
 
 ### How to uninstall WBD?
-1. WBD server DLL provides this feature.
+1. Call the related function from WBD server DLL (read demo code for details).
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
 ### Application scenario
