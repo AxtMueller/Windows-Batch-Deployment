@@ -9,7 +9,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 1. File management (upload, download, copy, delete, rename, etc.).
 2. Run program, driver and system shell (CMD).
 3. Shut down or reboot the system.
-4. The client protects itself against unauthorized uninstallation. The self-protection feature takes effect after system reboot of installation. If debug mode is enabled, the self-protection feature will be disabled.
+4. The client protects itself against unauthorized uninstallation. The self-protection feature takes effect after system reboot of installation. If debug mode is enabled, the self-protection feature will be disabled. If you are interested in this feature, please check [this page](https://github.com/AxtMueller/Windows-Batch-Deployment/issues/1).
 
 ### How to configure and install WBD?
 1. Edit “InstallClient.bat”, fill in the IP address or domain name (including port) of your server. Note: If you use WBD on the wide area network (WAN), you must have a server. If you only use WBD on the local area network (LAN, such as at home), you can use your own PC.
