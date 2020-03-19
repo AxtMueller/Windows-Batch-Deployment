@@ -3,13 +3,13 @@
 You can only use this software on your computers or computers which you have the right to use, and I will not be responsible for any consequences and losses caused by the abuse of this software.
 
 # Introduction
-Windows Batch Deployment (you can simply call it as "WBD") is a programmable and rootkit-like remote access tool, it supports from Windows XP to Windows 10 (32-bit and 64-bit). Compared with other remote access software, WBD does not have a server program in the traditional sense. WBD only provides a server DLL, and users must write server programs according to their needs. Therefore, WBD maximally meets the individual needs of users. WBD client is a kernel-mode driver without user-mode component, it hides its traces as much as possible, and the goal is to keep the user's attention as little as possible. WBD client can run user-defined programs when system starts, user-defined programs do not store on the disk in the form of files, and there are no startup entries in the registry. As WBD may be used illegally, when WBD client starts, it outputs a text file to the desktop or the root of system drive to inform its existence and how to uninstall manually. If debug mode is enabled, the self-protection feature will not be enabled.
+Windows Batch Deployment (you can simply call it as "WBD") is a programmable and rootkit-like remote access tool, it supports from Windows XP to Windows 10 (32-bit and 64-bit). Compared with other remote access software, WBD does not have a server program in the traditional sense. WBD only provides a server DLL, and users must write server programs according to their needs. Therefore, WBD maximally meets the individual needs of users. WBD client is a kernel-mode driver without user-mode component, it hides its traces as much as possible, and the goal is to keep the user's attention as little as possible. WBD client can run user-defined programs when system starts, user-defined programs do not store on the disk in the form of files, and there are no startup entries in the registry. As WBD may be used illegally, when WBD client starts, it outputs a text file to the desktop or the root of system drive to inform its existence and how to uninstall manually.
 
 ### Main Features
 1. File management (upload, download, copy, delete, rename, etc.).
 2. Run program, driver and system shell (CMD).
 3. Shut down or reboot the system.
-4. The client protects itself against unauthorized uninstallation.
+4. The client protects itself against unauthorized uninstallation. The self-protection feature takes effect after system reboot of installation. If debug mode is enabled, the self-protection feature will not be enabled.
 
 ### How to configure and install WBD?
 1. Edit “InstallClient.bat”, fill in the IP address or domain name (including port) of your server. Note: If you use WBD on the wide area network (WAN), you must have a server. If you only use WBD on the local area network (LAN, such as at home), you can use your own PC.
