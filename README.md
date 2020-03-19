@@ -45,7 +45,7 @@ These screenshots are the interface of the demonstration server program.
 2. You'd better write E-MAIL in English or German, I only reply to E-MAILs that I am interested in.
 ### Paid services:
 1. Binary customization I: Remove or modify all obvious characteristics of public WBD client.
-2. Binary customization II: More powerful self-protection for WBD client and different characteristic of data packet.
+2. Binary customization II: More powerful self-protection for WBD client, and different characteristic of data packet.
 2. Binary customization III: Add more features based on your needs.
 4. Source code: Entire source code of WBD.
 
