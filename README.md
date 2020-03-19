@@ -23,14 +23,14 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 1. Call the related function from WBD server DLL (read sample source code for details).
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
-### Application scenario
+### About digital signature and negative report from Anti-Virus softwares
+Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative report, any program of this type is considered a virus by Anti-Virus software, so who cares.
+
+# Application scenario
 1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules and scripts, pushing notifications, etc.).
 2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users).
 3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen.
 4. You are a voyeur and you want to take a screenshot every 10 seconds to monitor what your spouse is doing on his / her computer (just kidding, this is illegal).
-
-### About digital signature and negative report from Anti-Virus softwares
-Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative report, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
 # Screenshots
 These screenshots are the interface of the demonstration server program.
