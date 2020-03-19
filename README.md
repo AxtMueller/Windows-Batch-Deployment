@@ -20,7 +20,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 2. WBD provides DLL (both 32-bit and 64-bit) for advanced users, you can write your server program based on the sample source code.
 
 ### How to uninstall WBD?
-1. Call the related function from WBD server DLL (read demo code for details).
+1. Call the related function from WBD server DLL (read sample source code for details).
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
 ### Application scenario
