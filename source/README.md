@@ -9,4 +9,4 @@ VB6 source code example of using server DLL.
 C++ source code example of user-defined DLL.
 
 ### UserDrvDemo
-C++ source code example of user-defined driver and update-test driver.
+C source code example of user-defined driver and update-test driver.
