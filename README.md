@@ -27,7 +27,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative comment, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
 # Application Scenario Examples
-1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules and scripts, pushing notifications, etc.).
+1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules and scripts, pushing notifications). I used to work in this post, this is my original purpose of making this software.
 2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users).
 3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen.
 4. You are a voyeur and you want to take a screenshot every 10 seconds to monitor what your spouse is doing on his / her computer (just kidding, this is illegal).
