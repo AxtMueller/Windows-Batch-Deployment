@@ -48,4 +48,6 @@ In order to optimize the page load speed in low quality network environments, I 
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20200202
+This is the first public version.
 ### Server Version: 20200202
+This is the first public version.
