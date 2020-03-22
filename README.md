@@ -26,6 +26,9 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 ### About digital signature and negative comment from Anti-Virus softwares
 Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative comment, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
+### Share programs
+If you want to share your server programs or user-defined programs, please commit the program and / or source code to the "Issues" area. If I think your programs are useful, I will add your programs to the "Third-Party Programs" directory.
+
 # Application Scenario Examples
 1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules and scripts, pushing notifications). I used to work in this post, this is my original purpose of making this software.
 2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users).
