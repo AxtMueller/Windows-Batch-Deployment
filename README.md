@@ -23,7 +23,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 1. Call the related function from WBD server DLL (read sample source code for details).
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
-### About digital signature and negative comment from Anti-Virus softwares
+### About digital signature and negative comment from Anti-Virus software
 Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative comment, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
 ### Share programs
