@@ -45,9 +45,9 @@ In order to optimize the page load speed in low quality network environments, I 
 2. You'd better write E-MAIL in English or German, I only reply to E-MAILs that I am interested in.
 ### Paid services:
 1. Binary customization I: Remove or modify all obvious characteristics of public WBD client.
-2. Binary customization II: More powerful self-protection for WBD client, and different characteristic of data packet.
-2. Binary customization III: Add more features based on your needs.
-4. Source code: Entire source code of WBD.
+2. Binary customization II: More powerful self-protection for WBD client.
+3. Source code: Provide you the entire source code of WBD.
+4. Source code customization: Provide you the entire source code of WBD, and add features based on your needs.
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20200202
