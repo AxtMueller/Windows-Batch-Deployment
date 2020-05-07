@@ -9,5 +9,11 @@ Binary files of Windows Batch Deployment.
 5. Select the local system in the client list (its IP is 127.0.0.1 and its status is "Online"), and then click the "Connect" button.
 6. When its status changes to "Connected", you can submit operations. When you are finished, click the "Disconnect" button.
 # All revision history
-### 1st version: 20200202
+### Client Versions:
+#### 2nd version: 20200505
+[This is the latest version.](../README.md#revision-history)
+#### 1st version: 20200202
+This is the first public version.
+### Server Versions:
+#### 1st version: 20200202
 [This is the latest version.](../README.md#revision-history)
