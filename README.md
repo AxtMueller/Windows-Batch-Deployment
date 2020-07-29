@@ -45,8 +45,8 @@ In order to optimize the page load speed in low quality network environments, I 
 ### Paid services:
 1. Binary customization I: Remove or modify all obvious characteristics of public WBD client.
 2. Binary customization II: More powerful self-protection for WBD client.
-3. Source code: The entire source code of WBD.
-4. Source code customization: The entire source code of WBD, and add features based on your needs. Source code customization is only available to customers who have purchased the source code.
+3. Source code: All source code of WBD, including client and server.
+4. Source code customization: Add features to WBD based on your needs. Source code customization is only available to customers who have purchased the WBD source code.
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20200505
