@@ -31,8 +31,10 @@ shutdown /f /r /t 0
 
 # All revision history
 ### Client Versions:
-#### 2nd version: 20200505
+#### 3nd version: 20201111
 [This is the latest version.](../README.md#revision-history)
+#### 2nd version: 20200505
+Bug fix: Enhanced stability.
 #### 1st version: 20200202
 This is the first public version.
 ### Server Versions:
