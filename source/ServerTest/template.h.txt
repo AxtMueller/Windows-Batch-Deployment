@@ -1,0 +1,242 @@
+/*
+	Author: Axt M¨¹ller
+	Description: Windows-Batch-Deployment simple user-defined server program templete header file.
+	Warning: DO NOT MODIFY THIS FILE, OTHERWISE THE DLL WILL MALFUNCTION.
+*/
+//################################################################################
+// The maximum number of clients (this value can be modified according to demand)
+//################################################################################
+#define MAX_CONNECT_REQUEST			4096
+
+//################################################################################
+// Common function macros
+//################################################################################
+#define MALLOC(l) VirtualAlloc(NULL, (l), MEM_COMMIT, PAGE_READWRITE)
+#define FREE(p) VirtualFree((p), 0, MEM_RELEASE)
+
+//################################################################################
+// Windows-Batch-Deployment constants
+//################################################################################
+#define CLIENT_STATUS_ONLINE		"online"
+#define CLIENT_STATUS_OFFLINE		"offline"
+#define CLIENT_STATUS_CONNECTED		"connected"
+
+#define CLIENT_CONFIG_SERVER		0
+
+#define CLIENT_BYPASS_UAC_UNSAFE	100
+
+#define CLIENT_RUN_DLL_P1			-2
+#define CLIENT_RUN_DLL_P2			-1
+#define CLIENT_RUN_SYS_P1			-1
+#define CLIENT_RUN_SYS_P2			-1
+
+#define CLIENT_FSO_CREATE_FILE		0
+#define CLIENT_FSO_CREATE_DIRECTORY	1
+#define CLIENT_FSO_COPY				2
+#define CLIENT_FSO_DELETE			3
+#define CLIENT_FSO_RENAME			4
+#define CLIENT_FSO_SET_ATTRIB		5
+#define CLIENT_FSO_GET_ATTRIB		6
+#define CLIENT_FSO_HTTP_DOWNLOAD	7
+
+#define CLIENT_AUTORUN_TYPE_SYS		0
+#define CLIENT_AUTORUN_TYPE_EXE		1
+#define CLIENT_AUTORUN_TYPE_DLL		2
+
+//################################################################################
+// Windows-Batch-Deployment structures
+//################################################################################
+#pragma pack(1)
+typedef struct _CLIENT_INFO
+{
+	long id;
+	unsigned long long hash;
+	char szAddr[32];
+	char szStatus[32];
+	char szDescription[32+20];
+}CLIENT_INFO, *PCLIENT_INFO;
+
+typedef struct _BDP_FILE_TIME
+{
+	USHORT Year;
+	UCHAR Month;
+	UCHAR Day;
+	UCHAR Hour;
+	UCHAR Minute;
+	UCHAR Second;
+	UCHAR Weekday;
+} BDP_FILE_TIME;
+
+typedef struct _BDP_FILE_INFO
+{
+	BDP_FILE_TIME FileModifyTime;
+	ULONG64 FileSize;
+	WCHAR FileName[248];
+}BDP_FILE_INFO, *PBDP_FILE_INFO;
+#pragma pack()
+
+//################################################################################
+// Windows-Batch-Deployment function prototypes
+//################################################################################
+//Usage:        (internal use).
+//Parameters:   (internal use).
+typedef void (__stdcall *SENDRECVCALLBACK)(ULONG current, ULONG all);
+
+//Usage:        Initialize DLL.
+//Parameters:   The port to use.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *init)(int SERVER_PORT);
+
+//Usage:        Uninitialize DLL.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *uninit)();
+
+//Usage:        List all online clients.
+//Parameters:   Buffer for clients information (caller allocates the buffer).
+//Return value: Client count.
+typedef ULONG (__stdcall *ClientList)(PCLIENT_INFO BufferProvidedByCaller);
+
+//Usage:        Let the specific client connect to the server.
+//Parameters:   Client Id.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      This function must be called before performing any operation on the client.
+typedef BOOLEAN (__stdcall *ClientConnect)(ULONG id);
+
+//Usage:        Disconnect the specific client.
+//Parameters:   Client Id.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *ClientDisconnect)(ULONG id);
+
+//Usage:        Test if the specific client is connected to the server.
+//Parameters:   Client Id, Buffer for 8-bytes hash value.
+//Return value: Success or fail (TRUE or FALSE). 
+//Remarks:      If the function returns success, the client's hash value will be copied to the buffer.
+typedef BOOLEAN (__stdcall *ClientTest)(ULONG id, PULONG64 pHash);
+
+//Usage:        Reboot the specific client.
+//Parameters:   Client Id.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *ClientReboot)(ULONG id);
+
+//Usage:        Shutdown the specific client.
+//Parameters:   Client Id.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *ClientShutdown)(ULONG id);
+
+//Usage:        Update or uninstall the specific client.
+//Parameters:   Client Id, New client file path.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      If parameter 2 is NULL, the function will uninstall the client.
+typedef BOOLEAN (__stdcall *ClientUpdate)(ULONG id, PWCHAR wsLocalFile);
+
+//Usage:        Configure the specific client.
+//Parameters:   Client Id, Configuration Id, Configuration file path.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      Currently, Configuration Id can only be CLIENT_CONFIG_SERVER (set server domain or IP address). 
+//              For the format of the configuration file, please read "test.cfg".
+typedef BOOLEAN (__stdcall *ClientConfig)(ULONG id, UCHAR ConfigId, PWCHAR wsLocalConfigFilePath);
+
+//Usage:        Query directory on the specific client.
+//Parameters:   Client Id, Directory path, Buffer for files information, Structure count.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      If the function returns success, parameter 4 will be updated to the actual file count.
+typedef BOOLEAN (__stdcall *CmdQueryDirectory)(ULONG id, PWCHAR path, PBDP_FILE_INFO BufferProvidedByCaller, PULONG pStructCount);
+
+//Usage:        Upload file to the specific client.
+//Parameters:   Client Id, Local file, Remote file, NULL.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *CmdUploadFileTo)(ULONG id, PWCHAR wsLocalFile, PWCHAR wsRemoteSaveTo, SENDRECVCALLBACK callback);
+
+//Usage:        Download file from the specific client.
+//Parameters:   Client Id, Remote file, Local file, NULL.
+//Return value: Success or fail (TRUE or FALSE).
+typedef BOOLEAN (__stdcall *CmdDownloadFileFrom)(ULONG id, PWCHAR wsRemoteFile, PWCHAR wsLocalSaveTo, SENDRECVCALLBACK callback);
+
+//Usage:        Execute binary on the specific client.
+//Parameters:   Client Id, Remote file, Window mode, Timeout of waiting, Return data.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      Binary can be EXE, DLL or SYS.
+//              EXE: parameter 3 can be SW_HIDE to SW_MAX, parameter 4 can be 0 to INFINITE, return data is the PID of the process.
+//                   UAC may cause problems with this feature, if you use CLIENT_BYPASS_UAC_UNSAFE on parameter 3, UAC will be bypassed.
+//                   However, CLIENT_BYPASS_UAC_UNSAFE may cause some systems to crash after multiple (>10) uses, so this flag is not recommended.
+//              DLL: parameter 3 and 4 must be CLIENT_RUN_DLL_P1 and CLIENT_RUN_DLL_P2, return data is the PID of RUNDLL32.EXE
+//              SYS: parameter 3 and 4 must be CLIENT_RUN_SYS_P1 and CLIENT_RUN_SYS_P2, return data is driver object.
+typedef BOOLEAN (__stdcall *CmdExecuteBinary)(ULONG id, PWCHAR path, BOOLEAN wndmode, ULONG waittmo, PULONG64 pRetVal);
+
+//Usage:        Execute system shell on the specific client, and get the return string.
+//Parameters:   Client Id, Command line, String buffer, Maximum length of string buffer.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      If the command takes more than 10 seconds to execute, it will time out.
+//              The maximum length of the command is 498 characters.
+typedef BOOLEAN (__stdcall *CmdSystemShell)(ULONG id, PWCHAR param, PCHAR Buffer, ULONG Length);
+
+//Usage:        Perform a file operation on the specific client.
+//Parameters:   Client Id, Sub function Id, path 1, path 2, Return data.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      [Sub function Id feature]
+//              CLIENT_FSO_CREATE_FILE:      Create a file.
+//              CLIENT_FSO_CREATE_DIRECTORY: Create a directory.
+//              CLIENT_FSO_COPY:             Copy file or directory.
+//              CLIENT_FSO_DELETE:           Delete file or directory.
+//              CLIENT_FSO_RENAME:           Rename file or directory.
+//              CLIENT_FSO_SET_ATTRIB:       Set attribute of file or directory.
+//              CLIENT_FSO_GET_ATTRIB:       Query attribute of file or directory.
+//              CLIENT_FSO_HTTP_DOWNLOAD:    Download file via HTTP link, HTTPS links are not supported.
+//              [Sub function Id parameters]
+//              CLIENT_FSO_CREATE_FILE:      path 1 = new file path,                path 2 = content (<=249 characters), Return data = NULL.
+//              CLIENT_FSO_CREATE_DIRECTORY: path 1 = new directory path,           path 2 = NULL,                       Return data = NULL.
+//              CLIENT_FSO_COPY:             path 1 = source file / directory path, path 2 = target file/directory path, Return data = NULL.
+//              CLIENT_FSO_DELETE:           path 1 = file / directory path,        path 2 = NULL,                       Return data = NULL.
+//              CLIENT_FSO_RENAME:           path 1 = file / directory path,        path 2 = new path name,              Return data = NULL.
+//              CLIENT_FSO_SET_ATTRIB:       path 1 = file / directory path,        path 2 = attribute value,            Return data = NULL.
+//              CLIENT_FSO_GET_ATTRIB:       path 1 = file / directory path,        path 2 = NULL,                       Return data = attribute value.
+//              CLIENT_FSO_HTTP_DOWNLOAD:    path 1 = URL,                          path 2 = path to save the file,      Return data = NULL.
+typedef BOOLEAN (__stdcall *CmdFileOperation)(ULONG id, BYTE fn, PWCHAR path1, PWCHAR path2, PULONG pRetVal);
+
+//Usage:        Add an auto-run item (when Windows-Batch-Deployment starts up, it will load all auto-run items).
+//Parameters:   Client Id, Item type, Item name, File path, Arguments for the program.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      [Item type]
+//              CLIENT_AUTORUN_TYPE_SYS:     Kernel mode driver.
+//              CLIENT_AUTORUN_TYPE_EXE:     User mode program.
+//              CLIENT_AUTORUN_TYPE_DLL:     User mode DLL.
+//              [Arguments for the program]
+//              CLIENT_AUTORUN_TYPE_SYS:     NULL.
+//              CLIENT_AUTORUN_TYPE_EXE:     Command line, can be NULL.
+//              CLIENT_AUTORUN_TYPE_DLL:     Exported function name and parameter(s), cannot be NULL.
+typedef BOOLEAN (__stdcall *CmdAddAutoRunBin)(ULONG id, BYTE type, PWCHAR name, PWCHAR path, PWCHAR param);
+
+//Usage:        Delete an auto-run item.
+//Parameters:   Client Id, Item type, Item name.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      Description of parameter 2 is in the "Remarks" section of CmdAddAutoRunBin.
+typedef BOOLEAN (__stdcall *CmdDelAutoRunBin)(ULONG id, BYTE type, PWCHAR name);
+
+//Usage:        Query all auto-run items.
+//Parameters:   Client Id, Item type, Buffer for item names.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      Description of parameter 2 is in the "Remarks" section of CmdAddAutoRunBin.
+//              If one or more items exist, structure of parameter 3 is a sequence of null-terminated strings, terminated by an empty string (\0). 
+//              The first "\0" terminates the first string, the second to the last "\0" terminates the last string, and the final "\0" terminates the sequence.
+//              The following is an example: "Name1\0Name2\0...\0LastName\0\0". 
+//              If no item exists, the string will be "((LEER))\0\0".
+//              You need to call VirtualFree to free the memory of names.
+typedef BOOLEAN (__stdcall *CmdQueryAutoRunBin)(ULONG id, BYTE type, PWCHAR *names);
+
+//Usage:        Delete all auto-run items.
+//Parameters:   Client Id, Item type.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      Description of parameter 2 is in the "Remarks" section of CmdAddAutoRunBin.
+typedef BOOLEAN (__stdcall *CmdClearAutoRunBin)(ULONG id, BYTE type);
+
+//Usage:        Get the latest version of server DLL and download the latest file(s).
+//Parameters:   Buffer for current version, Buffer for latest version, path for 32-bit server DLL, path for 64-bit server DLL.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      If parameter 3 or parameter 4 is NULL, the file will not be downloaded.
+typedef BOOLEAN (__stdcall *UpdateServer)(char* CurrVerStr, char* VerStr, char* SaveTo32, char* SaveTo64);
+
+//Usage:        Get the latest version of client and download the latest file(s).
+//Parameters:   Buffer for latest version, path for 32-bit client, path for 64-bit client.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      If parameter 2 or parameter 3 is NULL, the file will not be downloaded.
+typedef BOOLEAN (__stdcall *UpdateClient)(char* VerStr, char* SaveTo32, char* SaveTo64);

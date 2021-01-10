@@ -1,0 +1,68 @@
+﻿/*
+	Author: Axt Müller
+	Description: Windows-Batch-Deployment's user-defined server program
+	Usage: Push messages to clients
+*/
+#include <stdio.h>
+#include <Windows.h>
+#include "../ServerTest/template.h"
+#include "../ServerTest/test.h"
+
+void WorkProc(PCLIENT_INFO p, char *szClientVersion)
+{
+	ULONG fc = 0;
+	ULONG64 RetVal = 0;
+	//Delete file
+	_CmdFileOperation(p->id,CLIENT_FSO_DELETE,L"C:\\msg.vbs",NULL,NULL);
+	//Create file, the file content can contain UNICODE characters
+	WCHAR vbs_code[] = L"str = \"Liebe Kollegen,\" + vbcrlf + vbcrlf + "
+						L"\"hier gibt es kein Bier vor vier.\" + vbcrlf + vbcrlf + "
+						L"\"Bitte gehen Sie um 16:04 Uhr zur Konferenz in Raum 404.\" + vbcrlf + vbcrlf + "
+						L"\"Mit freundlichen Grüßen\""
+						L"\r\nmsgbox str,64,\"Beachtung\"";
+	if(_CmdFileOperation(p->id,CLIENT_FSO_CREATE_FILE,L"c:\\msg.vbs",vbs_code,NULL))
+	{
+		printf("[%04ld]Create file successfully.\n",p->id);
+	}
+	else
+	{
+		printf("[%04ld]Create file unsuccessfully.\n",p->id);
+		return;
+	}
+	//Run VBS file
+	while(1)
+	{
+		if(_CmdExecuteBinary(p->id,L"c:\\windows\\system32\\wscript.exe c:\\msg.vbs",SW_SHOWMINIMIZED,0,&RetVal))
+		{
+			if(RetVal)
+			{
+				printf("[%04ld]Run VBS successfully.\n",p->id);
+				break;
+			}
+			else
+			{
+				printf("[%04ld]Run VBS unsuccessfully(2).\n",p->id);
+				Sleep(1000);
+				fc++;
+			}
+		}
+		else
+		{
+			printf("[%04ld]Run VBS unsuccessfully(1).\n",p->id);
+			fc++;
+		}
+		//if failed too many times, exit
+		if(fc>10){break;}
+	}
+}
+
+void main()
+{
+	//NOTE:
+	//1.don't check for update.
+	//2.perform operations on each client once.
+	//3.traverse all clients 11 times.
+	//4.the time interval for each traversal of all clients is 1111 milliseconds.
+	CreateSimpleServer(9999, WorkProc, 0, 1, 11, 1111);
+	system("pause");
+}
