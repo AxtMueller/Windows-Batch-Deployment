@@ -1,5 +1,5 @@
-/*
-	Author: Axt M¨¹ller
+ï»¿/*
+	Author: Axt MÃ¼ller
 	Description: Windows-Batch-Deployment simple user-defined server program templete.
 	Warning: THIS FILE DO NOT NEED TO BE MODIFIED.
 */
