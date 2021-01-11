@@ -1,0 +1,1 @@
+COPY Server32.dll to this folder before running the server program.
