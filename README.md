@@ -51,6 +51,6 @@ In order to optimize the page load speed in low quality network environments, I 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210111
 Bug fix: BSOD may happen when querying directory.  
-Bug fix: BSOD may happen when downloading file by HTTP link.
+Bug fix: BSOD may happen when downloading file via HTTP link.
 ### Server Version: 20200202
 This is the first public version.
