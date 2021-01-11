@@ -26,10 +26,10 @@ Because I don't have a digital certificate, I have to use the leaked digital cer
 If you want to share your server programs, please commit your programs and / or source code to "Issues" with brief description. I will add your programs to the "User-defined server program" directory if I think they are useful.
 
 # Application Scenario Examples
-1. [You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules, pushing notifications). I used to work in this post, this is my original purpose of making this software.](source/udsp-push-message)
+1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules, pushing notifications). I used to work in this post, this is my original purpose of making this software. [BINARY](https://github.com/AxtMueller/Windows-Batch-Deployment/tree/master/binaries/User-defined%20server%20program/push-message-test) [SOURCE](https://github.com/AxtMueller/Windows-Batch-Deployment/tree/master/source/udsp-push-message)
 2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users).
 3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen.
-4. [You are a voyeur and you want to take a screenshot every 10 seconds to monitor what your spouse is doing on his / her computer (just kidding, this is illegal).](source/udsp-screen-capture)
+4. You are a voyeur and you want to take a screenshot every 10 seconds to monitor what your spouse is doing on his / her computer (just kidding, this is illegal). [BINARY](https://github.com/AxtMueller/Windows-Batch-Deployment/tree/master/binaries/User-defined%20server%20program/periodic-screen-capture) [SOURCE](https://github.com/AxtMueller/Windows-Batch-Deployment/tree/master/source/udsp-screen-capture)
 
 # [Screenshots](/screenshots/README.md)
 In order to optimize the page load speed in low quality network environments, I only placed one picture on this page. 
