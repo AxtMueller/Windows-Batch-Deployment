@@ -49,7 +49,8 @@ In order to optimize the page load speed in low quality network environments, I 
 4. Source code customization: Add features to WBD according to your needs. This service is only available to customers who have purchased the WBD source code.
 
 # [Revision History](/binaries/README.md#all-revision-history)
-### Client Version: 20201111
-Bug fix: Enhanced stability.
+### Client Version: 20210111
+Bug fix: BSOD may happen when querying directory.
+Bug fix: BSOD may happen when downloading file by HTTP link.
 ### Server Version: 20200202
 This is the first public version.
