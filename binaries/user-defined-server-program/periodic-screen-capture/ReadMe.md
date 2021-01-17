@@ -2,4 +2,4 @@ Description: This server program will push a DLL for screenshots to all clients,
   
 Copy Server32.dll to this folder before running the server program.  
   
-The source code is in the "source" folder.
+[SOURCE CODE](https://github.com/AxtMueller/Windows-Batch-Deployment/tree/master/source/udsp-screen-capture)
