@@ -12,8 +12,8 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 2. Run “InstallClient.bat” on the computers that you need access remotely.
 
 ### How to access the systems with WBD installed?
-1. WBD comes with a demonstration server program, you can use it as an ordinary remote access tool without programming.
-2. WBD provides DLL (both 32-bit and 64-bit) for advanced users, you can write your server program based on the sample source code.
+1. WBD comes with a demonstration server program, you can use it as an remote access tool without programming.
+2. WBD provides DLL (both 32-bit and 64-bit) for advanced users, you can write your server program based on your need.
 
 ### How to uninstall WBD?
 1. Call the related function from WBD server DLL (read sample source code for details).
