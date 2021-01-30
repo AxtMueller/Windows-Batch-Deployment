@@ -10,7 +10,7 @@ Binary files of Windows Batch Deployment. [Click here to download the entire pac
 ### How to test WBD in the local host?
 1. Rename "InstallClient.bat.txt" to "InstallClient.bat", then run it as administrator.
 2. Run ServerTestVB6GUI.EXE, you will see the local host in the client list (its IP would be 127.0.0.1 and its status would be "Online").
-3. Select the local host in the client list, then click the "Connect" button. When its status changes to "Connected", you can submit operations.
+3. Select the local host in the client list, then click the "Connect" button. When the status changes to "Connected", you can submit operations.
 
 # Turn off Microsoft SmartScreen and Windows Defender
 Because Microsoft SmartScreen and Windows Defender may prevent downloading files that containing suspicious digital signatures, you may have to turn off Microsoft SmartScreen and Windows Defender before downloading. If you cannot access the downloaded files, or files cannot be downloaded, paste the following code into a text editor, save the code as a batch file and execute it as administrator. After restarting, this page will be opened again. If this batch file cannot help you, you may have to [manually turn Tamper Protection off](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/prevent-changes-to-security-settings-with-tamper-protection#turn-tamper-protection-on-or-off-for-an-individual-machine) before using the batch file.
