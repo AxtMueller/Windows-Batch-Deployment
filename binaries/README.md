@@ -31,8 +31,11 @@ shutdown /f /r /t 0
 
 # All revision history
 ### Client Versions:
-#### 4th version: 20210111
+#### 5th version: 20210130
 [This is the latest version.](../README.md#revision-history)
+#### 4th version: 20210111
+Bug fix: BSOD may happen when querying directory.  
+Bug fix: BSOD may happen when downloading file via HTTP link.
 #### 3rd version: 20201111
 Bug fix: Enhanced stability.
 #### 2nd version: 20200505
@@ -40,5 +43,7 @@ Bug fix: Enhanced stability.
 #### 1st version: 20200202
 This is the first public version.
 ### Server Versions:
-#### 1st version: 20200202
+#### 2nd version: 20210130
 [This is the latest version.](../README.md#revision-history)
+#### 1st version: 20200202
+This is the latest version.
