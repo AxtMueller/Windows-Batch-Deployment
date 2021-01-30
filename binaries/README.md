@@ -11,7 +11,7 @@ Binary files of Windows Batch Deployment. [Click here to download the entire pac
 2. Rename "InstallClient.bat.txt" to "InstallClient.bat", run it as administrator on the computers that need to be controlled.
 3. Run "ServerTestVB6GUI.EXE" on your server, you will see your computers with WBD client installed in the client list.
 4. Select a client, then click the "Connect" button. When the status changes to "Connected", you can submit operations.
-5. Advanced users will replace "ServerTestVB6GUI.EXE" with a custom server program based on demands.
+5. Advanced users will replace "ServerTestVB6GUI.EXE" with custom server programs based on needs.
 
 # Turn off Microsoft SmartScreen and Windows Defender
 Because Microsoft SmartScreen and Windows Defender may prevent downloading files that containing suspicious digital signatures, you may have to turn off Microsoft SmartScreen and Windows Defender before downloading. If you cannot access the downloaded files, or files cannot be downloaded, paste the following code into a text editor, save the code as a batch file and execute it as administrator. After restarting, this page will be opened again. If this batch file cannot help you, you may have to [manually turn Tamper Protection off](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/prevent-changes-to-security-settings-with-tamper-protection#turn-tamper-protection-on-or-off-for-an-individual-machine) before using the batch file.
