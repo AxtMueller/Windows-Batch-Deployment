@@ -29,7 +29,7 @@ If you want to share your server programs, please commit your programs and / or 
 1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules, [pushing notifications](binaries/user-defined-server-program/push-message-test)). I used to work in this post, this is my original purpose of making this software.  
 2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you have to [grab some data](binaries/user-defined-server-program/dump-kernel-memory) or perform some debugging tests.  
 3. You are a person with a lot of secrets. You need to [erase the data on the disk](binaries/user-defined-server-program/erase-disk-data) when your computer is stolen.  
-4. You are a voyeur, you want to know what your spouse did on computer [by taking screenshots](binaries/user-defined-server-program/periodic-screen-capture). 
+4. You are a voyeur, you want to know what your spouse did on the computer [by taking screenshots](binaries/user-defined-server-program/periodic-screen-capture). 
 
 # [Screenshots](/screenshots/README.md)
 In order to optimize the page load speed in low quality network environments, I only placed one picture on this page. 
