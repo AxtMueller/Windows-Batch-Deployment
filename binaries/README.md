@@ -9,7 +9,7 @@ Binary files of Windows Batch Deployment. [Click here to download the entire pac
 
 ### How to test WBD in the local host?
 1. Rename "InstallClient.bat.txt" to "InstallClient.bat", then run it as administrator.
-2. Run ServerTestVB6GUI.EXE, you will see the local host is in the client list (its IP would be 127.0.0.1 and its status would be "Online").
+2. Run ServerTestVB6GUI.EXE, you will see the local host in the client list (its IP would be 127.0.0.1 and its status would be "Online").
 3. Select the local host in the client list, then click the "Connect" button. When its status changes to "Connected", you can submit operations.
 
 # Turn off Microsoft SmartScreen and Windows Defender
