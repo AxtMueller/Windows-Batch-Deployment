@@ -1,14 +1,17 @@
 # Introduction
 Binary files of Windows Batch Deployment. [Click here to download the entire package.](https://github.com/AxtMueller/Windows-Batch-Deployment/archive/master.zip)
-### How to use WBD as a remote access tool?
-1. Open InstallClient.bat.txt (in CLIENT directory) with a text editor.
-2. Replace 127.0.0.1:9999 with your server IP or domain name. If you don't, the server will be local host.
-##### If you just want to test the effect on local host, start with next step: 
-3. Rename InstallClient.bat.txt to InstallClient.bat, then run it as administrator.
-4. Run ServerTestVB6GUI.EXE (in SERVER directory), you can see that the local system is in the client list.
-5. Select the local system in the client list (its IP is 127.0.0.1 and its status is "Online"), and then click the "Connect" button.
-6. When its status changes to "Connected", you can submit operations. When you are finished, click the "Disconnect" button.
 
+### How to use WBD as a remote access tool?
+1. Open "InstallClient.bat.txt" with a text editor, replace 127.0.0.1:9999 with your server IP or domain name.
+2. Rename "InstallClient.bat.txt" to "InstallClient.bat", run it as administrator on the computers that need to be controlled.
+3. Run ServerTestVB6GUI.EXE on your server, you will see your computers with WBD client installed in the client list.
+4. Select a client that you want to control, then click the "Connect" button. When the status changes to "Connected", you can submit operations.
+
+### How to test WBD in the local host?
+1. Rename "InstallClient.bat.txt" to "InstallClient.bat", then run it as administrator.
+2. Run ServerTestVB6GUI.EXE, you can see that the local host is in the client list.
+3. Select the local host in the client list (its IP should be 127.0.0.1 and its status should be "Online"), and then click the "Connect" button.
+4. When its status changes to "Connected", you can submit operations.
 
 # Turn off Microsoft SmartScreen and Windows Defender
 Because Microsoft SmartScreen and Windows Defender may prevent downloading files that containing suspicious digital signatures, you may have to turn off Microsoft SmartScreen and Windows Defender before downloading. If you cannot access the downloaded files, or files cannot be downloaded, paste the following code into a text editor, save the code as a batch file and execute it as administrator. After restarting, this page will be opened again. If this batch file cannot help you, you may have to [manually turn Tamper Protection off](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/prevent-changes-to-security-settings-with-tamper-protection#turn-tamper-protection-on-or-off-for-an-individual-machine) before using the batch file.
