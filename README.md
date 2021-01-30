@@ -2,7 +2,7 @@
 Windows Batch Deployment (you can simply call it as "WBD") is a programmable and rootkit-like remote access tool, it supports from Windows XP to Windows 10 (32-bit and 64-bit). Compared with other remote access software, WBD does not have a server program in the traditional sense. WBD provides a server DLL, and users need to write server programs according to their needs. Therefore, WBD maximally meets the individual needs of users. WBD client is a kernel-mode driver, it hides its traces as much as possible, and the goal is to keep the user's attention as little as possible. WBD client can run user-defined programs when system starts, user-defined programs do not store on the disk in the form of files, and there are no startup entries in the registry. As WBD may be used illegally, when WBD client starts, it outputs a text file to the desktop or the root of system drive to inform its existence and how to uninstall it manually. Disclaimer: You can only use WBD on your computers or computers which you are allowed to access, I will not be responsible for any consequences and losses caused by the abuse of it. Until you fully understand how to use WBD, please test it in virtual machines only.
 
 ### Main Features
-1. File management (upload, download, copy, delete, rename, etc.).
+1. File and registry management.
 2. Run program, driver and system shell (CMD).
 3. Shut down or reboot the system.
 4. The client protects itself against unauthorized uninstallation. The self-protection feature takes effect after rebooting (when the installation is complete, all features except the self-protection will work; and then reboot, all features will work). If debug mode is enabled, the self-protection feature will be disabled. If you are interested in this feature, please check [this page](https://github.com/AxtMueller/Windows-Batch-Deployment/issues/1).
@@ -51,7 +51,7 @@ In order to optimize the page load speed in low quality network environments, I 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210130
 Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.  
-New feature: Calculate CRC32 of file and delete / move file after reboot.  
+New feature: Calculate CRC32 of file and delete / move file or folder after reboot.  
 New feature: Registry operations.  
 ### Server Version: 20210130
 New feature: Functions of registry operation.
