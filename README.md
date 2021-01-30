@@ -27,8 +27,8 @@ If you want to share your server programs, please commit your programs and / or 
 
 # Application Scenario Examples
 1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules, pushing notifications). I used to work in this post, this is my original purpose of making this software. [DEMO](binaries/user-defined-server-program/push-message-test) 
-2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users).
-3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen.
+2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users). [DEMO](binaries/user-defined-server-program/dump-kernel-memory) 
+3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen. [DEMO](binaries/user-defined-server-program/erase-disk-data) 
 4. You are a voyeur, you want to know what your spouse did on his / her computer. [DEMO](binaries/user-defined-server-program/periodic-screen-capture) 
 
 # [Screenshots](/screenshots/README.md)
