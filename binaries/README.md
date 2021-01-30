@@ -46,4 +46,4 @@ This is the first public version.
 #### 2nd version: 20210130
 [This is the latest version.](../README.md#revision-history)
 #### 1st version: 20200202
-This is the latest version.
+This is the first public version.
