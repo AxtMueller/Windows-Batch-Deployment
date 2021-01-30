@@ -50,8 +50,8 @@ In order to optimize the page load speed in low quality network environments, I 
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210130
-Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.
-New feature: Calculate CRC32 of file and delete/move file after reboot.
-New feature: Registry operations.
+Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.  
+New feature: Calculate CRC32 of file and delete/move file after reboot.  
+New feature: Registry operations.  
 ### Server Version: 20210130
 New feature: Functions of registry operation.
