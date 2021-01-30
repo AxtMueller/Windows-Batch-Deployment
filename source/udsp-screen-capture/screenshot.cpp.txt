@@ -1,0 +1,138 @@
+﻿#include <Windows.h>
+#include <atlimage.h>
+#pragma warning(disable:4996)
+
+BOOLEAN CaptureScreen(LPCTSTR wsFile)
+{
+	int sw = GetSystemMetrics(SM_CXSCREEN);
+	int sh = GetSystemMetrics(SM_CYSCREEN);
+	HWND h1 = GetDesktopWindow();
+	if(h1)
+	{
+		HDC h2 = GetDC(h1);
+		if(h2)
+		{
+			HDC h3 = CreateCompatibleDC(h2);
+			if(h3)
+			{
+				HBITMAP h4 = CreateCompatibleBitmap(h2, sw, sh);
+				if(h4)
+				{
+					CImage img;
+					SelectObject(h3, h4);
+					BitBlt(h3, 0, 0, sw, sh, h2, 0, 0, SRCCOPY);
+					img.Attach(h4);
+					img.Save(wsFile, Gdiplus::ImageFormatPNG);
+					img.Detach();		
+					DeleteObject(h4);
+				}
+				DeleteDC(h3);
+			}
+			ReleaseDC(h1, h2);
+		}
+	}
+	return TRUE;
+}
+
+__int64 GetFileSizeW(WCHAR *lpPath)
+{
+	WIN32_FILE_ATTRIBUTE_DATA fileAttr = {0};
+	GetFileAttributesExW(lpPath, GetFileExInfoStandard, &fileAttr);
+	return ((__int64)fileAttr.nFileSizeHigh << 32) + fileAttr.nFileSizeLow;
+}
+
+void RenameExtNameToPNG(PWCHAR path)
+{
+	WCHAR newname[MAX_PATH] = {0};
+	wcscpy(newname, path);
+	newname[wcslen(newname)-3] = L'p';
+	newname[wcslen(newname)-2] = L'n';
+	newname[wcslen(newname)-1] = L'g';
+	MoveFileW(path,newname);
+}
+
+extern "C" __declspec(dllexport) DWORD MainProc
+(
+	HWND hwnd,			// handle to owner window
+	HINSTANCE hinst,	// instance handle for the DLL
+	LPTSTR lpParameter, // string the DLL will parse
+	int nCmdShow		// show state
+)
+{
+	ULONG interval = atoi((CHAR*)lpParameter);
+	WCHAR lastpath[MAX_PATH] = {0};
+	//Allow one instance only
+	HANDLE hMutex = OpenMutexW(MUTEX_ALL_ACCESS, 0, L"periodic-screen-capture");
+	if(hMutex)
+	{
+		ExitThread(0);
+	}
+	else
+	{
+		hMutex = CreateMutexW(NULL, FALSE, L"periodic-screen-capture");
+	}
+	//Query system directory
+	WCHAR sysdir[MAX_PATH] = {0};
+	WCHAR pddir[MAX_PATH] = L"*:\\ProgramData\\";
+	WCHAR ssdir[MAX_PATH] = L"*:\\ProgramData\\ScreenShot\\";
+	GetSystemDirectoryW(sysdir,sizeof(sysdir));
+	//Set directory names
+	pddir[0] = sysdir[0];
+	ssdir[0] = sysdir[0];
+	//Create screenshots
+	while(1)
+	{
+		static __int64 lfs = 0;
+		WCHAR path[MAX_PATH] = {0};
+		SYSTEMTIME st = {0};
+		//make file name
+		GetLocalTime(&st);
+		wcscpy_s(path,ssdir);
+		wsprintf(path+wcslen(path),L"%04ld%02ld%02ld`%02ld%02ld%02ld.tmp",st.wYear,st.wMonth,st.wDay,st.wHour,st.wMinute,st.wSecond);
+		//ensure directories exist
+		CreateDirectoryW(pddir,NULL);
+		CreateDirectoryW(ssdir,NULL);
+		SetFileAttributesW(pddir, FILE_ATTRIBUTE_HIDDEN);
+		//screen capture
+		__try
+		{
+			CaptureScreen(path);
+		}
+		__except(1)
+		{
+			;
+		}
+		//Compare with last pictures
+		if(lfs==0)
+		{
+			lfs = GetFileSizeW(path);
+			RenameExtNameToPNG(path);
+		}
+		else
+		{
+			//If the size between 2 files are almost the same, it means the screen has not changed
+			__int64 cfs = GetFileSizeW(path);
+			if(abs(lfs - cfs) < 2048)
+			{
+				DeleteFileW(path);
+			}
+			else
+			{
+				lfs = cfs;
+				RenameExtNameToPNG(path);
+			}
+		}
+		Sleep(interval);
+	}
+	return 0;
+}
+
+BOOL WINAPI DllMain
+(
+	_In_ HINSTANCE hinstDLL,
+	_In_ DWORD     fdwReason,
+	_In_ LPVOID    lpvReserved
+)
+{
+	return TRUE;
+}

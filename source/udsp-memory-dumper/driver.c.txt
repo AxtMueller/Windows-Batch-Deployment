@@ -1,0 +1,636 @@
+#include <ntddk.h>
+#include <windef.h>
+#include <ntimage.h>
+#include <Ntstrsafe.h>
+#pragma warning (disable: 4995)
+
+/*
+	Driver logic:
+	1. Create a key, set value "(default)" to "idle", create a thread and query value "(default)" periodically in the thread.
+	2. When value "(default)" is "busy", query value "fn", "p1", "p2" (all parameters that required for the operation).
+	3. Execute operation, and then save the result to value "result", and set value "(default)" to "idle" again.
+*/
+
+//##############################################################################
+// definitions and global variables
+//##############################################################################
+typedef struct _RTL_PROCESS_MODULE_INFORMATION
+{
+	HANDLE	Section; 
+	PVOID	MappedBase; 
+	PVOID	ImageBase; 
+	ULONG	ImageSize; 
+	ULONG	Flags; 
+	USHORT	LoadOrderIndex; 
+	USHORT	InitOrderIndex; 
+	USHORT	LoadCount; 
+	USHORT	OffsetToFileName;
+	UCHAR	FullPathName[256];
+}RTL_PROCESS_MODULE_INFORMATION, *PRTL_PROCESS_MODULE_INFORMATION;
+
+typedef struct _SYSTEM_MODULE_INFORMATION
+{
+	ULONG Count;
+	RTL_PROCESS_MODULE_INFORMATION Module[1];
+}SYSTEM_MODULE_INFORMATION, *PSYSTEM_MODULE_INFORMATION;
+
+NTSYSAPI NTSTATUS ZwQuerySystemInformation
+(
+    ULONG	SystemInformationClass,
+    PVOID	SystemInformation,
+    ULONG	SystemInformationLength,
+    PULONG	ReturnLength
+);
+
+WCHAR g_wsKey[] = L"\\REGISTRY\\MACHINE\\SOFTWARE\\KMDUMPER";
+
+//##############################################################################
+// basis function
+//##############################################################################
+VOID Pause(LONG msec)
+{
+	LARGE_INTEGER interval;
+	interval.QuadPart = -10000;
+	interval.QuadPart *= msec;
+	KeDelayExecutionThread(KernelMode, 0, &interval);
+}
+
+HANDLE RegOpenKey(LPWSTR KeyName)
+{
+	HANDLE hKey = NULL;
+	UNICODE_STRING usKeyName = {0};
+	OBJECT_ATTRIBUTES objectAttributes = {0};
+	RtlInitUnicodeString(&usKeyName, KeyName);
+	InitializeObjectAttributes(&objectAttributes, &usKeyName, OBJ_CASE_INSENSITIVE, NULL, NULL);
+	if (!NT_SUCCESS(ZwOpenKey(&hKey, KEY_ALL_ACCESS, &objectAttributes)))
+	{
+		return NULL;
+	}
+	else
+	{
+		return hKey;
+	}
+}
+
+NTSTATUS RegCreateKey(LPWSTR KeyName)
+{
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	HANDLE hKey = RegOpenKey(KeyName);
+	if(hKey)
+	{
+		ZwClose(hKey);
+		status = STATUS_SUCCESS;
+	}
+	else
+	{
+		UNICODE_STRING usKeyName = {0};
+		OBJECT_ATTRIBUTES objectAttributes = {0};
+		RtlInitUnicodeString(&usKeyName, KeyName);
+		InitializeObjectAttributes(&objectAttributes, &usKeyName, OBJ_CASE_INSENSITIVE, NULL, NULL);
+		status = ZwCreateKey(&hKey, KEY_ALL_ACCESS, &objectAttributes, 0, NULL, REG_OPTION_NON_VOLATILE, NULL);
+		if(NT_SUCCESS(status))
+		{
+			ZwClose(hKey);
+		}
+	}
+	return status;
+}
+
+NTSTATUS RegQueryValueKey(LPWSTR KeyName, LPWSTR ValueName, PKEY_VALUE_PARTIAL_INFORMATION *ppBuffer)
+{
+	ULONG ulSize = 0;
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	HANDLE hKey = RegOpenKey(KeyName);
+	if(hKey)
+	{
+		UNICODE_STRING usValueName = {0};
+		RtlInitUnicodeString(&usValueName, ValueName);
+		status = ZwQueryValueKey(hKey, &usValueName, KeyValuePartialInformation, NULL, 0, &ulSize);
+		if(status==STATUS_BUFFER_TOO_SMALL && ulSize)
+		{
+			*ppBuffer = (PKEY_VALUE_PARTIAL_INFORMATION)ExAllocatePool(PagedPool,ulSize);
+			if(*ppBuffer)
+			{
+				status = ZwQueryValueKey(hKey, &usValueName, KeyValuePartialInformation, *ppBuffer, ulSize, &ulSize);
+			}
+		}
+		ZwClose(hKey);
+	}
+	return status;
+}
+
+NTSTATUS RegQueryValueString(LPWSTR KeyName, LPWSTR ValueName, PWCHAR *ppBuffer)
+{
+	PKEY_VALUE_PARTIAL_INFORMATION pInfo = NULL;
+	NTSTATUS st = RegQueryValueKey(KeyName,ValueName,&pInfo);
+	if(NT_SUCCESS(st))
+	{
+		*ppBuffer = (PWCHAR)ExAllocatePool(PagedPool,pInfo->DataLength+2);
+		if(*ppBuffer)
+		{
+			RtlZeroMemory(*ppBuffer,pInfo->DataLength+2);
+			memcpy(*ppBuffer,pInfo->Data,pInfo->DataLength);
+		}
+		ExFreePool(pInfo);
+	}
+	return st;
+}
+
+NTSTATUS RegQueryValueDWORD(LPWSTR KeyName, LPWSTR ValueName, PULONG RetVal)
+{
+	PKEY_VALUE_PARTIAL_INFORMATION pInfo = NULL;
+	NTSTATUS st = RegQueryValueKey(KeyName,ValueName,&pInfo);
+	if(NT_SUCCESS(st))
+	{
+		if(pInfo->DataLength==4)
+		{
+			memcpy(RetVal,pInfo->Data,pInfo->DataLength);
+		}
+		else
+		{
+			st = STATUS_INFO_LENGTH_MISMATCH;
+		}
+		ExFreePool(pInfo);
+	}
+	return st;
+}
+
+NTSTATUS RegQueryValueQWORD(LPWSTR KeyName, LPWSTR ValueName, PULONG64 RetVal)
+{
+	PKEY_VALUE_PARTIAL_INFORMATION pInfo = NULL;
+	NTSTATUS st = RegQueryValueKey(KeyName,ValueName,&pInfo);
+	if(NT_SUCCESS(st))
+	{
+		if(pInfo->DataLength==8)
+		{
+			memcpy(RetVal,pInfo->Data,pInfo->DataLength);
+		}
+		else if(pInfo->DataLength==4)
+		{
+			memcpy(RetVal,pInfo->Data,pInfo->DataLength);
+		}
+		else
+		{
+			st = STATUS_INFO_LENGTH_MISMATCH;
+		}
+		ExFreePool(pInfo);
+	}
+	return st;
+}
+
+NTSTATUS RegSetValueKey(LPWSTR KeyName, LPWSTR ValueName, ULONG DataType, PVOID DataBuffer, ULONG DataLength)
+{
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	HANDLE hKey = RegOpenKey(KeyName);
+	if (hKey)
+	{
+		UNICODE_STRING usValueName = {0};
+		RtlInitUnicodeString(&usValueName, ValueName);
+		status = ZwSetValueKey(hKey, &usValueName, 0, DataType, DataBuffer, DataLength);
+		ZwClose(hKey);
+	}
+	return status;
+}
+
+NTSTATUS RegDeleteValueKey(LPWSTR KeyName, LPWSTR ValueName)
+{
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	HANDLE hKey = RegOpenKey(KeyName);
+	if (hKey)
+	{
+		UNICODE_STRING usValueName = {0};
+		RtlInitUnicodeString(&usValueName, ValueName);
+		status = ZwDeleteValueKey(hKey,&usValueName);
+		ZwFlushKey(hKey);
+		ZwClose(hKey);
+	}
+	return status;
+}
+
+NTSTATUS RegDeleteKey(LPWSTR KeyName)
+{
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	HANDLE hKey = RegOpenKey(KeyName);
+	if (hKey)
+	{
+		status = ZwDeleteKey(hKey);
+		ZwFlushKey(hKey);
+		ZwClose(hKey);
+	}
+	return status;
+}
+
+PVOID MiFindExportedRoutine 
+(
+    IN PVOID DllBase,
+	PIMAGE_EXPORT_DIRECTORY ExportDirectory,
+	ULONG ExportSize,
+    BOOL ByName,
+    IN char *RoutineName,
+    DWORD Ordinal
+)
+{
+	USHORT OrdinalNumber;
+	PULONG NameTableBase;
+	PUSHORT NameOrdinalTableBase;
+	PULONG AddressTableBase;
+	PULONG Addr;
+	LONG High;
+	LONG Low;
+	LONG Middle;
+	LONG Result;
+	PVOID FunctionAddress;
+	if (ExportDirectory == NULL || ExportSize == 0)
+	{
+		return NULL;
+	}
+	NameTableBase = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNames);
+	NameOrdinalTableBase = (PUSHORT)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
+	AddressTableBase=(PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfFunctions);
+	if (!ByName)
+	{
+		return (PVOID)AddressTableBase[Ordinal];
+	}
+	Low = 0;
+	Middle = 0;
+	High = ExportDirectory->NumberOfNames - 1;
+	while (High >= Low)
+	{
+		Middle = (Low + High) >> 1;
+		Result = strcmp (RoutineName,
+		                 (PCHAR)DllBase + NameTableBase[Middle]);
+		if (Result < 0)
+		{
+			High = Middle - 1;
+		}
+		else if (Result > 0)
+		{
+			Low = Middle + 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+	if (High < Low)
+	{
+		return NULL;
+	}
+	OrdinalNumber = NameOrdinalTableBase[Middle];
+	if ((ULONG)OrdinalNumber >= ExportDirectory->NumberOfFunctions)
+	{
+		return NULL;
+	}
+	Addr = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfFunctions);
+	FunctionAddress = (PVOID)((PCHAR)DllBase + Addr[OrdinalNumber]);
+	if ((ULONG_PTR)FunctionAddress > (ULONG_PTR)ExportDirectory &&
+	        (ULONG_PTR)FunctionAddress < ((ULONG_PTR)ExportDirectory + ExportSize))
+	{
+		FunctionAddress = NULL;
+	}
+	return FunctionAddress;
+}
+
+#ifdef AMD64
+PVOID NativeGetProcAddress64(SIZE_T uModBase, CHAR *cSearchFnName)
+{
+	IMAGE_DOS_HEADER *doshdr;
+	IMAGE_OPTIONAL_HEADER64 *opthdr;
+	IMAGE_EXPORT_DIRECTORY *pExportTable;
+	ULONG size;
+	SIZE_T uFnAddr=0;
+	doshdr = (IMAGE_DOS_HEADER *)uModBase;
+	if (NULL == doshdr)
+	{
+		goto __exit;
+	}
+	opthdr = (IMAGE_OPTIONAL_HEADER64 *)(uModBase + doshdr->e_lfanew + sizeof(ULONG) + sizeof(IMAGE_FILE_HEADER));
+	if (NULL == opthdr)
+	{
+		goto __exit;
+	}
+	pExportTable = (IMAGE_EXPORT_DIRECTORY *)(uModBase + opthdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+	if (NULL == pExportTable)
+	{
+		goto __exit;
+	}
+	size = opthdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size;
+	uFnAddr = (SIZE_T)MiFindExportedRoutine((PVOID)uModBase,pExportTable,size,TRUE,cSearchFnName,0);
+__exit:
+	return (PVOID)uFnAddr;
+}
+#endif
+
+PVOID NativeGetProcAddress32(SIZE_T uModBase, CHAR *cSearchFnName)
+{
+	IMAGE_DOS_HEADER *doshdr;
+	IMAGE_OPTIONAL_HEADER32 *opthdr;
+	IMAGE_EXPORT_DIRECTORY *pExportTable;
+	ULONG size;
+	SIZE_T uFnAddr=0;
+	doshdr = (IMAGE_DOS_HEADER *)uModBase;
+	if (NULL == doshdr)
+	{
+		goto __exit;
+	}
+	opthdr = (IMAGE_OPTIONAL_HEADER32 *)(uModBase + doshdr->e_lfanew + sizeof(ULONG) + sizeof(IMAGE_FILE_HEADER));
+	if (NULL == opthdr)
+	{
+		goto __exit;
+	}
+	pExportTable = (IMAGE_EXPORT_DIRECTORY *)(uModBase + opthdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+	if (NULL == pExportTable)
+	{
+		goto __exit;
+	}
+	size = opthdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size;
+	uFnAddr = (SIZE_T)MiFindExportedRoutine((PVOID)uModBase,pExportTable,size,TRUE,cSearchFnName,0);
+__exit:
+	return (PVOID)uFnAddr;
+}
+
+PVOID NativeGetProcAddress(PVOID uModBase, CHAR *cSearchFnName)
+{
+#ifdef AMD64
+	return NativeGetProcAddress64((SIZE_T)uModBase,cSearchFnName);
+#else
+	return NativeGetProcAddress32((SIZE_T)uModBase,cSearchFnName);
+#endif
+}
+
+BOOLEAN GetModuleInformation(char *TargetDriverName, PSIZE_T retBase, PULONG retSize, PCHAR retFullNameBuffer)
+{
+	PSYSTEM_MODULE_INFORMATION pSystemModuleInformation = NULL;
+	ULONG i, NeedSize = 0, BufferSize = PAGE_SIZE*10;
+	PVOID pBuffer = NULL;
+	NTSTATUS st = 0;
+	BOOLEAN ret = 0;
+	do
+	{
+		pBuffer = ExAllocatePool(PagedPool, BufferSize);
+		if(pBuffer == NULL )
+		{
+			return FALSE;
+		}
+		st = ZwQuerySystemInformation(11, pBuffer, BufferSize, &NeedSize);
+		if(st == STATUS_INFO_LENGTH_MISMATCH )
+		{
+			ExFreePool(pBuffer);
+			BufferSize *= 2;
+		}
+		else if(!NT_SUCCESS(st))
+		{
+			ExFreePool(pBuffer);
+			return FALSE;
+		}
+	}
+	while( st == STATUS_INFO_LENGTH_MISMATCH );
+	pSystemModuleInformation = (PSYSTEM_MODULE_INFORMATION)pBuffer;
+	if(!TargetDriverName)
+	{
+		if(retBase)
+		{
+			*retBase = (SIZE_T)(pSystemModuleInformation->Module[0].ImageBase);
+		}
+		if(retSize)
+		{
+			*retSize = pSystemModuleInformation->Module[0].ImageSize;
+		}
+		if(retFullNameBuffer)
+		{
+			strcpy(retFullNameBuffer,pSystemModuleInformation->Module[0].FullPathName+pSystemModuleInformation->Module[0].OffsetToFileName);
+		}
+		ret = TRUE;
+	}
+	else
+	{
+		for(i=0;i<pSystemModuleInformation->Count;i++)
+		{
+			char *szCurrentName = pSystemModuleInformation->Module[i].FullPathName+pSystemModuleInformation->Module[i].OffsetToFileName;
+			if(!_stricmp(szCurrentName,TargetDriverName))
+			{
+				if(retBase)
+				{
+					*retBase = (SIZE_T)(pSystemModuleInformation->Module[i].ImageBase);
+				}
+				if(retSize)
+				{
+					*retSize = pSystemModuleInformation->Module[i].ImageSize;
+				}
+				if(retFullNameBuffer)
+				{
+					strcpy(retFullNameBuffer,pSystemModuleInformation->Module[i].FullPathName);
+				}
+				ret = TRUE;
+				break;
+			}
+		}
+	}
+	ExFreePool(pBuffer);
+	return ret;
+}
+
+PVOID NativeGetModuleHandle(char *TargetDriverName)
+{
+	SIZE_T base = 0;
+	GetModuleInformation(TargetDriverName,&base,NULL,NULL);
+	return (void*)base;
+}
+
+//##############################################################################
+// working procedure
+//##############################################################################
+PWCHAR list_kernel_modules()
+{
+	PSYSTEM_MODULE_INFORMATION pSystemModuleInformation = NULL;
+	ULONG i, NeedSize = 0, BufferSize = PAGE_SIZE*10;
+	PVOID pBuffer = NULL;
+	PWCHAR ret = NULL;
+	NTSTATUS st;
+	do
+	{
+		pBuffer = ExAllocatePool(PagedPool, BufferSize);
+		if(pBuffer == NULL )
+		{
+			return FALSE;
+		}
+		st = ZwQuerySystemInformation(11, pBuffer, BufferSize, &NeedSize);
+		if(st == STATUS_INFO_LENGTH_MISMATCH )
+		{
+			ExFreePool(pBuffer);
+			BufferSize *= 2;
+		}
+		else if(!NT_SUCCESS(st))
+		{
+			ExFreePool(pBuffer);
+			return FALSE;
+		}
+	}
+	while( st == STATUS_INFO_LENGTH_MISMATCH );
+	pSystemModuleInformation = (PSYSTEM_MODULE_INFORMATION)pBuffer;
+	ret = (PWCHAR)ExAllocatePool(PagedPool, pSystemModuleInformation->Count * (MAX_PATH+60)*2);
+	if(ret)
+	{
+		RtlZeroMemory(ret, pSystemModuleInformation->Count * (MAX_PATH+60)*2);
+		for(i=0;i<pSystemModuleInformation->Count;i++)
+		{
+			WCHAR wsTmp[MAX_PATH+60] = {0};
+			RtlStringCbPrintfW(wsTmp, sizeof(wsTmp), L"0x%p\t0x%06X\t%S\r\n", 
+								pSystemModuleInformation->Module[i].ImageBase, 
+								pSystemModuleInformation->Module[i].ImageSize,
+								pSystemModuleInformation->Module[i].FullPathName);
+			wcscat(ret, wsTmp);
+		}
+	}
+	ExFreePool(pBuffer);
+	return ret;
+}
+
+PVOID get_proc_addr(PWCHAR mod, PWCHAR fun)
+{
+	PVOID base = NULL;
+	CHAR szMod[MAX_PATH] = {0};
+	CHAR szFun[MAX_PATH] = {0};
+	RtlStringCbPrintfA(szMod, sizeof(szMod), "%S", mod);
+	RtlStringCbPrintfA(szFun, sizeof(szFun), "%S", fun);
+	if(_stricmp(szMod,"nt")==0 || _stricmp(szMod,"ntoskrnl.exe")==0)
+	{
+		base = NativeGetModuleHandle(NULL);
+	}
+	else
+	{
+		base = NativeGetModuleHandle(szMod);
+	}
+	if(base)
+	{
+		return NativeGetProcAddress(base, szFun);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+PUCHAR dump_kernel_memory(ULONG64 base, ULONG size)
+{
+	if(MmIsAddressValid((void*)base))
+	{
+		PUCHAR buffer = ExAllocatePool(NonPagedPool, size);
+		if(buffer)
+		{
+			memcpy(buffer, (void*)base, size);
+		}
+		return buffer;
+	}
+	return NULL;
+}
+
+VOID WorkProc(IN PVOID context)
+{
+	ULONG dwExit = 0;
+	while(!dwExit)
+	{
+		PWCHAR work = NULL;
+		//query status
+		if(NT_SUCCESS(RegQueryValueString(g_wsKey, NULL, &work)))
+		{
+			//if status = "busy" then start work
+			if(_wcsicmp(work,L"busy")==0)
+			{
+				//query what to do
+				PWCHAR function = NULL;
+				if(NT_SUCCESS(RegQueryValueString(g_wsKey, L"fn", &function)))
+				{
+					//query kernel modules
+					if(_wcsicmp(function,L"lm")==0)
+					{
+						//execute operation
+						PWCHAR result = list_kernel_modules();
+						if(result)
+						{
+							//write result
+							RegSetValueKey(g_wsKey, L"result", REG_SZ, result, wcslen(result)*2);
+							ExFreePool(result);
+						}
+					}
+					//get export function/variable address: ga mode name
+					else if(_wcsicmp(function,L"ga")==0)
+					{
+						ULONG64 result = 0;
+						PWCHAR wsMod = NULL, wsFun = NULL;
+						//query module name
+						if(NT_SUCCESS(RegQueryValueString(g_wsKey, L"p1", &wsMod)))
+						{
+							//query function name
+							if(NT_SUCCESS(RegQueryValueString(g_wsKey, L"p2", &wsFun)))
+							{
+								//execute operation
+								result = (ULONG64)get_proc_addr(wsMod, wsFun);
+								//write result
+								RegSetValueKey(g_wsKey, L"result", REG_QWORD, &result, sizeof(void*));
+								ExFreePool(wsFun);
+							}
+							ExFreePool(wsMod);
+						}
+					}
+					//dump memory: dm base size
+					else if(_wcsicmp(function,L"dm")==0)
+					{
+						ULONG64 base = 0;
+						ULONG size = 0;
+						//query base
+						if(NT_SUCCESS(RegQueryValueQWORD(g_wsKey, L"p1", &base)))
+						{
+							//query size
+							if(NT_SUCCESS(RegQueryValueDWORD(g_wsKey, L"p2", &size)))
+							{
+								//execute operation
+								PUCHAR result = dump_kernel_memory(base,size);
+								if(result)
+								{
+									//write result
+									RegSetValueKey(g_wsKey, L"result", REG_BINARY, result, size);
+									ExFreePool(result);
+								}
+							}
+						}
+					}
+					ExFreePool(function);
+				}
+				//finished
+				RegDeleteValueKey(g_wsKey, L"fn");
+				RegDeleteValueKey(g_wsKey, L"p1");
+				RegDeleteValueKey(g_wsKey, L"p2");
+				RegSetValueKey(g_wsKey, NULL, REG_SZ, L"idle", 16);
+			}
+			ExFreePool(work);
+		}
+		//query exit
+		RegQueryValueDWORD(g_wsKey, L"EXIT", &dwExit);
+		//rest a while
+		Pause(MAX_PATH);
+	}
+	RegDeleteKey(g_wsKey);
+	PsTerminateSystemThread(STATUS_SUCCESS);
+}
+
+VOID DriverUnload(IN PDRIVER_OBJECT pDriverObject)
+{
+	DbgPrint("kmdumper Driver Unloaded.");
+}
+
+NTSTATUS DriverEntry(IN PDRIVER_OBJECT pDriverObject,IN PUNICODE_STRING pRegistryPath)
+{
+	NTSTATUS status;
+	HANDLE hThread;
+	pDriverObject->DriverUnload = DriverUnload;
+	RegCreateKey(g_wsKey);
+	RegSetValueKey(g_wsKey, NULL, REG_SZ, L"idle", 16);
+	status = PsCreateSystemThread(&hThread, 0, NULL, NULL, NULL, WorkProc, NULL);
+	if (!NT_SUCCESS(status))
+	{
+		DbgPrint("kmdumper Driver Loaded.\n");
+		ZwClose(hThread);
+	}
+	return status;
+}

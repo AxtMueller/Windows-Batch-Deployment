@@ -3,6 +3,7 @@
 	Description: Windows-Batch-Deployment DLL function test.
 	Note: This file can be modified at will, but improper operation(s) will cause BSOD on the client(s).
 */
+#include <locale.h>
 #include <stdio.h>
 #include <Windows.h>
 #include "template.h"
@@ -167,7 +168,11 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 	//Download NTOSKRNL file.
 	WCHAR wsRF[MAX_PATH] = L"c:\\windows\\system32\\ntoskrnl.exe";
 	WCHAR wsLF[MAX_PATH] = {0};
-	swprintf(wsLF, MAX_PATH, L"c:\\[%S]ntoskrnl.exe", p->szDescription);
+	WCHAR wsLocalSaveDir[MAX_PATH] = {0};
+	wcscpy(wsLocalSaveDir, wsAppPath);
+	wcscat(wsLocalSaveDir, L"ntoskrnl");
+	CreateDirectoryW(wsLocalSaveDir, NULL);
+	swprintf(wsLF, MAX_PATH, L"%s\\[%S]ntoskrnl.exe", wsLocalSaveDir, p->szDescription);
 	if(_CmdDownloadFileFrom(p->id, wsRF, wsLF, NULL))
 	{
 		printf("[%04ld]Download file successfully.\n", p->id);
@@ -285,6 +290,24 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 		printf("[%04ld]Download file unsuccessfully.\n", p->id);
 		goto __exit;
 	}
+	//Get DLL file hash
+	if(_CmdFileOperation(p->id, CLIENT_FSO_GET_CRC32, L"C:\\22222222\\logo.png", NULL, &AttrVal))
+	{
+		printf("[%04ld]Get file CRC32 successfully: 0x%X\n", p->id, AttrVal);
+	}
+	else
+	{
+		printf("[%04ld]Get file CRC32 unsuccessfully.\n", p->id);
+	}
+	//Move file / folder after reboot
+	if(_CmdFileOperation(p->id, CLIENT_FSO_DELAY_MOV_DEL, L"C:\\22222222", L"C:\\33333333", NULL))
+	{
+		printf("[%04ld]Delay to delete file successfully.\n", p->id);
+	}
+	else
+	{
+		printf("[%04ld]Delay to delete file unsuccessfully.\n", p->id);
+	}
 	//======================================================================
 	//Binary execution (CmdExecuteBinary)
 	//======================================================================
@@ -314,7 +337,7 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 		printf("[%04ld]Run EXE unsuccessfully.\n", p->id);
 	}
 	//You must write an exported function name after the DLL path name (separated by comma), otherwise the DLL will not be loaded.
-	if(_CmdExecuteBinary(p->id, L"c:\\test.dll,0", CLIENT_RUN_DLL_P1, CLIENT_RUN_DLL_P2, &RetVal))
+	if(_CmdExecuteBinary(p->id, L"c:\\test.dll,ExportedFunction 123", CLIENT_RUN_DLL_P1, CLIENT_RUN_DLL_P2, &RetVal))
 	{
 		printf("[%04ld]Load DLL successfully.\n", p->id);
 	}
@@ -445,6 +468,161 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 	else
 	{
 		printf("[%04ld]Query auto-run unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//======================================================================
+	//Registry operation (CmdQueryRegistry + CmdRegistryOperation)
+	//======================================================================
+	ULONG dwItems = 0;
+	WCHAR wsKey[] = L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Services\\AfD";
+	//Query registry items of "AfD" key
+	if(_CmdQueryRegistry(p->id, wsKey, NULL, &dwItems))
+	{
+		printf("[%04ld]Enumerate registry key successfully, number of items: %ld.\n", p->id, dwItems);
+		//Allocate file buffer
+		PBDP_REG_INFO pItems = (PBDP_REG_INFO)MALLOC(sizeof(BDP_REG_INFO) * dwItems);
+		if(pItems)
+		{
+			RtlZeroMemory(pItems, sizeof(BDP_REG_INFO) * dwItems);
+			if(_CmdQueryRegistry(p->id, wsKey, pItems, &dwItems))
+			{
+				for(ULONG i=0; i<dwItems; i++)
+				{
+					if(pItems[i].Type==0xFF)
+					{
+						printf("[%04ld][REG_KEY      ]%S\n", p->id, pItems[i].Name);
+					}
+					else
+					{
+						char szTypeName[32] = {0};
+						//get type name
+						if (pItems[i].Type==REG_NONE){strcpy(szTypeName, "REG_NONE     ");}
+						else if (pItems[i].Type==REG_SZ){strcpy(szTypeName, "REG_SZ       ");}
+						else if (pItems[i].Type==REG_EXPAND_SZ){strcpy(szTypeName, "REG_EXPAND_SZ");}
+						else if (pItems[i].Type==REG_BINARY){strcpy(szTypeName, "REG_BINARY   ");}
+						else if (pItems[i].Type==REG_DWORD){strcpy(szTypeName, "REG_DWORD    ");}
+						else if (pItems[i].Type==REG_DWORD_BIG_ENDIAN){strcpy(szTypeName, "REG_DWORD_BIG_ENDIAN");}
+						else if (pItems[i].Type==REG_LINK){strcpy(szTypeName, "REG_LINK     ");}
+						else if (pItems[i].Type==REG_MULTI_SZ){strcpy(szTypeName, "REG_MULTI_SZ ");}
+						else if (pItems[i].Type==REG_RESOURCE_LIST){strcpy(szTypeName, "REG_RESOURCE_LIST");}
+						else if (pItems[i].Type==REG_FULL_RESOURCE_DESCRIPTOR){strcpy(szTypeName, "REG_FULL_RESOURCE_DESCRIPTOR");}
+						else if (pItems[i].Type==REG_RESOURCE_REQUIREMENTS_LIST){strcpy(szTypeName, "REG_RESOURCE_REQUIREMENTS_LIST");}
+						else if (pItems[i].Type==REG_QWORD){strcpy(szTypeName, "REG_QWORD    ");}
+						//show name
+						if(pItems[i].NameTooLong)
+						{
+							printf("[%04ld][%s]!%S\t\t", p->id, szTypeName, pItems[i].Name);
+						}
+						else
+						{
+							printf("[%04ld][%s]%S\t\t", p->id, szTypeName, pItems[i].Name);
+						}
+						//show data of some values
+						if(pItems[i].Type==REG_SZ || pItems[i].Type==REG_EXPAND_SZ)
+						{
+							printf("%S",(PWCHAR)pItems[i].Data);
+						}
+						else if(pItems[i].Type==REG_DWORD)
+						{
+							printf("%ld",*(PDWORD)pItems[i].Data);
+						}
+						printf("\n");
+					}
+				}
+			}
+			else
+			{
+				printf("[%04ld]Enumerate registry key unsuccessfully.\n", p->id);
+				bNeedExit = 1;
+			}
+			FREE(pItems);
+		}
+		if(bNeedExit)
+		{
+			goto __exit;
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query registry key item count unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Create registry key
+	wcscpy(wsKey,L"\\REGISTRY\\MACHINE\\SYSTEM\\00000000");
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_CREATE_KEY, wsKey, NULL, NULL, NULL, NULL))
+	{
+		printf("[%04ld]Create registry key successfully.\n", p->id);
+	}
+	else
+	{
+		printf("[%04ld]Create registry key unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Rename registry key
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_RENAME_KEY, wsKey, L"11111111", NULL, NULL, NULL))
+	{
+		printf("[%04ld]Rename registry key successfully.\n", p->id);
+		wcscpy(wsKey,L"\\REGISTRY\\MACHINE\\SYSTEM\\11111111");
+	}
+	else
+	{
+		printf("[%04ld]Rename registry key unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Set registry value
+	WCHAR wsValue[] = L"value";
+	WCHAR wsValueData[] = L"Mit freundlichen Grüßen";//PWCHAR wsValue=NULL;
+	DWORD dwValueType = REG_SZ;
+	DWORD dwValueLength = (DWORD)wcslen(wsValueData)*2;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_SET_VALUE, wsKey, wsValue, &dwValueType, wsValueData, &dwValueLength))
+	{
+		printf("[%04ld]Set registry value successfully.\n", p->id);
+	}
+	else
+	{
+		printf("[%04ld]Set registry value unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Query registry value
+	DWORD dwRetValueType, dwRetValueLength;
+	PVOID wsRetValueData;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, &dwRetValueType, NULL, &dwRetValueLength))
+	{
+		printf("[%04ld]Query registry value type and length successfully: type=%ld, length=%ld\n", p->id, dwRetValueType, dwRetValueLength);
+		wsRetValueData = MALLOC(dwRetValueLength+2);
+		if(wsRetValueData)
+		{
+			RtlZeroMemory(wsRetValueData, dwRetValueLength+2);
+			if(_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, NULL, wsRetValueData, &dwRetValueLength))
+			{
+				printf("[%04ld]Query registry value data successfully: %S\n", p->id, wsRetValueData);
+			}
+			FREE(wsRetValueData);
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query registry value type and length unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Delete registry value
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_DELETE_VALUE, wsKey, wsValue, NULL, NULL, NULL))
+	{
+		printf("[%04ld]Delete registry value successfully.\n", p->id);
+	}
+	else
+	{
+		printf("[%04ld]Delete registry value unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Delete registry key
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_DELETE_KEY, wsKey, NULL, NULL, NULL, NULL))
+	{
+		printf("[%04ld]Delete registry key successfully.\n", p->id);
+	}
+	else
+	{
+		printf("[%04ld]Delete registry key unsuccessfully.\n", p->id);
 		goto __exit;
 	}
 __exit:;

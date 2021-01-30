@@ -51,7 +51,7 @@ void WorkProc(PCLIENT_INFO p, char *szClientVersion)
 			printf("[%04ld]Run VBS unsuccessfully(1).\n",p->id);
 			fc++;
 		}
-		//if failed too many times, exit
+		//If it fails too many times, exit
 		if(fc>10){break;}
 	}
 }
@@ -63,6 +63,8 @@ void main()
 	//2.perform operations on each client once.
 	//3.traverse all clients 11 times.
 	//4.the time interval for each traversal of all clients is 1111 milliseconds.
-	CreateSimpleServer(9999, WorkProc, 0, 1, 11, 1111);
+	SetConsoleTitleW(L"Push Message Test");
+	puts("Description: This server program will push a message with UNICODE characters to all clients.\n");
+	CreateSimpleServer(9999, WorkProc, 0, 1, 0, 1111);
 	system("pause");
 }

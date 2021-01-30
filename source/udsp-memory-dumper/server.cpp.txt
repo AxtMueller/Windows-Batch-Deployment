@@ -1,0 +1,394 @@
+﻿/*
+	Author: Axt Müller
+	Description: Windows-Batch-Deployment's user-defined server program
+	Usage: Dump kernel memory from clients
+*/
+/*
+	Server program logic:
+	1. Confirm that the remote driver status is "idle".
+	2. Send parameters (fn, p1, p2...) and set remote driver status to "busy".
+	3. When the remote driver status is "idle" again, read the result and delete it.
+*/
+#include <stdio.h>
+#include <Windows.h>
+#include "../ServerTest/template.h"
+#include "../ServerTest/test.h"
+
+ULONG64 RegQueryRemoteQWORD(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue)
+{
+	DWORD dwRetValueType, dwRetValueLength;
+	PVOID RetValueData = NULL;
+	ULONG64 ret = 0;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, &dwRetValueType, NULL, &dwRetValueLength))
+	{
+		RetValueData = MALLOC(dwRetValueLength);
+		if(RetValueData)
+		{
+			if(_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, NULL, RetValueData, &dwRetValueLength))
+			{
+				memcpy(&ret, RetValueData, dwRetValueLength);
+			}
+			else
+			{
+				printf("[%04ld]Query registry value type and length unsuccessfully(2).\n", p->id);
+			}
+			FREE(RetValueData);
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query registry value type and length unsuccessfully(1).\n", p->id);
+	}
+	return ret;
+}
+
+PWCHAR RegQueryRemoteString(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue)
+{
+	DWORD dwRetValueType, dwRetValueLength;
+	PVOID wsRetValueData = NULL;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, &dwRetValueType, NULL, &dwRetValueLength))
+	{
+		wsRetValueData = MALLOC(dwRetValueLength+2);
+		if(wsRetValueData)
+		{
+			RtlZeroMemory(wsRetValueData, dwRetValueLength+2);
+			if(!_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, NULL, wsRetValueData, &dwRetValueLength))
+			{
+				printf("[%04ld]Query registry value type and length unsuccessfully(2).\n", p->id);
+				FREE(wsRetValueData);
+				wsRetValueData = NULL;
+			}
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query registry value type and length unsuccessfully(1).\n", p->id);
+	}
+	return (PWCHAR)wsRetValueData;
+}
+
+PUCHAR RegQueryRemoteBinary(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue)
+{
+	DWORD dwRetValueType, dwRetValueLength;
+	PUCHAR RetValueData = NULL;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, &dwRetValueType, NULL, &dwRetValueLength))
+	{
+		RetValueData = (PUCHAR)MALLOC(dwRetValueLength);
+		if(RetValueData)
+		{
+			RtlZeroMemory(RetValueData, dwRetValueLength);
+			if(!_CmdRegistryOperation(p->id, CLIENT_REG_QUERY_VALUE, wsKey, wsValue, NULL, RetValueData, &dwRetValueLength))
+			{
+				printf("[%04ld]Query registry value type and length unsuccessfully(2).\n", p->id);
+				FREE(RetValueData);
+				RetValueData = NULL;
+			}
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query registry value type and length unsuccessfully(1).\n", p->id);
+	}
+	return RetValueData;
+}
+
+BOOLEAN RegSetRemoteString(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue, PWCHAR wsValueData)
+{
+	DWORD dwValueType = REG_SZ;
+	DWORD dwValueLength = (DWORD)wcslen(wsValueData)*2;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_SET_VALUE, wsKey, wsValue, &dwValueType, wsValueData, &dwValueLength))
+	{
+		return TRUE;
+	}
+	else
+	{
+		printf("[%04ld]Set registry STRING value unsuccessfully.\n", p->id);
+		return FALSE;
+	}
+}
+
+BOOLEAN RegSetRemoteQWORD(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue, ULONG64 ValueData)
+{
+	DWORD dwValueType = REG_QWORD;
+	DWORD dwValueLength = 8;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_SET_VALUE, wsKey, wsValue, &dwValueType, &ValueData, &dwValueLength))
+	{
+		return TRUE;
+	}
+	else
+	{
+		printf("[%04ld]Set registry QWORD value unsuccessfully.\n", p->id);
+		return FALSE;
+	}
+}
+
+BOOLEAN RegSetRemoteDWORD(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue, ULONG ValueData)
+{
+	DWORD dwValueType = REG_DWORD;
+	DWORD dwValueLength = 4;
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_SET_VALUE, wsKey, wsValue, &dwValueType, &ValueData, &dwValueLength))
+	{
+		return TRUE;
+	}
+	else
+	{
+		printf("[%04ld]Set registry DWORD value unsuccessfully.\n", p->id);
+		return FALSE;
+	}
+}
+
+BOOLEAN RegDeleteRemoteValue(PCLIENT_INFO p, PWCHAR wsKey, PWCHAR wsValue)
+{
+	if(_CmdRegistryOperation(p->id, CLIENT_REG_DELETE_VALUE, wsKey, wsValue, NULL, NULL, NULL))
+	{
+		return TRUE;
+	}
+	else
+	{
+		printf("[%04ld]Delete registry value unsuccessfully.\n", p->id);
+		return FALSE;
+	}
+}
+
+BOOLEAN IsRemoteDriverIdle(PCLIENT_INFO p, PWCHAR wsKey, DWORD timeout)
+{
+	BOOLEAN b = FALSE;
+	DWORD SleepingTime = 0;
+	while(1)
+	{
+		PWCHAR status = RegQueryRemoteString(p, wsKey, NULL);
+		if(status)
+		{
+			if(wcsicmp(status,L"idle")==0)
+			{
+				b = TRUE;
+			}
+			FREE(status);
+		}
+		if(!b && timeout>0)
+		{
+			if(SleepingTime>timeout)
+			{
+				break;
+			}
+			Sleep(100);
+			SleepingTime+=100;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return b;
+}
+
+void PrintBufferLikeWINDBG(ULONG64 RemoteFunPtr, PUCHAR RemoteFunBin, ULONG max)
+{
+	printf("0x%I64X  ", RemoteFunPtr);
+	for(ULONG i=0; i<max; i++)
+	{
+		if((i+1)%8==0 && (i+1)%16!=0)
+		{
+			printf("%02X-", RemoteFunBin[i]);
+		}
+		else
+		{
+			printf("%02X ", RemoteFunBin[i]);
+		}
+		if((i+1)%16==0 && (i+1)!=max)
+		{
+			printf("\n0x%I64X  ", RemoteFunPtr + i + 1);
+		}
+	}
+	puts("");
+}
+
+void WorkProc(PCLIENT_INFO p, char *szClientVersion)
+{
+	//Query app path
+	WCHAR wsAppPath[MAX_PATH] = {0};
+	if(GetModuleFileNameW(0, wsAppPath, MAX_PATH))
+	{
+		size_t i, c = wcslen(wsAppPath);
+		for(i=c-1; i>=0; i--)
+		{
+			if(wsAppPath[i]==L'\\')
+			{
+				wsAppPath[i+1]=L'\0';
+				break;
+			}
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query program path unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Different driver for different system
+	if(strstr(p->szDescription, "(WIN32-"))
+	{
+		swprintf(wsAppPath+wcslen(wsAppPath), L"udsp-md-32.sys");
+	}
+	else
+	{
+		swprintf(wsAppPath+wcslen(wsAppPath), L"udsp-md-64.sys");
+	}
+	//Query the attribute of the driver file to obtain its existence status.
+	ULONG AttrVal;
+	WCHAR wsRemoteDriver[] = L"c:\\kmdumper.sys";
+	if(_CmdFileOperation(p->id, CLIENT_FSO_GET_ATTRIB, wsRemoteDriver, NULL, &AttrVal))
+	{
+		printf("[%04ld]Query file attribute successfully: 0x%X.\n", p->id, AttrVal);
+		if(AttrVal==0)
+		{
+			//Upload driver
+			if(_CmdUploadFileTo(p->id, wsAppPath, L"c:\\kmdumper.sys", NULL))
+			{
+				printf("[%04ld]Upload file successfully.\n", p->id);
+			}
+			else
+			{
+				printf("[%04ld]Upload file unsuccessfully.\n", p->id);
+				goto __exit;
+			}
+			//Load driver
+			ULONG64 RetVal = 0;
+			if(_CmdExecuteBinary(p->id, wsRemoteDriver, CLIENT_RUN_SYS_P1, CLIENT_RUN_SYS_P2, &RetVal))
+			{
+				if(RetVal)
+				{
+					printf("[%04ld]Load driver successfully.\n",p->id);
+				}
+				else
+				{
+					printf("[%04ld]Load driver unsuccessfully(2).\n",p->id);
+				}
+			}
+			else
+			{
+				printf("[%04ld]Load driver unsuccessfully(1).\n",p->id);
+			}
+			//Delete driver after reboot
+			if(_CmdFileOperation(p->id, CLIENT_FSO_DELAY_MOV_DEL, wsRemoteDriver, NULL, NULL))
+			{
+				printf("[%04ld]Delay to delete driver successfully.\n", p->id);
+			}
+			else
+			{
+				printf("[%04ld]Delay to delete driver unsuccessfully.\n", p->id);
+			}
+		}
+	}
+	else
+	{
+		printf("[%04ld]Query file attribute unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Query remote system information
+	WCHAR wsKey[] = L"\\REGISTRY\\MACHINE\\SOFTWARE\\KMDUMPER";
+	//Get remote kernel module info
+	if(IsRemoteDriverIdle(p, wsKey, 0))
+	{
+		//Set parameters
+		if(!RegSetRemoteString(p, wsKey, L"fn", L"lm")){printf("[%04ld]Sent command 'LM' unsuccessfully(0).\n",p->id);goto __exit;}
+		if(!RegSetRemoteString(p, wsKey, NULL, L"busy")){printf("[%04ld]Sent command 'LM' unsuccessfully(1).\n",p->id);goto __exit;}
+		printf("[%04ld]Querying remote module list...\n",p->id);
+		//Get driver status
+		if(!IsRemoteDriverIdle(p, wsKey, 1111)){printf("[%04ld]Remote driver status is abnormal.\n", p->id);goto __exit;}
+		//Get result
+		PWCHAR wsLM = RegQueryRemoteString(p, wsKey, L"result");
+		if(wsLM)
+		{
+			printf("[%04ld]Query remote module list successfully:\n",p->id);
+			printf("%S",wsLM);
+			FREE(wsLM);
+		}
+		else
+		{
+			printf("[%04ld]Query remote module list unsuccessfully.\n",p->id);
+			goto __exit;
+		}
+		//Delete result
+		RegDeleteRemoteValue(p, wsKey, L"result");
+	}
+	else
+	{
+		printf("[%04ld]Remote driver is not idle.\n", p->id);
+	}
+	//Get remote kernel function address
+	ULONG64 RemoteFunPtr = 0;
+	if(IsRemoteDriverIdle(p, wsKey, 0))
+	{
+		//Set parameters
+		if(!RegSetRemoteString(p, wsKey, L"fn", L"ga")){printf("[%04ld]Sent command 'GA' unsuccessfully(0).\n",p->id);goto __exit;}
+		if(!RegSetRemoteString(p, wsKey, L"p1", L"nt")){printf("[%04ld]Sent command 'GA' unsuccessfully(1).\n",p->id);goto __exit;}
+		if(!RegSetRemoteString(p, wsKey, L"p2", L"NtCreateFile")){printf("[%04ld]Sent command 'GA' unsuccessfully(2).\n",p->id);goto __exit;}
+		if(!RegSetRemoteString(p, wsKey, NULL, L"busy")){printf("[%04ld]Sent command 'GA' unsuccessfully(3).\n",p->id);goto __exit;}
+		printf("[%04ld]Querying remote kernel function address...\n",p->id);
+		//Get driver status
+		if(!IsRemoteDriverIdle(p, wsKey, 1111)){printf("[%04ld]Remote driver status is abnormal.\n", p->id);goto __exit;}
+		//Get result
+		RemoteFunPtr = RegQueryRemoteQWORD(p, wsKey, L"result");
+		if(RemoteFunPtr)
+		{
+			printf("[%04ld]Query remote kernel function address successfully: 0x%I64X\n",p->id,RemoteFunPtr);
+		}
+		else
+		{
+			printf("[%04ld]Query remote kernel function address unsuccessfully.\n",p->id);
+			goto __exit;
+		}
+		//Delete result
+		RegDeleteRemoteValue(p, wsKey, L"result");
+	}
+	else
+	{
+		printf("[%04ld]Remote driver is not idle.\n", p->id);
+	}
+	//Get remote kernel function code
+	if(IsRemoteDriverIdle(p, wsKey, 0))
+	{
+		ULONG i=0, max=256;
+		//Set parameters
+		if(!RegSetRemoteString(p, wsKey, L"fn", L"dm")){printf("[%04ld]Sent command 'DM' unsuccessfully(0).\n",p->id);goto __exit;}
+		if(!RegSetRemoteQWORD(p, wsKey, L"p1", RemoteFunPtr)){printf("[%04ld]Sent command 'DM' unsuccessfully(1).\n",p->id);goto __exit;}
+		if(!RegSetRemoteDWORD(p, wsKey, L"p2", max)){printf("[%04ld]Sent command 'DM' unsuccessfully(2).\n",p->id);goto __exit;}
+		if(!RegSetRemoteString(p, wsKey, NULL, L"busy")){printf("[%04ld]Sent command 'DM' unsuccessfully(3).\n",p->id);goto __exit;}
+		printf("[%04ld]Querying remote kernel function code...\n",p->id);
+		//Get driver status
+		if(!IsRemoteDriverIdle(p, wsKey, 1111)){printf("[%04ld]Remote driver status is abnormal.\n", p->id);goto __exit;}
+		//Get result
+		PUCHAR RemoteFunBin = RegQueryRemoteBinary(p, wsKey, L"result");
+		if(RemoteFunBin)
+		{
+			printf("[%04ld]Query remote kernel function code successfully:\n",p->id);
+			PrintBufferLikeWINDBG(RemoteFunPtr,RemoteFunBin,max);
+			FREE(RemoteFunBin);
+		}
+		else
+		{
+			printf("[%04ld]Query remote kernel function code unsuccessfully.\n",p->id);
+			goto __exit;
+		}
+		//Delete result
+		RegDeleteRemoteValue(p, wsKey, L"result");
+	}
+	else
+	{
+		printf("[%04ld]Remote driver is not idle.\n", p->id);
+	}
+__exit:;
+}
+
+void main()
+{
+	//NOTE:
+	//1.don't check for update.
+	//2.perform operations on each client once.
+	//3.traverse all clients unlimited times.
+	//4.the time interval for each traversal of all clients is 1111 milliseconds.
+	SetConsoleTitleW(L"Kernel Memory Dumper");
+	puts("Description: This server program will push a driver that can dump kernel memory to all clients.\n");
+	CreateSimpleServer(9999, WorkProc, 0, 1, 0, 1111);
+	system("pause");
+}

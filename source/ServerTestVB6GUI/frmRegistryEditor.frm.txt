@@ -1,0 +1,151 @@
+VERSION 5.00
+Begin VB.Form frmRegistryEditor 
+   BorderStyle     =   4  'Fixed ToolWindow
+   Caption         =   "Registry Value Editor"
+   ClientHeight    =   3270
+   ClientLeft      =   105
+   ClientTop       =   435
+   ClientWidth     =   7095
+   Icon            =   "frmRegistryEditor.frx":0000
+   LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   3270
+   ScaleWidth      =   7095
+   ShowInTaskbar   =   0   'False
+   StartUpPosition =   1  'CenterOwner
+   Begin VB.Frame Frame1 
+      Caption         =   "Name"
+      Height          =   615
+      Left            =   120
+      TabIndex        =   10
+      Top             =   120
+      Width           =   6855
+      Begin VB.TextBox Text1 
+         Height          =   270
+         Left            =   120
+         TabIndex        =   11
+         Top             =   240
+         Width           =   6615
+      End
+   End
+   Begin VB.Frame Frame2 
+      Caption         =   "Data"
+      Height          =   2295
+      Left            =   120
+      TabIndex        =   8
+      Top             =   840
+      Width           =   4815
+      Begin VB.TextBox Text2 
+         Height          =   1935
+         Left            =   120
+         MultiLine       =   -1  'True
+         ScrollBars      =   3  'Both
+         TabIndex        =   9
+         Top             =   240
+         Width           =   4575
+      End
+   End
+   Begin VB.Frame Frame3 
+      Caption         =   "Type"
+      Height          =   1815
+      Left            =   5040
+      TabIndex        =   1
+      Top             =   840
+      Width           =   1935
+      Begin VB.OptionButton Option1 
+         Caption         =   "REG_SZ"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   7
+         ToolTipText     =   "Write string directly."
+         Top             =   240
+         Width           =   1575
+      End
+      Begin VB.OptionButton Option2 
+         Caption         =   "REG_EXPAND_SZ"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   6
+         ToolTipText     =   "Write string directly."
+         Top             =   480
+         Width           =   1695
+      End
+      Begin VB.OptionButton Option3 
+         Caption         =   "REG_MULTI_SZ"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   5
+         ToolTipText     =   "Write each string per line."
+         Top             =   720
+         Width           =   1575
+      End
+      Begin VB.OptionButton Option4 
+         Caption         =   "REG_BINARY"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   4
+         ToolTipText     =   "Use HEX number without ""0x"" prefix, split each number by BLANK (example: 11 AA bb)."
+         Top             =   960
+         Width           =   1575
+      End
+      Begin VB.OptionButton Option5 
+         Caption         =   "REG_DWORD"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   3
+         ToolTipText     =   "Use DEC number or HEX number with ""0x"" prefix."
+         Top             =   1200
+         Width           =   1575
+      End
+      Begin VB.OptionButton Option6 
+         Caption         =   "REG_QWORD"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   2
+         ToolTipText     =   "Only HEX number with ""0x"" prefix can be used."
+         Top             =   1440
+         Width           =   1575
+      End
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "OK"
+      Height          =   375
+      Left            =   5040
+      TabIndex        =   0
+      Top             =   2760
+      Width           =   1935
+   End
+End
+Attribute VB_Name = "frmRegistryEditor"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+Private Sub Command1_Click()
+    frmMain.txtTempRegData.Text = Text2.Text
+    frmMain.txtTempRegData.ToolTipText = Text1.Text
+    If Option1.Value = True Then
+        frmMain.txtTempRegData.Tag = Option1.Caption
+    ElseIf Option2.Value = True Then
+        frmMain.txtTempRegData.Tag = Option2.Caption
+    ElseIf Option3.Value = True Then
+        frmMain.txtTempRegData.Tag = Option3.Caption
+    ElseIf Option4.Value = True Then
+        frmMain.txtTempRegData.Tag = Option4.Caption
+    ElseIf Option5.Value = True Then
+        frmMain.txtTempRegData.Tag = Option5.Caption
+    ElseIf Option6.Value = True Then
+        frmMain.txtTempRegData.Tag = Option6.Caption
+    End If
+    Unload Me
+End Sub
+
+Private Sub Form_Load()
+    frmMain.txtTempRegData.Tag = ""
+    frmMain.txtTempRegData.Text = ""
+    frmMain.txtTempRegData.ToolTipText = ""
+End Sub

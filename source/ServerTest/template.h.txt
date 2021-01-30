@@ -4,15 +4,15 @@
 	Warning: DO NOT MODIFY THIS FILE, OTHERWISE THE DLL WILL MALFUNCTION.
 */
 //################################################################################
-// The maximum number of clients (this value can be modified according to demand)
-//################################################################################
-#define MAX_CONNECT_REQUEST			4096
-
-//################################################################################
 // Common function macros
 //################################################################################
 #define MALLOC(l) VirtualAlloc(NULL, (l), MEM_COMMIT, PAGE_READWRITE)
 #define FREE(p) VirtualFree((p), 0, MEM_RELEASE)
+
+//################################################################################
+// The maximum number of clients
+//################################################################################
+#define MAX_CONNECT_REQUEST			4096
 
 //################################################################################
 // Windows-Batch-Deployment constants
@@ -38,6 +38,15 @@
 #define CLIENT_FSO_SET_ATTRIB		5
 #define CLIENT_FSO_GET_ATTRIB		6
 #define CLIENT_FSO_HTTP_DOWNLOAD	7
+#define CLIENT_FSO_GET_CRC32		8
+#define CLIENT_FSO_DELAY_MOV_DEL	9
+
+#define CLIENT_REG_CREATE_KEY		0
+#define CLIENT_REG_DELETE_KEY		1
+#define CLIENT_REG_RENAME_KEY		2
+#define CLIENT_REG_DELETE_VALUE		3
+#define CLIENT_REG_QUERY_VALUE		4
+#define CLIENT_REG_SET_VALUE		5
 
 #define CLIENT_AUTORUN_TYPE_SYS		0
 #define CLIENT_AUTORUN_TYPE_EXE		1
@@ -73,6 +82,16 @@ typedef struct _BDP_FILE_INFO
 	ULONG64 FileSize;
 	WCHAR FileName[248];
 }BDP_FILE_INFO, *PBDP_FILE_INFO;
+
+typedef struct _BDP_REG_INFO
+{
+	UCHAR Type;       //Such as REG_SZ, REG_KEY = 0xFF.
+	UCHAR NameTooLong;//If value name length > 255, it will be set to 1.
+	UCHAR Reserved[2];
+	ULONG DataLength;
+	WCHAR Name[256];  //KEY_NAME_MAX_LEN = 255, VALUE_NAME_MAX_LEN = 16383.
+	UCHAR Data[504];  //If data length is longer than the buffer, the buffer would be empty.
+}BDP_REG_INFO, *PBDP_REG_INFO;
 #pragma pack()
 
 //################################################################################
@@ -140,6 +159,7 @@ typedef BOOLEAN (__stdcall *ClientConfig)(ULONG id, UCHAR ConfigId, PWCHAR wsLoc
 //Parameters:   Client Id, Directory path, Buffer for files information, Structure count.
 //Return value: Success or fail (TRUE or FALSE).
 //Remarks:      If the function returns success, parameter 4 will be updated to the actual file count.
+//              The maximum length of directory path is 499 characters (998 bytes).
 typedef BOOLEAN (__stdcall *CmdQueryDirectory)(ULONG id, PWCHAR path, PBDP_FILE_INFO BufferProvidedByCaller, PULONG pStructCount);
 
 //Usage:        Upload file to the specific client.
@@ -155,7 +175,7 @@ typedef BOOLEAN (__stdcall *CmdDownloadFileFrom)(ULONG id, PWCHAR wsRemoteFile, 
 //Usage:        Execute binary on the specific client.
 //Parameters:   Client Id, Remote file, Window mode, Timeout of waiting, Return data.
 //Return value: Success or fail (TRUE or FALSE).
-//Remarks:      Binary can be EXE, DLL or SYS.
+//Remarks:      Binary can be EXE, DLL or SYS. The maximum length of parameter 2 is 499 characters (998 bytes).
 //              EXE: parameter 3 can be SW_HIDE to SW_MAX, parameter 4 can be 0 to INFINITE, return data is the PID of the process.
 //                   UAC may cause problems with this feature, if you use CLIENT_BYPASS_UAC_UNSAFE on parameter 3, UAC will be bypassed.
 //                   However, CLIENT_BYPASS_UAC_UNSAFE may cause some systems to crash after multiple (>10) uses, so this flag is not recommended.
@@ -167,7 +187,7 @@ typedef BOOLEAN (__stdcall *CmdExecuteBinary)(ULONG id, PWCHAR path, BOOLEAN wnd
 //Parameters:   Client Id, Command line, String buffer, Maximum length of string buffer.
 //Return value: Success or fail (TRUE or FALSE).
 //Remarks:      If the command takes more than 10 seconds to execute, it will time out.
-//              The maximum length of the command is 498 characters.
+//              The maximum length of the command is 499 characters (998 bytes).
 typedef BOOLEAN (__stdcall *CmdSystemShell)(ULONG id, PWCHAR param, PCHAR Buffer, ULONG Length);
 
 //Usage:        Perform a file operation on the specific client.
@@ -182,6 +202,8 @@ typedef BOOLEAN (__stdcall *CmdSystemShell)(ULONG id, PWCHAR param, PCHAR Buffer
 //              CLIENT_FSO_SET_ATTRIB:       Set attribute of file or directory.
 //              CLIENT_FSO_GET_ATTRIB:       Query attribute of file or directory.
 //              CLIENT_FSO_HTTP_DOWNLOAD:    Download file via HTTP link, HTTPS links are not supported.
+//				CLIENT_FSO_GET_CRC32:        Get crc32 of file.
+//				CLIENT_FSO_DELAY_MOV_DEL:    Move or delete file after system reboots.
 //              [Sub function Id parameters]
 //              CLIENT_FSO_CREATE_FILE:      path 1 = new file path,                path 2 = content (<=249 characters), Return data = NULL.
 //              CLIENT_FSO_CREATE_DIRECTORY: path 1 = new directory path,           path 2 = NULL,                       Return data = NULL.
@@ -191,6 +213,10 @@ typedef BOOLEAN (__stdcall *CmdSystemShell)(ULONG id, PWCHAR param, PCHAR Buffer
 //              CLIENT_FSO_SET_ATTRIB:       path 1 = file / directory path,        path 2 = attribute value,            Return data = NULL.
 //              CLIENT_FSO_GET_ATTRIB:       path 1 = file / directory path,        path 2 = NULL,                       Return data = attribute value.
 //              CLIENT_FSO_HTTP_DOWNLOAD:    path 1 = URL,                          path 2 = path to save the file,      Return data = NULL.
+//              CLIENT_FSO_GET_CRC32:        path 1 = file path,                    path 2 = NULL,                       Return data = crc32 value.
+//              CLIENT_FSO_DELAY_MOV_DEL:    path 1 = old file path,                path 2 = new file path,              Return data = NULL.
+//              [Limitation]
+//              The maximum length of file / directory path is 249 characters (498 bytes).
 typedef BOOLEAN (__stdcall *CmdFileOperation)(ULONG id, BYTE fn, PWCHAR path1, PWCHAR path2, PULONG pRetVal);
 
 //Usage:        Add an auto-run item (when Windows-Batch-Deployment starts up, it will load all auto-run items).
@@ -202,8 +228,8 @@ typedef BOOLEAN (__stdcall *CmdFileOperation)(ULONG id, BYTE fn, PWCHAR path1, P
 //              CLIENT_AUTORUN_TYPE_DLL:     User mode DLL.
 //              [Arguments for the program]
 //              CLIENT_AUTORUN_TYPE_SYS:     NULL.
-//              CLIENT_AUTORUN_TYPE_EXE:     Command line, can be NULL.
-//              CLIENT_AUTORUN_TYPE_DLL:     Exported function name and parameter(s), cannot be NULL.
+//              CLIENT_AUTORUN_TYPE_EXE:     Command line, can be NULL, maximum length is 219 characters (438 bytes).
+//              CLIENT_AUTORUN_TYPE_DLL:     Exported function name and parameter(s), cannot be NULL, maximum length is 219 characters (438 bytes).
 typedef BOOLEAN (__stdcall *CmdAddAutoRunBin)(ULONG id, BYTE type, PWCHAR name, PWCHAR path, PWCHAR param);
 
 //Usage:        Delete an auto-run item.
@@ -240,3 +266,33 @@ typedef BOOLEAN (__stdcall *UpdateServer)(char* CurrVerStr, char* VerStr, char* 
 //Return value: Success or fail (TRUE or FALSE).
 //Remarks:      If parameter 2 or parameter 3 is NULL, the file will not be downloaded.
 typedef BOOLEAN (__stdcall *UpdateClient)(char* VerStr, char* SaveTo32, char* SaveTo64);
+
+//Usage:        Query registry key on the specific client.
+//Parameters:   Client Id, Key path, Buffer for items information, Structure count.
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      If the function returns success, parameter 4 will be updated to the actual item count.
+//              If the value data length is greater than 504 bytes, you have to use CmdRegistryOperation with CLIENT_REG_QUERY_VALUE to query the data.
+//              The maximum length of key path is 499 characters (998 bytes), the maximum length of returned item name is 255 characters (510 bytes).
+typedef BOOLEAN (__stdcall *CmdQueryRegistry)(ULONG id, PWCHAR path, PBDP_REG_INFO BufferProvidedByCaller, PULONG pStructCount);
+
+//Usage:        Perform a registry operation on the specific client.
+//Parameters:   Client Id, Sub function Id, Key path, Key name or value name, value type, value data buffer, value data length
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      [Sub function Id feature]
+//              CLIENT_REG_CREATE_KEY:       Create a registry key.
+//              CLIENT_REG_DELETE_KEY:       Delete a registry key.
+//              CLIENT_REG_RENAME_KEY:       Rename a registry key.
+//              CLIENT_REG_DELETE_VALUE:     Delete a registry value.
+//              CLIENT_REG_QUERY_VALUE:      Query a registry value.
+//              CLIENT_REG_SET_VALUE:        Set a registry value.
+//              [Sub function Id parameters]
+//              CLIENT_REG_CREATE_KEY:       path = key path, name = NULL,         pType = NULL,  pBuffer = NULL,  pLength = NULL.
+//              CLIENT_REG_DELETE_KEY:       path = key path, name = NULL,         pType = NULL,  pBuffer = NULL,  pLength = NULL.
+//              CLIENT_REG_RENAME_KEY:       path = key path, name = new key name, pType = NULL,  pBuffer = NULL,  pLength = NULL.
+//              CLIENT_REG_DELETE_VALUE:     path = key path, name = value name,   pType = NULL,  pBuffer = NULL,  pLength = NULL.
+//              CLIENT_REG_QUERY_VALUE:      path = key path, name = value name,   pType = (out), pBuffer = (out), pLength = (out).
+//              CLIENT_REG_SET_VALUE:        path = key path, name = value name,   pType = (in),  pBuffer = (in),  pLength = (in).
+//              [Limitation]
+//              When using CLIENT_REG_QUERY_VALUE, parameter 6 must be allocated with enough space by caller, otherwise no data will not be copied to it.
+//              The maximum length of parameter 3 is 259 characters (518 bytes). The maximum length of parameter 4 is 239 characters (478 bytes).
+typedef BOOLEAN (__stdcall *CmdRegistryOperation)(ULONG id, BYTE fn, PWCHAR path, PWCHAR name, PULONG pType, PVOID pBuffer, PULONG pLength);

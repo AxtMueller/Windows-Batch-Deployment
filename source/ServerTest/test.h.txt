@@ -22,6 +22,8 @@ extern CmdDownloadFileFrom _CmdDownloadFileFrom;
 extern CmdExecuteBinary _CmdExecuteBinary;
 extern CmdSystemShell _CmdSystemShell;
 extern CmdFileOperation _CmdFileOperation;
+extern CmdQueryRegistry _CmdQueryRegistry;
+extern CmdRegistryOperation _CmdRegistryOperation;
 extern CmdAddAutoRunBin _CmdAddAutoRunBin;
 extern CmdDelAutoRunBin _CmdDelAutoRunBin;
 extern CmdQueryAutoRunBin _CmdQueryAutoRunBin;
