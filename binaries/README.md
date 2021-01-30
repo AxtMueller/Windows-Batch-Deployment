@@ -1,6 +1,6 @@
 # Introduction
 Binary files of Windows Batch Deployment. [Click here to download the entire package.](https://github.com/AxtMueller/Windows-Batch-Deployment/archive/master.zip)
-### How to use WBD as remote access tool?
+### How to use WBD as a remote access tool?
 1. Open InstallClient.bat.txt (in CLIENT directory) with a text editor.
 2. Replace 127.0.0.1:9999 with your server IP or domain name. If you don't, the server will be localhost.
 ##### If you just want to test the effect, start with next step: 
