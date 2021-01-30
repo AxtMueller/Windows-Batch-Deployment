@@ -26,10 +26,10 @@ Because I don't have a digital certificate, I have to use the leaked digital cer
 If you want to share your server programs, please commit your programs and / or source code to "Issues" with brief description. I will add your programs to the "User-defined server program" directory if I think they are useful.
 
 # Application Scenario Examples
-1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules, pushing notifications). I used to work in this post, this is my original purpose of making this software. [DEMO](binaries/user-defined-server-program/push-message-test) 
-2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you need to get some data or perform some debugging tests secretly (such as issuing a debug version software to specific users). [DEMO](binaries/user-defined-server-program/dump-kernel-memory) 
-3. You are a person with a lot of secrets. You need to erase the data on your computer when you find that your computer is stolen. [DEMO](binaries/user-defined-server-program/erase-disk-data) 
-4. You are a voyeur, you want to know what your spouse did on his / her computer. [DEMO](binaries/user-defined-server-program/periodic-screen-capture) 
+1. You are an administrator of IT department. You need to perform repetitive tasks on hundreds of computers (such as updating firewall rules, [pushing notifications](binaries/user-defined-server-program/push-message-test)). I used to work in this post, this is my original purpose of making this software.  
+2. You are a developer. Your software does not run properly on a few users' systems, but it cannot be replicated in your test environment, so you have to [get some data](binaries/user-defined-server-program/dump-kernel-memory) or perform some debugging tests (such as issuing a debug version software to specific users).  
+3. You are a person with a lot of secrets. You need to [erase the data](binaries/user-defined-server-program/erase-disk-data) on your computer when you find that your computer is stolen.  
+4. You are a voyeur, you want to know what your spouse did on computer [by taking screenshots](binaries/user-defined-server-program/periodic-screen-capture). 
 
 # [Screenshots](/screenshots/README.md)
 In order to optimize the page load speed in low quality network environments, I only placed one picture on this page. 
