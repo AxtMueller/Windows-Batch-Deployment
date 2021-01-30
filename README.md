@@ -49,8 +49,9 @@ In order to optimize the page load speed in low quality network environments, I 
 4. Source code customization: Add features to WBD according to your needs. This service is only available to customers who have purchased the WBD source code.
 
 # [Revision History](/binaries/README.md#all-revision-history)
-### Client Version: 20210111
-Bug fix: BSOD may happen when querying directory.  
-Bug fix: BSOD may happen when downloading file via HTTP link.
-### Server Version: 20200202
-This is the first public version.
+### Client Version: 20210130
+Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.
+New feature: Calculate CRC32 of file and delete/move file after reboot.
+New feature: Registry operations.
+### Server Version: 20210130
+New feature: Functions of registry operation.
