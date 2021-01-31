@@ -1,7 +1,7 @@
 ﻿/*
 	Author: Axt Müller
 	Description: Windows-Batch-Deployment simple user-defined server program templete header file.
-	Warning: DO NOT MODIFY THIS FILE, OTHERWISE THE DLL WILL MALFUNCTION.
+	Warning: THIS FILE SHOULD NOT BE MODIFIED, OTHERWISE THE DLL WILL MALFUNCTION.
 */
 //################################################################################
 // Common function macros
