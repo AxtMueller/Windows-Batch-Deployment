@@ -1,7 +1,7 @@
 ﻿/*
 	Author: Axt Müller
 	Description: Windows-Batch-Deployment DLL function test header file.
-	Warning: THIS FILE DO NOT NEED TO BE MODIFIED.
+	Warning: THIS FILE SHOULD NOT BE MODIFIED.
 */
 //################################################################################
 // Windows-Batch-Deployment functions
