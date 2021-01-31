@@ -1,7 +1,7 @@
 ﻿/*
 	Author: Axt Müller
 	Description: Windows-Batch-Deployment simple user-defined server program templete.
-	Warning: THIS FILE DO NOT NEED TO BE MODIFIED.
+	Warning: THIS FILE SHOULD NOT BE MODIFIED.
 */
 #include <stdio.h>
 #include <Windows.h>
