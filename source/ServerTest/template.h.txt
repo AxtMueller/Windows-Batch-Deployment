@@ -97,10 +97,6 @@ typedef struct _BDP_REG_INFO
 //################################################################################
 // Windows-Batch-Deployment function prototypes
 //################################################################################
-//Usage:        (internal use).
-//Parameters:   (internal use).
-typedef void (__stdcall *SENDRECVCALLBACK)(ULONG current, ULONG all);
-
 //Usage:        Initialize DLL.
 //Parameters:   The port to use.
 //Return value: Success or fail (TRUE or FALSE).
@@ -165,12 +161,12 @@ typedef BOOLEAN (__stdcall *CmdQueryDirectory)(ULONG id, PWCHAR path, PBDP_FILE_
 //Usage:        Upload file to the specific client.
 //Parameters:   Client Id, Local file, Remote file, NULL.
 //Return value: Success or fail (TRUE or FALSE).
-typedef BOOLEAN (__stdcall *CmdUploadFileTo)(ULONG id, PWCHAR wsLocalFile, PWCHAR wsRemoteSaveTo, SENDRECVCALLBACK callback);
+typedef BOOLEAN (__stdcall *CmdUploadFileTo)(ULONG id, PWCHAR wsLocalFile, PWCHAR wsRemoteSaveTo, void* reserved);
 
 //Usage:        Download file from the specific client.
 //Parameters:   Client Id, Remote file, Local file, NULL.
 //Return value: Success or fail (TRUE or FALSE).
-typedef BOOLEAN (__stdcall *CmdDownloadFileFrom)(ULONG id, PWCHAR wsRemoteFile, PWCHAR wsLocalSaveTo, SENDRECVCALLBACK callback);
+typedef BOOLEAN (__stdcall *CmdDownloadFileFrom)(ULONG id, PWCHAR wsRemoteFile, PWCHAR wsLocalSaveTo, void* reserved);
 
 //Usage:        Execute binary on the specific client.
 //Parameters:   Client Id, Remote file, Window mode, Timeout of waiting, Return data.
