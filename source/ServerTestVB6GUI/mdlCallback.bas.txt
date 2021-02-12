@@ -1,4 +1,4 @@
-Attribute VB_Name = "frmCallback"
+Attribute VB_Name = "mdlCallback"
 Option Explicit
 
 Public Function CodePtr(ByVal p As Long) As Long
