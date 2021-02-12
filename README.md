@@ -49,9 +49,8 @@ In order to optimize the page load speed in low quality network environments, I 
 4. Source code customization: Add features to WBD according to your needs. This service is only available to customers who have purchased the WBD source code.
 
 # [Revision History](/binaries/README.md#all-revision-history)
-### Client Version: 20210130
-Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.  
-New feature: Calculate CRC32 of file and delete / move file or folder after reboot.  
-New feature: Registry operations.  
-### Server Version: 20210130
-New feature: Functions of registry operation.
+### Client Version: 20210212
+Bug fix: Accelerate file transfer speed.
+New feature: File transfer progress callback.
+### Server Version: 20210212
+New feature: File transfer progress callback.
