@@ -200,50 +200,34 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Registry Editor"
       TabPicture(1)   =   "frmMain.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lvReg"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "txtRegPath"
-      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(0)=   "txtTempRegData"
+      Tab(1).Control(1)=   "btnOperate(19)"
       Tab(1).Control(2)=   "btnOperate(18)"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "btnOperate(19)"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "txtTempRegData"
-      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(3)=   "txtRegPath"
+      Tab(1).Control(4)=   "lvReg"
       Tab(1).ControlCount=   5
       TabCaption(2)   =   "System Shell"
       TabPicture(2)   =   "frmMain.frx":0038
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "btnOperate(3)"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "btnOperate(2)"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "txtCMD"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "txtCmdRet"
-      Tab(2).Control(3).Enabled=   0   'False
+      Tab(2).Control(0)=   "txtCmdRet"
+      Tab(2).Control(1)=   "txtCMD"
+      Tab(2).Control(2)=   "btnOperate(2)"
+      Tab(2).Control(3)=   "btnOperate(3)"
       Tab(2).ControlCount=   4
       TabCaption(3)   =   "Server Configuration"
       TabPicture(3)   =   "frmMain.frx":0054
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "txtCfgText"
-      Tab(3).Control(0).Enabled=   0   'False
-      Tab(3).Control(1)=   "txtCfgFile"
-      Tab(3).Control(1).Enabled=   0   'False
-      Tab(3).Control(2)=   "btnOperate(4)"
-      Tab(3).Control(2).Enabled=   0   'False
-      Tab(3).Control(3)=   "btnOperate(5)"
-      Tab(3).Control(3).Enabled=   0   'False
+      Tab(3).Control(0)=   "btnOperate(5)"
+      Tab(3).Control(1)=   "btnOperate(4)"
+      Tab(3).Control(2)=   "txtCfgFile"
+      Tab(3).Control(3)=   "txtCfgText"
       Tab(3).ControlCount=   4
       TabCaption(4)   =   "Auto-Run Management"
       TabPicture(4)   =   "frmMain.frx":0070
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "Frame6"
-      Tab(4).Control(0).Enabled=   0   'False
+      Tab(4).Control(0)=   "Frame4"
       Tab(4).Control(1)=   "Frame5"
-      Tab(4).Control(1).Enabled=   0   'False
-      Tab(4).Control(2)=   "Frame4"
-      Tab(4).Control(2).Enabled=   0   'False
+      Tab(4).Control(2)=   "Frame6"
       Tab(4).ControlCount=   3
       Begin VB.TextBox txtTempRegData 
          Height          =   285
@@ -525,10 +509,10 @@ Begin VB.Form frmMain
       Begin VB.Frame Frame3 
          Caption         =   "Remote"
          Height          =   5295
-         Left            =   3960
+         Left            =   4440
          TabIndex        =   19
          Top             =   420
-         Width           =   7575
+         Width           =   7095
          Begin VB.CommandButton btnFile 
             Caption         =   "new dir"
             Height          =   255
@@ -639,8 +623,8 @@ Begin VB.Form frmMain
             TabIndex        =   23
             ToolTipText     =   "Double click to open directory or execute program."
             Top             =   600
-            Width           =   7335
-            _ExtentX        =   12938
+            Width           =   6855
+            _ExtentX        =   12091
             _ExtentY        =   8070
             View            =   3
             LabelEdit       =   1
@@ -663,29 +647,29 @@ Begin VB.Form frmMain
                Key             =   ""
                Object.Tag             =   ""
                Text            =   "Size"
-               Object.Width           =   2293
+               Object.Width           =   1766
             EndProperty
             BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   2
                Key             =   ""
                Object.Tag             =   ""
                Text            =   "Last Modify Time"
-               Object.Width           =   2822
+               Object.Width           =   2469
             EndProperty
          End
          Begin VB.TextBox txtFilePath 
-            Height          =   270
+            Height          =   285
             Left            =   120
             TabIndex        =   22
             Text            =   "\"
             Top             =   240
-            Width           =   5415
+            Width           =   4935
          End
          Begin VB.CommandButton btnOperate 
             Caption         =   "Go To"
             Height          =   255
             Index           =   0
-            Left            =   5640
+            Left            =   5160
             TabIndex        =   21
             Top             =   240
             Width           =   615
@@ -694,7 +678,7 @@ Begin VB.Form frmMain
             Caption         =   "Go To P.D"
             Height          =   255
             Index           =   1
-            Left            =   6360
+            Left            =   5880
             TabIndex        =   20
             ToolTipText     =   "Return to the parent directory"
             Top             =   240
@@ -705,10 +689,10 @@ Begin VB.Form frmMain
          Caption         =   "Download"
          Height          =   375
          Index           =   1
-         Left            =   2040
+         Left            =   2280
          TabIndex        =   18
          Top             =   5400
-         Width           =   1815
+         Width           =   2055
       End
       Begin VB.CommandButton btnFile 
          Caption         =   "Upload"
@@ -717,7 +701,7 @@ Begin VB.Form frmMain
          Left            =   120
          TabIndex        =   17
          Top             =   5400
-         Width           =   1815
+         Width           =   2055
       End
       Begin VB.Frame Frame2 
          Caption         =   "Local"
@@ -725,14 +709,14 @@ Begin VB.Form frmMain
          Left            =   120
          TabIndex        =   13
          Top             =   420
-         Width           =   3735
+         Width           =   4215
          Begin VB.DriveListBox Drive1 
             Appearance      =   0  'Flat
             Height          =   315
             Left            =   120
             TabIndex        =   16
             Top             =   240
-            Width           =   3495
+            Width           =   3975
          End
          Begin VB.DirListBox Dir1 
             Height          =   1890
@@ -740,7 +724,7 @@ Begin VB.Form frmMain
             TabIndex        =   15
             ToolTipText     =   "Right-click to refresh."
             Top             =   600
-            Width           =   3495
+            Width           =   3975
          End
          Begin VB.FileListBox File1 
             Height          =   2235
@@ -748,7 +732,7 @@ Begin VB.Form frmMain
             TabIndex        =   14
             ToolTipText     =   "Right-click to refresh."
             Top             =   2550
-            Width           =   3495
+            Width           =   3975
          End
       End
       Begin VB.CommandButton cmdFile 
@@ -1009,10 +993,16 @@ End Type
 Private Type BDP_REG_INFO
     ItemType As Byte         'Such as REG_SZ, REG_KEY = 0xFF.
     NameTooLong As Byte      'If name length > 255, it will be set to 1.
-    Reserved(1)  As Byte
+    reserved(1)  As Byte
     DataLength As Long
     ItemName(255) As Integer 'Information from MSDN: KEY_NAME_MAX_LENGTH = 255, VALUE_NAME_MAX_LENGTH = 16383.
     Data(503) As Byte        'If the data length is too long, nothing will be copied to this buffer.
+End Type
+
+Private Type SENDRECV_CALLBACK
+    id As Long          'Client Id.
+    reserved As Long    'Internal use.
+    callback As Long    'User-defined function that conforms to prototype SENDRECVCALLBACK.
 End Type
 
 '################################################################################
@@ -1023,14 +1013,14 @@ Private Declare Function uninit Lib "Server32.dll" () As Byte
 Private Declare Function ClientList Lib "Server32.dll" (ByVal pInfoAddress As Long) As Long
 Private Declare Function ClientConnect Lib "Server32.dll" (ByVal id As Long) As Byte
 Private Declare Function ClientDisconnect Lib "Server32.dll" (ByVal id As Long) As Byte
-Private Declare Function ClientTest Lib "Server32.dll" (ByVal id As Long, ByRef pHash As Currency) As Byte
+Private Declare Function ClientTest Lib "Server32.dll" (ByVal id As Long, ByRef version As Currency) As Byte
 Private Declare Function ClientReboot Lib "Server32.dll" (ByVal id As Long) As Byte
 Private Declare Function ClientShutdown Lib "Server32.dll" (ByVal id As Long) As Byte
 Private Declare Function ClientUpdate Lib "Server32.dll" (ByVal id As Long, ByVal wsLocalFile As Long) As Byte
 Private Declare Function ClientConfig Lib "Server32.dll" (ByVal id As Long, ByVal ConfigId As Byte, ByVal wsLocalConfigFilePath As Long) As Byte
 Private Declare Function CmdQueryDirectory Lib "Server32.dll" (ByVal id As Long, ByVal wsPath As Long, ByVal pStructAddress As Long, ByRef pCount As Long) As Byte
-Private Declare Function CmdUploadFileTo Lib "Server32.dll" (ByVal id As Long, ByVal wsLocalFile As Long, ByVal wsRemoteSaveTo As Long, ByVal stdcall_callback As Long) As Byte
-Private Declare Function CmdDownloadFileFrom Lib "Server32.dll" (ByVal id As Long, ByVal wsRemoteFile As Long, ByVal wsLocalSaveTo As Long, ByVal stdcall_callback As Long) As Byte
+Private Declare Function CmdUploadFileTo Lib "Server32.dll" (ByVal id As Long, ByVal wsLocalFile As Long, ByVal wsRemoteSaveTo As Long, ByVal pCallback As Long) As Byte
+Private Declare Function CmdDownloadFileFrom Lib "Server32.dll" (ByVal id As Long, ByVal wsRemoteFile As Long, ByVal wsLocalSaveTo As Long, ByVal pCallback As Long) As Byte
 Private Declare Function CmdExecuteBinary Lib "Server32.dll" (ByVal id As Long, ByVal wsPath As Long, ByVal wndmode As Byte, ByVal waittmo As Long, ByRef pRetVal As Currency) As Byte
 Private Declare Function CmdSystemShell Lib "Server32.dll" (ByVal id As Long, ByVal wsParam As Long, ByVal szBuffer As Long, ByVal Length As Long) As Byte
 Private Declare Function CmdFileOperation Lib "Server32.dll" (ByVal id As Long, ByVal fn As Byte, ByVal wsPath1 As Long, ByVal wsPath2 As Long, ByRef pRetVal As Long) As Byte
@@ -1371,7 +1361,7 @@ End Sub
 
 Private Sub btnClient_Click(Index As Integer)
     Dim b As Byte
-    If lvClient.ListItems.Count = 0 Then Exit Sub
+    If lvClient.ListItems.count = 0 Then Exit Sub
     Select Case Index
         Case 0
             b = ClientConnect(CLng(lvClient.SelectedItem.Text))
@@ -1426,26 +1416,40 @@ Private Sub btnFile_Click(Index As Integer)
     Dim lf As String
     Dim rf As String
     Dim NewName As String
-    If lvClient.ListItems.Count = 0 Then Exit Sub
+    Dim SendCallBack As SENDRECV_CALLBACK
+    Dim RecvCallBack As SENDRECV_CALLBACK
+    If lvClient.ListItems.count = 0 Then Exit Sub
     Select Case Index
         Case 0
             lf = Replace(File1.Path & "\" & File1.FileName, "\\", "\")
             rf = Replace(txtFilePath.Text & "\" & File1.FileName, "\\", "\")
-            b = CmdUploadFileTo(CLng(lvClient.SelectedItem.Text), StrPtr(lf), StrPtr(rf), 0)
+            SendCallBack.callback = CodePtr(AddressOf SendProgress)
+            SendCallBack.id = CLng(lvClient.SelectedItem.Text)
+            btnFile(Index).Enabled = False
+            NewName = btnFile(Index).Caption
+            b = CmdUploadFileTo(CLng(lvClient.SelectedItem.Text), StrPtr(lf), StrPtr(rf), VarPtr(SendCallBack))
             If b = 0 Then
                 MsgBox "Upload file unsuccessfully.", vbCritical
             Else
                 btnOperate_Click 0
             End If
+            btnFile(Index).Caption = NewName
+            btnFile(Index).Enabled = True
         Case 1
             rf = Replace(txtFilePath.Text & "\" & lvFile.SelectedItem.Text, "\\", "\")
             lf = Replace(File1.Path & "\" & lvFile.SelectedItem.Text, "\\", "\")
-            b = CmdDownloadFileFrom(CLng(lvClient.SelectedItem.Text), StrPtr(rf), StrPtr(lf), 0)
+            RecvCallBack.callback = CodePtr(AddressOf RecvProgress)
+            RecvCallBack.id = CLng(lvClient.SelectedItem.Text)
+            btnFile(Index).Enabled = False
+            NewName = btnFile(Index).Caption
+            b = CmdDownloadFileFrom(CLng(lvClient.SelectedItem.Text), StrPtr(rf), StrPtr(lf), VarPtr(RecvCallBack))
             If b = 0 Then
                 MsgBox "Download file unsuccessfully.", vbCritical
             Else
                 File1.Refresh
             End If
+            btnFile(Index).Caption = NewName
+            btnFile(Index).Enabled = True
         Case 2
             NewName = InputBox("Input directory name:", "Create Directory")
             If StrPtr(NewName) Then
@@ -1555,7 +1559,7 @@ End Sub
 
 Private Sub btnOperate_Click(Index As Integer)
     Dim b As Byte
-    If lvClient.ListItems.Count = 0 Then Exit Sub
+    If lvClient.ListItems.count = 0 Then Exit Sub
     Select Case Index
         Case 0
             'A lazy way: assume the maximum file count is 16384...
@@ -1577,7 +1581,7 @@ Private Sub btnOperate_Click(Index As Integer)
         Case 2
             'A lazy way: assume the maximum string length is 16384...
             Dim baReturn(16383) As Byte
-            If CmdSystemShell(CLng(lvClient.SelectedItem.Text), StrPtr(txtCMD.Text), VarPtr(baReturn(0)), 16384) Then
+            If CmdSystemShell(CLng(lvClient.SelectedItem.Text), StrPtr(txtCMD.Text), VarPtr(baReturn(0)), 16383) Then
                 txtCmdRet.Text = "COMMAND: " & txtCMD.Text & vbCrLf & sz2bstr(baReturn)
             Else
                 txtCmdRet.Text = "COMMAND: " & txtCMD.Text & vbCrLf & "Execute system shell unsuccessfully."
@@ -1781,7 +1785,7 @@ Private Sub Form_Initialize()
         MsgBox "Initialization failed.", vbCritical
         ExitProcess 0
     Else
-        Me.Caption = Me.Caption & "(Port: " & CStr(port) & ")"
+        Me.Caption = Me.Caption & " (Port: " & CStr(port) & ")"
     End If
 End Sub
 
@@ -1804,7 +1808,7 @@ End Sub
 Private Sub Frame1_DblClick()
     Dim i As Long, hash As Currency
     If vbYes = MsgBox("This operation may take a long time, do you want to continue?", vbQuestion + vbYesNo, "Test Clients") Then
-        For i = 1 To lvClient.ListItems.Count
+        For i = 1 To lvClient.ListItems.count
             ClientTest CLng(lvClient.ListItems(i).Text), hash
         Next
         MsgBox "Finished.", vbInformation, "Test Clients"
@@ -1816,7 +1820,7 @@ Private Sub lvClient_DblClick()
 End Sub
 
 Private Sub lvFile_DblClick()
-    If lvFile.ListItems.Count = 0 Then Exit Sub
+    If lvFile.ListItems.count = 0 Then Exit Sub
     If Trim$(txtFilePath.Text) = "\" Then txtFilePath.Text = ""
     If lvFile.SelectedItem.SubItems(1) = "<Directory>" Or _
         lvFile.SelectedItem.SubItems(1) = "<Drive>" Or _
@@ -1950,7 +1954,7 @@ exx:
 End Sub
 
 Private Sub lvReg_DblClick()
-    If lvReg.ListItems.Count = 0 Then Exit Sub
+    If lvReg.ListItems.count = 0 Then Exit Sub
     If lvReg.SelectedItem.Text = "[REG_KEY]" Then
         txtRegPath.Text = Replace(txtRegPath.Text & "\" & lvReg.SelectedItem.SubItems(1), "\\", "\")
         btnOperate_Click 18
@@ -2078,7 +2082,7 @@ Private Sub Timer1_Timer()
     If c > 0 Then
         'get current selection of listview
         lv_sel = 0
-        For i = 1 To lvClient.ListItems.Count
+        For i = 1 To lvClient.ListItems.count
             If lvClient.ListItems(i).Selected = True Then
                 lv_sel = i
                 Exit For
@@ -2093,8 +2097,8 @@ Private Sub Timer1_Timer()
         Next
         'set selection
         If lv_sel Then
-            If lv_sel > lvClient.ListItems.Count Then
-                lv_sel = lvClient.ListItems.Count
+            If lv_sel > lvClient.ListItems.count Then
+                lv_sel = lvClient.ListItems.count
             End If
             If lv_sel Then
                 lvClient.ListItems.Item(lv_sel).Selected = True
