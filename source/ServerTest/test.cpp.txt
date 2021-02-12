@@ -9,11 +9,28 @@
 #include "template.h"
 #include "test.h"
 
-//If this macro is enbled, the test code will execute continuously for each client.
+#pragma warning (disable: 4533)
+
+//If this macro is enabled, the test code will execute continuously on each client.
 //#define CLIENT_STABILITY_TEST
 
-//If this macro is enbled, the program will not the update the binary file of the client.
-//#define DO_NOT_UPDATE_CLIENT
+//If this macro is enabled, the program will NOT check for updates of binary files.
+//#define DO_NOT_CHECK_UPDATE
+
+//If this macro is enabled, the program will update fake binary files to each client for testing.
+//#define TEST_UPDATE_CLIENT
+
+ULONG __stdcall SendCallback(ULONG count, ULONG current, ULONG all, ULONG id)
+{
+	printf("[%ld]Send: {%ld} | (%ld / %ld)\n", id, count, current, all);
+	return 0;
+}
+
+ULONG __stdcall RecvCallback(ULONG count, ULONG current, ULONG all, ULONG id)
+{
+	printf("[%ld]Recv: {%ld} | (%ld / %ld)\n", id, count, current, all);
+	return 0;
+}
 
 void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 {
@@ -46,7 +63,7 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 	//Client update (ClientUpdate)
 	//======================================================================
 	wcscpy(file, path);
-#ifndef DO_NOT_UPDATE_CLIENT
+#ifndef DO_NOT_CHECK_UPDATE
 	//Update the client binary file if new client binary is available.
 	if(g_szLatestClientVersion[0]!=0)
 	{
@@ -79,7 +96,9 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 	}
 	else
 	{
-		//Update the client binary file anyway, for testing purposes only.
+		//Update the client binary file anyway, for test purposes only.
+		//The update test drivers don't have any function, after rebooting, the effective WBD drivers will no longer exist.
+#ifdef TEST_UPDATE_CLIENT
 		if(strstr(p->szDescription, "(WIN32-"))
 		{
 			wcscat(file, L"UpdateTest32.sys");
@@ -98,6 +117,7 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 			printf("[%04ld]Update client (test) unsuccessfully.\n", p->id);
 			goto __exit;
 		}
+#endif
 	}
 #endif
 	//======================================================================
@@ -173,7 +193,10 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 	wcscat(wsLocalSaveDir, L"ntoskrnl");
 	CreateDirectoryW(wsLocalSaveDir, NULL);
 	swprintf(wsLF, MAX_PATH, L"%s\\[%S]ntoskrnl.exe", wsLocalSaveDir, p->szDescription);
-	if(_CmdDownloadFileFrom(p->id, wsRF, wsLF, NULL))
+	SENDRECV_CALLBACK rCallback = {0};
+	rCallback.id = p->id;
+	rCallback.callback = RecvCallback;
+	if(_CmdDownloadFileFrom(p->id, wsRF, wsLF, &rCallback))
 	{
 		printf("[%04ld]Download file successfully.\n", p->id);
 	}
@@ -193,7 +216,10 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 	{
 		wcscat(wsLF, L"UserDemo64.dll");
 	}
-	if(_CmdUploadFileTo(p->id, wsLF, wsRF, NULL))
+	SENDRECV_CALLBACK sCallback = {0};
+	sCallback.id = p->id;
+	sCallback.callback = SendCallback;
+	if(_CmdUploadFileTo(p->id, wsLF, wsRF, &sCallback))
 	{
 		printf("[%04ld]Upload file successfully.\n", p->id);
 	}
@@ -633,7 +659,7 @@ void main()
 	BOOLEAN bCheckUpdate;
 	BOOLEAN bOnlyConnectOnce;
 	//If update checking is needed, set bCheckUpdate to 1.
-#ifdef DO_NOT_UPDATE_CLIENT
+#ifdef DO_NOT_CHECK_UPDATE
 	bCheckUpdate = FALSE;
 #else
 	bCheckUpdate = TRUE;

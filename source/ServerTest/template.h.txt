@@ -53,6 +53,15 @@
 #define CLIENT_AUTORUN_TYPE_DLL		2
 
 //################################################################################
+// Windows-Batch-Deployment user-defined function prototypes
+//################################################################################
+//Usage:        Indicate the progress of the file transfer.
+//Parameters:   Current file block number, Bytes transferred in current block, All bytes in current block, Client Id
+//Return value: Any, should be set to 0.
+//Remark:       The pointer of this function should be filled in the structure SENDRECV_CALLBACK.
+typedef ULONG (__stdcall *SENDRECVCALLBACK)(ULONG count, ULONG current, ULONG all, ULONG id);
+
+//################################################################################
 // Windows-Batch-Deployment structures
 //################################################################################
 #pragma pack(1)
@@ -94,6 +103,13 @@ typedef struct _BDP_REG_INFO
 }BDP_REG_INFO, *PBDP_REG_INFO;
 #pragma pack()
 
+typedef struct _SENDRECV_CALLBACK
+{
+	ULONG id;					//Client Id.
+	ULONG reserved;				//Internal use.
+	SENDRECVCALLBACK callback;	//User-defined function.
+}SENDRECV_CALLBACK, *PSENDRECV_CALLBACK;
+
 //################################################################################
 // Windows-Batch-Deployment function prototypes
 //################################################################################
@@ -123,10 +139,10 @@ typedef BOOLEAN (__stdcall *ClientConnect)(ULONG id);
 typedef BOOLEAN (__stdcall *ClientDisconnect)(ULONG id);
 
 //Usage:        Test if the specific client is connected to the server.
-//Parameters:   Client Id, Buffer for 8-bytes hash value.
+//Parameters:   Client Id, Buffer for version number.
 //Return value: Success or fail (TRUE or FALSE). 
-//Remarks:      If the function returns success, the client's hash value will be copied to the buffer.
-typedef BOOLEAN (__stdcall *ClientTest)(ULONG id, PULONG64 pHash);
+//Remarks:      If the function returns success, the client's version number will be copied to the buffer.
+typedef BOOLEAN (__stdcall *ClientTest)(ULONG id, PULONG64 pVersionNumber);
 
 //Usage:        Reboot the specific client.
 //Parameters:   Client Id.
@@ -159,14 +175,14 @@ typedef BOOLEAN (__stdcall *ClientConfig)(ULONG id, UCHAR ConfigId, PWCHAR wsLoc
 typedef BOOLEAN (__stdcall *CmdQueryDirectory)(ULONG id, PWCHAR path, PBDP_FILE_INFO BufferProvidedByCaller, PULONG pStructCount);
 
 //Usage:        Upload file to the specific client.
-//Parameters:   Client Id, Local file, Remote file, NULL.
+//Parameters:   Client Id, Local file, Remote file, Pointer of structure SENDRECV_CALLBACK (can be NULL).
 //Return value: Success or fail (TRUE or FALSE).
-typedef BOOLEAN (__stdcall *CmdUploadFileTo)(ULONG id, PWCHAR wsLocalFile, PWCHAR wsRemoteSaveTo, void* reserved);
+typedef BOOLEAN (__stdcall *CmdUploadFileTo)(ULONG id, PWCHAR wsLocalFile, PWCHAR wsRemoteSaveTo, PSENDRECV_CALLBACK Callback);
 
 //Usage:        Download file from the specific client.
-//Parameters:   Client Id, Remote file, Local file, NULL.
+//Parameters:   Client Id, Remote file, Local file, Pointer of structure SENDRECV_CALLBACK (can be NULL).
 //Return value: Success or fail (TRUE or FALSE).
-typedef BOOLEAN (__stdcall *CmdDownloadFileFrom)(ULONG id, PWCHAR wsRemoteFile, PWCHAR wsLocalSaveTo, void* reserved);
+typedef BOOLEAN (__stdcall *CmdDownloadFileFrom)(ULONG id, PWCHAR wsRemoteFile, PWCHAR wsLocalSaveTo, PSENDRECV_CALLBACK Callback);
 
 //Usage:        Execute binary on the specific client.
 //Parameters:   Client Id, Remote file, Window mode, Timeout of waiting, Return data.

@@ -222,7 +222,7 @@ DWORD WorkerThread(void *parameter)
 		_ClientTest(p->id, &ClientVersion);
 		if(ClientVersion)
 		{
-			PRINTF("[%04ld]The client version: %ld.\n", p->id, ClientVersion);
+			PRINTF("[%04ld]The client version: %ld.\n", p->id, (ULONG)ClientVersion);
 			_i64toa(ClientVersion, szClientVersion, 10);
 			break;
 		}
