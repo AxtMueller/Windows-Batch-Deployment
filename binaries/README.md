@@ -34,8 +34,12 @@ shutdown /f /r /t 0
 
 # All revision history
 ### Client Versions:
-#### 5th version: 20210130
+#### 6th version: 20210212
 [This is the latest version.](../README.md#revision-history)
+#### 5th version: 20210130
+Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.  
+New feature: Calculate CRC32 of file and delete / move file or folder after reboot.  
+New feature: Registry operations.  
 #### 4th version: 20210111
 Bug fix: BSOD may happen when querying directory.  
 Bug fix: BSOD may happen when downloading file via HTTP link.
@@ -46,7 +50,9 @@ Bug fix: Enhanced stability.
 #### 1st version: 20200202
 This is the first public version.
 ### Server Versions:
-#### 2nd version: 20210130
+#### 3nd version: 20210212
 [This is the latest version.](../README.md#revision-history)
+#### 2nd version: 20210130
+New feature: Functions of registry operation.
 #### 1st version: 20200202
 This is the first public version.
