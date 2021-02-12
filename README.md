@@ -50,7 +50,7 @@ In order to optimize the page load speed in low quality network environments, I 
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210212
-Bug fix: Accelerate file transfer speed.
+Bug fix: Accelerate file transfer speed.  
 New feature: File transfer progress callback.
 ### Server Version: 20210212
 New feature: File transfer progress callback.
