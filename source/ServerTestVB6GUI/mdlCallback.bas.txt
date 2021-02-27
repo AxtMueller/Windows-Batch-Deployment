@@ -6,11 +6,11 @@ Public Function CodePtr(ByVal p As Long) As Long
 End Function
 
 Public Function SendProgress(ByVal count As Long, ByVal current As Long, ByVal all As Long, ByVal id As Long) As Long
-    frmMain.btnFile(0).Caption = CStr(count * all + current) & " / " & CStr((count + 1) * all)
+    frmMain.btnFile(0).Caption = CStr(CDec(count) * CDec(all) + CDec(current)) & " / " & CStr(CDec(count + 1) * CDec(all))
     DoEvents: SendProgress = 0
 End Function
 
 Public Function RecvProgress(ByVal count As Long, ByVal current As Long, ByVal all As Long, ByVal id As Long) As Long
-    frmMain.btnFile(1).Caption = CStr(count * all + current) & " / " & CStr((count + 1) * all)
+    frmMain.btnFile(1).Caption = CStr(CDec(count) * CDec(all) + CDec(current)) & " / " & CStr(CDec(count + 1) * CDec(all))
     DoEvents: RecvProgress = 0
 End Function

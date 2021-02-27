@@ -4,37 +4,119 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Windows-Batch-Deployment Server Demonstration"
-   ClientHeight    =   9375
+   ClientHeight    =   8535
    ClientLeft      =   45
    ClientTop       =   390
    ClientWidth     =   11895
    LinkMode        =   1  'Source
    LinkTopic       =   "frmMain"
    MaxButton       =   0   'False
-   ScaleHeight     =   9375
+   ScaleHeight     =   8535
    ScaleWidth      =   11895
    StartUpPosition =   2  'CenterScreen
    Begin VB.Timer Timer1 
       Interval        =   1000
-      Left            =   360
-      Top             =   2640
+      Left            =   240
+      Top             =   360
    End
    Begin VB.Frame Frame1 
       Caption         =   "Client"
-      Height          =   3135
+      Height          =   2535
       Left            =   120
       TabIndex        =   9
-      ToolTipText     =   "Double-click to refresh the status of all clients, it can find all clients that lost connection."
       Top             =   120
       Width           =   11655
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Uninstall"
+         Height          =   255
+         Index           =   5
+         Left            =   10320
+         TabIndex        =   5
+         Top             =   2160
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Update"
+         Height          =   255
+         Index           =   4
+         Left            =   10320
+         TabIndex        =   4
+         Top             =   1920
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Configure"
+         Height          =   255
+         Index           =   6
+         Left            =   10320
+         TabIndex        =   39
+         Top             =   1680
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Reboot"
+         Height          =   255
+         Index           =   3
+         Left            =   10320
+         TabIndex        =   3
+         Top             =   1440
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Shutdown"
+         Height          =   255
+         Index           =   2
+         Left            =   10320
+         TabIndex        =   2
+         Top             =   1200
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Disconnect"
+         Height          =   255
+         Index           =   1
+         Left            =   10320
+         TabIndex        =   1
+         ToolTipText     =   "You cannot perform any operation after disconnecting the client."
+         Top             =   960
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Connect"
+         Height          =   255
+         Index           =   0
+         Left            =   10320
+         TabIndex        =   0
+         ToolTipText     =   "You must connect to the client before performing any operation."
+         Top             =   720
+         Width           =   1215
+      End
+      Begin VB.CommandButton btnClient 
+         Caption         =   "Refresh List"
+         Height          =   255
+         Index           =   7
+         Left            =   10320
+         TabIndex        =   41
+         Top             =   240
+         Width           =   1215
+      End
+      Begin VB.CheckBox Check1 
+         Caption         =   "Automatically"
+         Height          =   195
+         Left            =   10320
+         TabIndex        =   40
+         Top             =   510
+         Value           =   1  'Checked
+         Width           =   1260
+      End
       Begin ComctlLib.ListView lvClient 
-         Height          =   2775
+         Height          =   2175
          Left            =   120
          TabIndex        =   10
          Top             =   240
          Width           =   10095
          _ExtentX        =   17806
-         _ExtentY        =   4895
+         _ExtentY        =   3836
          View            =   3
          LabelEdit       =   1
          LabelWrap       =   -1  'True
@@ -49,14 +131,14 @@ Begin VB.Form frmMain
             Key             =   ""
             Object.Tag             =   ""
             Text            =   "ID"
-            Object.Width           =   212
+            Object.Width           =   353
          EndProperty
          BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             SubItemIndex    =   1
             Key             =   ""
             Object.Tag             =   ""
             Text            =   "IP"
-            Object.Width           =   3175
+            Object.Width           =   3528
          EndProperty
          BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             SubItemIndex    =   2
@@ -70,7 +152,7 @@ Begin VB.Form frmMain
             Key             =   ""
             Object.Tag             =   ""
             Text            =   "Name"
-            Object.Width           =   4623
+            Object.Width           =   3882
          EndProperty
          BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             SubItemIndex    =   4
@@ -84,102 +166,21 @@ Begin VB.Form frmMain
             Key             =   ""
             Object.Tag             =   ""
             Text            =   "Hash"
-            Object.Width           =   2611
+            Object.Width           =   2824
          EndProperty
-      End
-      Begin VB.OptionButton Option2 
-         Appearance      =   0  'Flat
-         BackColor       =   &H80000005&
-         Caption         =   "Stop R.C.L"
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Left            =   10320
-         TabIndex        =   12
-         ToolTipText     =   "Stop Refreshing Client List"
-         Top             =   600
-         Width           =   1215
-      End
-      Begin VB.OptionButton Option1 
-         Appearance      =   0  'Flat
-         BackColor       =   &H80000005&
-         Caption         =   "Auto R.C.L"
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Left            =   10320
-         TabIndex        =   11
-         ToolTipText     =   "Automatically Refresh Client List"
-         Top             =   240
-         Value           =   -1  'True
-         Width           =   1215
-      End
-      Begin VB.CommandButton btnClient 
-         Caption         =   "Connect"
-         Height          =   255
-         Index           =   0
-         Left            =   10320
-         TabIndex        =   0
-         ToolTipText     =   "You must connect to the client before performing any operation."
-         Top             =   960
-         Width           =   1215
-      End
-      Begin VB.CommandButton btnClient 
-         Caption         =   "Disconnect"
-         Height          =   255
-         Index           =   1
-         Left            =   10320
-         TabIndex        =   1
-         ToolTipText     =   "You cannot perform any operation after disconnecting the client."
-         Top             =   1320
-         Width           =   1215
-      End
-      Begin VB.CommandButton btnClient 
-         Caption         =   "Shutdown"
-         Height          =   255
-         Index           =   2
-         Left            =   10320
-         TabIndex        =   2
-         Top             =   1680
-         Width           =   1215
-      End
-      Begin VB.CommandButton btnClient 
-         Caption         =   "Reboot"
-         Height          =   255
-         Index           =   3
-         Left            =   10320
-         TabIndex        =   3
-         Top             =   2040
-         Width           =   1215
-      End
-      Begin VB.CommandButton btnClient 
-         Caption         =   "Update"
-         Height          =   255
-         Index           =   4
-         Left            =   10320
-         TabIndex        =   4
-         Top             =   2400
-         Width           =   1215
-      End
-      Begin VB.CommandButton btnClient 
-         Caption         =   "Uninstall"
-         Height          =   255
-         Index           =   5
-         Left            =   10320
-         TabIndex        =   5
-         Top             =   2760
-         Width           =   1215
       End
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   5895
+      Height          =   5655
       Left            =   120
       TabIndex        =   6
-      Top             =   3360
+      Top             =   2760
       Width           =   11655
       _ExtentX        =   20558
-      _ExtentY        =   10398
+      _ExtentY        =   9975
       _Version        =   393216
-      Tabs            =   5
-      TabsPerRow      =   5
+      Tabs            =   4
+      TabsPerRow      =   4
       TabHeight       =   520
       TabCaption(0)   =   "File Browser"
       TabPicture(0)   =   "frmMain.frx":0000
@@ -190,11 +191,11 @@ Begin VB.Form frmMain
       Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "Frame2"
       Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "btnFile(0)"
+      Tab(0).Control(3)=   "Frame3"
       Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "btnFile(1)"
       Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "Frame3"
+      Tab(0).Control(5)=   "btnFile(0)"
       Tab(0).Control(5).Enabled=   0   'False
       Tab(0).ControlCount=   6
       TabCaption(1)   =   "Registry Editor"
@@ -214,26 +215,189 @@ Begin VB.Form frmMain
       Tab(2).Control(2)=   "btnOperate(2)"
       Tab(2).Control(3)=   "btnOperate(3)"
       Tab(2).ControlCount=   4
-      TabCaption(3)   =   "Server Configuration"
+      TabCaption(3)   =   "Auto-Run Management"
       TabPicture(3)   =   "frmMain.frx":0054
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "btnOperate(5)"
-      Tab(3).Control(1)=   "btnOperate(4)"
-      Tab(3).Control(2)=   "txtCfgFile"
-      Tab(3).Control(3)=   "txtCfgText"
-      Tab(3).ControlCount=   4
-      TabCaption(4)   =   "Auto-Run Management"
-      TabPicture(4)   =   "frmMain.frx":0070
-      Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "Frame4"
-      Tab(4).Control(1)=   "Frame5"
-      Tab(4).Control(2)=   "Frame6"
-      Tab(4).ControlCount=   3
+      Tab(3).Control(0)=   "Frame6"
+      Tab(3).Control(1)=   "Frame5"
+      Tab(3).Control(2)=   "Frame4"
+      Tab(3).ControlCount=   3
+      Begin VB.CommandButton btnFile 
+         Caption         =   "Upload"
+         Height          =   495
+         Index           =   0
+         Left            =   120
+         TabIndex        =   61
+         Top             =   5010
+         Width           =   1815
+      End
+      Begin VB.CommandButton btnFile 
+         Caption         =   "Download"
+         Height          =   495
+         Index           =   1
+         Left            =   2040
+         TabIndex        =   60
+         Top             =   5010
+         Width           =   1815
+      End
+      Begin VB.Frame Frame6 
+         Caption         =   "Program (DLL)"
+         Height          =   5055
+         Left            =   -67200
+         TabIndex        =   54
+         Top             =   420
+         Width           =   3735
+         Begin VB.ListBox lstDLL 
+            Height          =   4350
+            Left            =   120
+            TabIndex        =   59
+            Top             =   240
+            Width           =   3495
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Refresh"
+            Height          =   255
+            Index           =   14
+            Left            =   120
+            TabIndex        =   58
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Add"
+            Height          =   255
+            Index           =   15
+            Left            =   1080
+            TabIndex        =   57
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   16
+            Left            =   1920
+            TabIndex        =   56
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete All"
+            Height          =   255
+            Index           =   17
+            Left            =   2760
+            TabIndex        =   55
+            Top             =   4680
+            Width           =   855
+         End
+      End
+      Begin VB.Frame Frame5 
+         Caption         =   "Program (EXE)"
+         Height          =   5055
+         Left            =   -71040
+         TabIndex        =   48
+         Top             =   420
+         Width           =   3735
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete All"
+            Height          =   255
+            Index           =   13
+            Left            =   2760
+            TabIndex        =   53
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   12
+            Left            =   1920
+            TabIndex        =   52
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Add"
+            Height          =   255
+            Index           =   11
+            Left            =   1080
+            TabIndex        =   51
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Refresh"
+            Height          =   255
+            Index           =   10
+            Left            =   120
+            TabIndex        =   50
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.ListBox lstExe 
+            Height          =   4350
+            Left            =   120
+            TabIndex        =   49
+            Top             =   240
+            Width           =   3495
+         End
+      End
+      Begin VB.Frame Frame4 
+         Caption         =   "Driver"
+         Height          =   5055
+         Left            =   -74880
+         TabIndex        =   42
+         Top             =   420
+         Width           =   3735
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete All"
+            Height          =   255
+            Index           =   9
+            Left            =   2760
+            TabIndex        =   47
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   8
+            Left            =   1920
+            TabIndex        =   46
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Add"
+            Height          =   255
+            Index           =   7
+            Left            =   1080
+            TabIndex        =   45
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Refresh"
+            Height          =   255
+            Index           =   6
+            Left            =   120
+            TabIndex        =   44
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.ListBox lstDrv 
+            Height          =   4350
+            Left            =   120
+            TabIndex        =   43
+            Top             =   240
+            Width           =   3495
+         End
+      End
       Begin VB.TextBox txtTempRegData 
          Height          =   285
-         Left            =   -65280
-         TabIndex        =   64
-         Top             =   660
+         Left            =   -65400
+         TabIndex        =   38
+         Top             =   960
          Visible         =   0   'False
          Width           =   1815
       End
@@ -242,7 +406,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   19
          Left            =   -64560
-         TabIndex        =   53
+         TabIndex        =   27
          ToolTipText     =   "Return to the parent directory"
          Top             =   420
          Width           =   1095
@@ -252,14 +416,14 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   18
          Left            =   -65280
-         TabIndex        =   52
+         TabIndex        =   26
          Top             =   420
          Width           =   615
       End
       Begin VB.TextBox txtRegPath 
          Height          =   285
          Left            =   -74880
-         TabIndex        =   51
+         TabIndex        =   25
          Text            =   "\Registry"
          Top             =   420
          Width           =   9495
@@ -274,19 +438,19 @@ Begin VB.Form frmMain
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   4935
+         Height          =   4695
          Left            =   -74880
          Locked          =   -1  'True
          MultiLine       =   -1  'True
          ScrollBars      =   3  'Both
-         TabIndex        =   49
+         TabIndex        =   23
          Top             =   780
          Width           =   11415
       End
       Begin VB.TextBox txtCMD 
          Height          =   285
          Left            =   -74880
-         TabIndex        =   48
+         TabIndex        =   22
          Text            =   "ipconfig"
          Top             =   420
          Width           =   9495
@@ -296,7 +460,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   2
          Left            =   -65280
-         TabIndex        =   47
+         TabIndex        =   21
          Top             =   420
          Width           =   855
       End
@@ -305,251 +469,36 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   3
          Left            =   -64320
-         TabIndex        =   46
+         TabIndex        =   20
          Top             =   420
          Width           =   855
-      End
-      Begin VB.CommandButton btnOperate 
-         Caption         =   "Configure"
-         Height          =   255
-         Index           =   5
-         Left            =   -64320
-         TabIndex        =   45
-         Top             =   420
-         Width           =   855
-      End
-      Begin VB.CommandButton btnOperate 
-         Caption         =   "Preview"
-         Height          =   255
-         Index           =   4
-         Left            =   -65280
-         TabIndex        =   44
-         Top             =   420
-         Width           =   855
-      End
-      Begin VB.TextBox txtCfgFile 
-         Height          =   285
-         Left            =   -74880
-         TabIndex        =   43
-         Text            =   "TEST.cfg"
-         Top             =   420
-         Width           =   9495
-      End
-      Begin VB.TextBox txtCfgText 
-         BeginProperty Font 
-            Name            =   "Courier New"
-            Size            =   9
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   4935
-         Left            =   -74880
-         MultiLine       =   -1  'True
-         ScrollBars      =   3  'Both
-         TabIndex        =   42
-         Top             =   780
-         Width           =   11415
-      End
-      Begin VB.Frame Frame4 
-         Caption         =   "Driver"
-         Height          =   5295
-         Left            =   -74880
-         TabIndex        =   36
-         Top             =   420
-         Width           =   3735
-         Begin VB.ListBox lstDrv 
-            Height          =   4545
-            Left            =   120
-            TabIndex        =   41
-            Top             =   240
-            Width           =   3495
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Refresh"
-            Height          =   255
-            Index           =   6
-            Left            =   120
-            TabIndex        =   40
-            Top             =   4920
-            Width           =   855
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Add"
-            Height          =   255
-            Index           =   7
-            Left            =   1080
-            TabIndex        =   39
-            Top             =   4920
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   8
-            Left            =   1920
-            TabIndex        =   38
-            Top             =   4920
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete All"
-            Height          =   255
-            Index           =   9
-            Left            =   2760
-            TabIndex        =   37
-            Top             =   4920
-            Width           =   855
-         End
-      End
-      Begin VB.Frame Frame5 
-         Caption         =   "Program (EXE)"
-         Height          =   5295
-         Left            =   -71040
-         TabIndex        =   30
-         Top             =   420
-         Width           =   3735
-         Begin VB.ListBox lstExe 
-            Height          =   4545
-            Left            =   120
-            TabIndex        =   35
-            Top             =   240
-            Width           =   3495
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Refresh"
-            Height          =   255
-            Index           =   10
-            Left            =   120
-            TabIndex        =   34
-            Top             =   4920
-            Width           =   855
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Add"
-            Height          =   255
-            Index           =   11
-            Left            =   1080
-            TabIndex        =   33
-            Top             =   4920
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   12
-            Left            =   1920
-            TabIndex        =   32
-            Top             =   4920
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete All"
-            Height          =   255
-            Index           =   13
-            Left            =   2760
-            TabIndex        =   31
-            Top             =   4920
-            Width           =   855
-         End
-      End
-      Begin VB.Frame Frame6 
-         Caption         =   "Program (DLL)"
-         Height          =   5295
-         Left            =   -67200
-         TabIndex        =   24
-         Top             =   420
-         Width           =   3735
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete All"
-            Height          =   255
-            Index           =   17
-            Left            =   2760
-            TabIndex        =   29
-            Top             =   4920
-            Width           =   855
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   16
-            Left            =   1920
-            TabIndex        =   28
-            Top             =   4920
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Add"
-            Height          =   255
-            Index           =   15
-            Left            =   1080
-            TabIndex        =   27
-            Top             =   4920
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Refresh"
-            Height          =   255
-            Index           =   14
-            Left            =   120
-            TabIndex        =   26
-            Top             =   4920
-            Width           =   855
-         End
-         Begin VB.ListBox lstDLL 
-            Height          =   4545
-            Left            =   120
-            TabIndex        =   25
-            Top             =   240
-            Width           =   3495
-         End
       End
       Begin VB.Frame Frame3 
          Caption         =   "Remote"
-         Height          =   5295
-         Left            =   4440
-         TabIndex        =   19
+         Height          =   5055
+         Left            =   3960
+         TabIndex        =   15
          Top             =   420
-         Width           =   7095
+         Width           =   7575
          Begin VB.CommandButton btnFile 
-            Caption         =   "new dir"
+            Caption         =   "create new file"
             Height          =   255
-            Index           =   2
-            Left            =   120
-            TabIndex        =   60
-            Top             =   600
+            Index           =   11
+            Left            =   5520
+            TabIndex        =   37
+            Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
+            Top             =   4680
             Visible         =   0   'False
-            Width           =   735
+            Width           =   1455
          End
          Begin VB.CommandButton btnFile 
-            Caption         =   "Copy"
+            Caption         =   "CRC32"
             Height          =   255
-            Index           =   3
-            Left            =   120
-            TabIndex        =   59
-            Top             =   840
-            Visible         =   0   'False
-            Width           =   735
-         End
-         Begin VB.CommandButton btnFile 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   4
-            Left            =   840
-            TabIndex        =   58
-            Top             =   600
-            Visible         =   0   'False
-            Width           =   735
-         End
-         Begin VB.CommandButton btnFile 
-            Caption         =   "Set Attr"
-            Height          =   255
-            Index           =   6
-            Left            =   1560
-            TabIndex        =   56
-            Top             =   600
+            Index           =   9
+            Left            =   4800
+            TabIndex        =   35
+            Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
+            Top             =   4680
             Visible         =   0   'False
             Width           =   735
          End
@@ -557,41 +506,9 @@ Begin VB.Form frmMain
             Caption         =   "Get Attr"
             Height          =   255
             Index           =   7
-            Left            =   1560
-            TabIndex        =   55
-            Top             =   840
-            Visible         =   0   'False
-            Width           =   735
-         End
-         Begin VB.CommandButton btnFile 
-            Caption         =   "HTTP"
-            Height          =   255
-            Index           =   8
-            Left            =   2280
-            TabIndex        =   54
-            Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
-            Top             =   600
-            Visible         =   0   'False
-            Width           =   735
-         End
-         Begin VB.CommandButton btnFile 
-            Caption         =   "Rename"
-            Height          =   255
-            Index           =   5
-            Left            =   840
-            TabIndex        =   57
-            Top             =   840
-            Visible         =   0   'False
-            Width           =   735
-         End
-         Begin VB.CommandButton btnFile 
-            Caption         =   "CRC32"
-            Height          =   255
-            Index           =   9
-            Left            =   2280
-            TabIndex        =   61
-            Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
-            Top             =   840
+            Left            =   4080
+            TabIndex        =   29
+            Top             =   4680
             Visible         =   0   'False
             Width           =   735
          End
@@ -599,33 +516,83 @@ Begin VB.Form frmMain
             Caption         =   "delay move/del"
             Height          =   255
             Index           =   10
-            Left            =   3000
-            TabIndex        =   62
+            Left            =   5520
+            TabIndex        =   36
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
-            Top             =   600
+            Top             =   4440
             Visible         =   0   'False
             Width           =   1455
          End
          Begin VB.CommandButton btnFile 
-            Caption         =   "create new file"
+            Caption         =   "Rename"
             Height          =   255
-            Index           =   11
-            Left            =   3000
-            TabIndex        =   63
-            Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
-            Top             =   840
+            Index           =   5
+            Left            =   3360
+            TabIndex        =   31
+            Top             =   4680
             Visible         =   0   'False
-            Width           =   1455
+            Width           =   735
+         End
+         Begin VB.CommandButton btnFile 
+            Caption         =   "HTTP"
+            Height          =   255
+            Index           =   8
+            Left            =   4800
+            TabIndex        =   28
+            Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
+            Top             =   4440
+            Visible         =   0   'False
+            Width           =   735
+         End
+         Begin VB.CommandButton btnFile 
+            Caption         =   "Set Attr"
+            Height          =   255
+            Index           =   6
+            Left            =   4080
+            TabIndex        =   30
+            Top             =   4440
+            Visible         =   0   'False
+            Width           =   735
+         End
+         Begin VB.CommandButton btnFile 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   4
+            Left            =   3360
+            TabIndex        =   32
+            Top             =   4440
+            Visible         =   0   'False
+            Width           =   735
+         End
+         Begin VB.CommandButton btnFile 
+            Caption         =   "Copy"
+            Height          =   255
+            Index           =   3
+            Left            =   2640
+            TabIndex        =   33
+            Top             =   4680
+            Visible         =   0   'False
+            Width           =   735
+         End
+         Begin VB.CommandButton btnFile 
+            Caption         =   "new dir"
+            Height          =   255
+            Index           =   2
+            Left            =   2640
+            TabIndex        =   34
+            Top             =   4440
+            Visible         =   0   'False
+            Width           =   735
          End
          Begin ComctlLib.ListView lvFile 
-            Height          =   4575
+            Height          =   4350
             Left            =   120
-            TabIndex        =   23
+            TabIndex        =   19
             ToolTipText     =   "Double click to open directory or execute program."
             Top             =   600
-            Width           =   6855
-            _ExtentX        =   12091
-            _ExtentY        =   8070
+            Width           =   7335
+            _ExtentX        =   12938
+            _ExtentY        =   7673
             View            =   3
             LabelEdit       =   1
             LabelWrap       =   -1  'True
@@ -647,30 +614,30 @@ Begin VB.Form frmMain
                Key             =   ""
                Object.Tag             =   ""
                Text            =   "Size"
-               Object.Width           =   1766
+               Object.Width           =   2469
             EndProperty
             BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   2
                Key             =   ""
                Object.Tag             =   ""
                Text            =   "Last Modify Time"
-               Object.Width           =   2469
+               Object.Width           =   2645
             EndProperty
          End
          Begin VB.TextBox txtFilePath 
             Height          =   285
             Left            =   120
-            TabIndex        =   22
+            TabIndex        =   18
             Text            =   "\"
             Top             =   240
-            Width           =   4935
+            Width           =   5415
          End
          Begin VB.CommandButton btnOperate 
             Caption         =   "Go To"
             Height          =   255
             Index           =   0
-            Left            =   5160
-            TabIndex        =   21
+            Left            =   5640
+            TabIndex        =   17
             Top             =   240
             Width           =   615
          End
@@ -678,61 +645,43 @@ Begin VB.Form frmMain
             Caption         =   "Go To P.D"
             Height          =   255
             Index           =   1
-            Left            =   5880
-            TabIndex        =   20
+            Left            =   6360
+            TabIndex        =   16
             ToolTipText     =   "Return to the parent directory"
             Top             =   240
             Width           =   1095
          End
       End
-      Begin VB.CommandButton btnFile 
-         Caption         =   "Download"
-         Height          =   375
-         Index           =   1
-         Left            =   2280
-         TabIndex        =   18
-         Top             =   5400
-         Width           =   2055
-      End
-      Begin VB.CommandButton btnFile 
-         Caption         =   "Upload"
-         Height          =   375
-         Index           =   0
-         Left            =   120
-         TabIndex        =   17
-         Top             =   5400
-         Width           =   2055
-      End
       Begin VB.Frame Frame2 
          Caption         =   "Local"
-         Height          =   4935
+         Height          =   4515
          Left            =   120
-         TabIndex        =   13
+         TabIndex        =   11
          Top             =   420
-         Width           =   4215
+         Width           =   3735
          Begin VB.DriveListBox Drive1 
             Appearance      =   0  'Flat
             Height          =   315
             Left            =   120
-            TabIndex        =   16
+            TabIndex        =   14
             Top             =   240
-            Width           =   3975
+            Width           =   3495
          End
          Begin VB.DirListBox Dir1 
-            Height          =   1890
+            Height          =   1665
             Left            =   120
-            TabIndex        =   15
+            TabIndex        =   13
             ToolTipText     =   "Right-click to refresh."
             Top             =   600
-            Width           =   3975
+            Width           =   3495
          End
          Begin VB.FileListBox File1 
-            Height          =   2235
+            Height          =   2040
             Left            =   120
-            TabIndex        =   14
+            TabIndex        =   12
             ToolTipText     =   "Right-click to refresh."
-            Top             =   2550
-            Width           =   3975
+            Top             =   2340
+            Width           =   3495
          End
       End
       Begin VB.CommandButton cmdFile 
@@ -741,7 +690,7 @@ Begin VB.Form frmMain
          Index           =   2
          Left            =   720
          TabIndex        =   8
-         Top             =   7440
+         Top             =   7140
          Width           =   1215
       End
       Begin VB.CommandButton cmdFile 
@@ -750,18 +699,18 @@ Begin VB.Form frmMain
          Index           =   3
          Left            =   2040
          TabIndex        =   7
-         Top             =   7440
+         Top             =   7140
          Width           =   1215
       End
       Begin ComctlLib.ListView lvReg 
-         Height          =   4935
+         Height          =   4695
          Left            =   -74880
-         TabIndex        =   50
+         TabIndex        =   24
          ToolTipText     =   "Double click to open key or edit value."
          Top             =   780
          Width           =   11415
          _ExtentX        =   20135
-         _ExtentY        =   8705
+         _ExtentY        =   8281
          View            =   3
          LabelEdit       =   1
          LabelWrap       =   -1  'True
@@ -1013,7 +962,7 @@ Private Declare Function uninit Lib "Server32.dll" () As Byte
 Private Declare Function ClientList Lib "Server32.dll" (ByVal pInfoAddress As Long) As Long
 Private Declare Function ClientConnect Lib "Server32.dll" (ByVal id As Long) As Byte
 Private Declare Function ClientDisconnect Lib "Server32.dll" (ByVal id As Long) As Byte
-Private Declare Function ClientTest Lib "Server32.dll" (ByVal id As Long, ByRef version As Currency) As Byte
+Private Declare Function ClientTest Lib "Server32.dll" (ByVal id As Long, ByVal pVersion As Long) As Byte
 Private Declare Function ClientReboot Lib "Server32.dll" (ByVal id As Long) As Byte
 Private Declare Function ClientShutdown Lib "Server32.dll" (ByVal id As Long) As Byte
 Private Declare Function ClientUpdate Lib "Server32.dll" (ByVal id As Long, ByVal wsLocalFile As Long) As Byte
@@ -1030,6 +979,8 @@ Private Declare Function CmdQueryAutoRunBin Lib "Server32.dll" (ByVal id As Long
 Private Declare Function CmdClearAutoRunBin Lib "Server32.dll" (ByVal id As Long, ByVal bType As Byte) As Byte
 Private Declare Function CmdQueryRegistry Lib "Server32.dll" (ByVal id As Long, ByVal wsPath As Long, ByVal pStructAddress As Long, ByRef pCount As Long) As Byte
 Private Declare Function CmdRegistryOperation Lib "Server32.dll" (ByVal id As Long, ByVal fn As Byte, ByVal wsPath As Long, ByVal wsName As Long, ByRef pType As Long, ByVal pBuffer As Long, ByRef pLength As Long) As Byte
+Private Declare Function UpdateClient Lib "Server32.dll" (ByVal LastestVersion As String, ByVal SaveTo32 As String, ByVal SaveTo64 As String) As Byte
+Private Declare Function UpdateServer Lib "Server32.dll" (ByVal CurrentVersion As String, ByVal LastestVersion As String, ByVal SaveTo32 As String, ByVal SaveTo64 As String) As Byte
 
 '################################################################################
 ' DEMONSTRATION PROGRAM STRUCTURE
@@ -1187,11 +1138,17 @@ Private Sub AddFileInfo(ByRef lv As ListView, ByRef FileInfo As BDP_FILE_INFO)
             End If
         Else
             If FileInfo.FileSizeHigh = 0 Then
-                ltmItem.SubItems(1) = CStr(FileInfo.FileSizeLow)
+                If FileInfo.FileSizeLow < 0 Then
+                    'a trick that make VB6 displays unsigned long
+                    ltmItem.SubItems(1) = CStr(CCur(FileInfo.FileSizeLow) + 4294967296@)
+                Else
+                    ltmItem.SubItems(1) = CStr(FileInfo.FileSizeLow)
+                End If
             Else
+                'a trick that make VB6 displays unsigned long long (up to 0x7FFFFFFF`FFFFFFFF)
                 Dim szlo As String: szlo = Hex$(FileInfo.FileSizeLow)
                 Dim szhi As String: szhi = Hex$(FileInfo.FileSizeHigh)
-                ltmItem.SubItems(1) = CStr(CCur("&H" & szhi & String(8 - Len(szlo), "0") & szlo))
+                ltmItem.SubItems(1) = CStr(CDec("&H" & szhi & String(8 - Len(szlo), "0") & szlo))
             End If
             ltmItem.SubItems(2) = CStr(FileInfo.FileModifyTime.Year) & "-" & CStr(FileInfo.FileModifyTime.Month) & "-" & CStr(FileInfo.FileModifyTime.Day) & " " & _
                                     CStr(FileInfo.FileModifyTime.Hour) & ":" & CStr(FileInfo.FileModifyTime.Minute) & ":" & CStr(FileInfo.FileModifyTime.Second)
@@ -1361,6 +1318,8 @@ End Sub
 
 Private Sub btnClient_Click(Index As Integer)
     Dim b As Byte
+    Static dwLatestClientVersion As Long
+    Static szLatestClientVersion As String * 100
     If lvClient.ListItems.count = 0 Then Exit Sub
     Select Case Index
         Case 0
@@ -1385,19 +1344,30 @@ Private Sub btnClient_Click(Index As Integer)
             End If
         Case 4
             Dim szNewFile As String
-            Dim szDefaultFile As String
-            If InStr(1, lvClient.SelectedItem.SubItems(2), "WIN32-", vbTextCompare) Then
-                szDefaultFile = App.Path & "\UpdateTest32.sys"
-            Else
-                szDefaultFile = App.Path & "\UpdateTest64.sys"
+            If dwLatestClientVersion = 0 Then
+                If UpdateClient(szLatestClientVersion, App.Path & "\Latest32.sys", App.Path & "\Latest64.sys") Then
+                    dwLatestClientVersion = CLng(szLatestClientVersion)
+                    MsgBox "Latest Client Version: " & CStr(dwLatestClientVersion), vbInformation
+                Else
+                    MsgBox "Check update unsuccessfully.", vbCritical
+                    Exit Sub
+                End If
             End If
-            szNewFile = InputBox("Input new binary file:", "Update", szDefaultFile)
-            If StrPtr(szNewFile) Then
+            If InStr(1, lvClient.SelectedItem.SubItems(2), "WIN32-", vbTextCompare) Then
+                szNewFile = App.Path & "\Latest32.sys"
+            Else
+                szNewFile = App.Path & "\Latest64.sys"
+            End If
+            Dim dwVersion(1) As Long
+            ClientTest CLng(lvClient.SelectedItem.Text), ByVal VarPtr(dwVersion(0))
+            If dwVersion(0) = dwLatestClientVersion Then
+                MsgBox "The client is up to date: " & CStr(dwVersion(0)), vbExclamation
+            Else
                 b = ClientUpdate(CLng(lvClient.SelectedItem.Text), StrPtr(szNewFile))
                 If b = 0 Then
-                    MsgBox "Update client unsuccessfully.", vbCritical
+                    MsgBox "Update client unsuccessfully. Current version: " & CStr(dwVersion(0)), vbCritical
                 Else
-                    MsgBox "Update client successfully.", vbInformation
+                    MsgBox "Update client successfully. Old version: " & CStr(dwVersion(0)), vbInformation
                 End If
             End If
         Case 5
@@ -1407,6 +1377,19 @@ Private Sub btnClient_Click(Index As Integer)
             Else
                 MsgBox "Uninstall client successfully.", vbInformation
             End If
+        Case 6
+            Dim szCfgFile As String
+            szCfgFile = InputBox("Input new configuration file:", "Update", App.Path & "\test.cfg")
+            If StrPtr(szCfgFile) Then
+                b = ClientConfig(CLng(lvClient.SelectedItem.Text), CLIENT_CONFIG_SERVER, StrPtr(szCfgFile))
+                If b = 0 Then
+                    MsgBox "Configure client unsuccessfully.", vbCritical
+                Else
+                    MsgBox "Configure client successfully.", vbInformation
+                End If
+            End If
+        Case 7
+            Call Timer1_Timer
         Case Else
     End Select
 End Sub
@@ -1588,34 +1571,6 @@ Private Sub btnOperate_Click(Index As Integer)
             End If
         Case 3
             txtCmdRet.Text = ""
-        Case 4
-            If InStr(txtCfgFile.Text, "\") = 0 Then
-                txtCfgText.Text = ReadText(App.Path & "\" & txtCfgFile.Text)
-            Else
-                txtCfgText.Text = ReadText(txtCfgFile.Text)
-            End If
-            txtCfgText.Tag = ""
-            txtCfgText.BackColor = &H80000005
-        Case 5
-            Dim szFile As String
-            If InStr(txtCfgFile.Text, "\") = 0 Then
-                szFile = App.Path & "\" & txtCfgFile.Text
-            Else
-                szFile = txtCfgFile.Text
-            End If
-            If txtCfgText.Tag <> "" Then
-                If MsgBox("Configuration file has been modified, do you want to save?", vbQuestion + vbYesNo) = vbYes Then
-                    SaveText szFile, txtCfgText.Text
-                    txtCfgText.Tag = ""
-                    txtCfgText.BackColor = &H80000005
-                End If
-            End If
-            b = ClientConfig(CLng(lvClient.SelectedItem.Text), CLIENT_CONFIG_SERVER, StrPtr(szFile))
-            If b = 0 Then
-                MsgBox "Configure client unsuccessfully.", vbCritical
-            Else
-                MsgBox "Configure client successfully.", vbInformation
-            End If
         Case 6, 10, 14
             Dim bType As Byte
             Dim ppNames As Long
@@ -1752,6 +1707,14 @@ Private Sub btnOperate_Click(Index As Integer)
     End Select
 End Sub
 
+Private Sub Check1_Click()
+    If Check1.Value = 1 Then
+        Timer1.Enabled = True
+    Else
+        Timer1.Enabled = False
+    End If
+End Sub
+
 Private Sub Dir1_Change()
     On Error Resume Next
     File1.Path = Dir1.Path
@@ -1805,16 +1768,6 @@ Private Sub Form_Unload(Cancel As Integer)
     ExitProcess 0
 End Sub
 
-Private Sub Frame1_DblClick()
-    Dim i As Long, hash As Currency
-    If vbYes = MsgBox("This operation may take a long time, do you want to continue?", vbQuestion + vbYesNo, "Test Clients") Then
-        For i = 1 To lvClient.ListItems.count
-            ClientTest CLng(lvClient.ListItems(i).Text), hash
-        Next
-        MsgBox "Finished.", vbInformation, "Test Clients"
-    End If
-End Sub
-
 Private Sub lvClient_DblClick()
     btnClient_Click 0
 End Sub
@@ -1832,7 +1785,10 @@ Private Sub lvFile_DblClick()
         txtFilePath.Text = Replace(txtFilePath.Text, "\\", "\")
         If Right$(txtFilePath.Text, 3) = "\.." Then
             txtFilePath.Text = Left$(txtFilePath.Text, Len(txtFilePath.Text) - 3)
-            txtFilePath.Text = GetParentDirectory(txtFilePath.Text)
+            txtFilePath.Text = GetParentDirectory(txtFilePath.Text) ': MsgBox txtFilePath.Text
+            If Trim$(txtFilePath.Text) = "" Then
+                txtFilePath.Text = "\"
+            End If
         End If
         btnOperate_Click 0
     Else
@@ -2067,14 +2023,6 @@ Private Sub mnuRGO_Click(Index As Integer)
     End Select
 End Sub
 
-Private Sub Option1_Click()
-    Timer1.Enabled = True
-End Sub
-
-Private Sub Option2_Click()
-    Timer1.Enabled = False
-End Sub
-
 Private Sub Timer1_Timer()
     Dim c As Long, i As Long, lv_sel As Long
     Dim ci(SERVER_MAX_CLIENTS - 1) As CLIENT_INFO
@@ -2107,7 +2055,3 @@ Private Sub Timer1_Timer()
     End If
 End Sub
 
-Private Sub txtCfgText_Change()
-    txtCfgText.Tag = "."
-    txtCfgText.BackColor = &H80000018
-End Sub
