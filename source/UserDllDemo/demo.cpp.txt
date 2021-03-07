@@ -69,12 +69,13 @@ BOOL WINAPI DllMain
 		{
 			if(sizeof(void*)>4)
 			{
-				memset(MessageBoxW,0xC3,1);
+				UCHAR code[] = {0x33,0xC0,0xC3};
+				memcpy(MessageBoxW,code,sizeof(code));
 			}
 			else
 			{
-				UCHAR code[] = {0x31,0xC0,0xC3};
-				memcpy(MessageBoxW,code,3);
+				UCHAR code[] = {0x31,0xC0,0xC2,0x10,0x00};
+				memcpy(MessageBoxW,code,sizeof(code));
 			}
 			VirtualProtect(MessageBoxW,10,fp,&fp);
 		}
