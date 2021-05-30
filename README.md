@@ -43,8 +43,8 @@ In order to optimize the page load speed in low quality network environments, I 
 4. In order to reduce the impact of the Internet on real life, I also do not use Facebook, Twitter, etc. Please don't ask me for such information via E-MAIL.
 
 ### Paid services:
-1. Binary customization I: Remove or modify all obvious characteristics of public WBD client.
-2. Binary customization II: More powerful self-protection for WBD client.
+1. Binary customization I: Remove or modify all obvious characteristics of the public client program.
+2. Binary customization II: More powerful self-protection for the client program.
 3. Source code: All source code of WBD, including client and server.
 4. Source code customization: Add features to WBD according to your needs. This service is only available to customers who have purchased the WBD source code.
 
