@@ -31,4 +31,4 @@ C:\Apache24\bin\httpd -k install
 C:\Apache24\bin\httpd -k start
 ```
 5. Run "ServerTestVB6GUI.exe" and keep it running, the web control panel needs it.   
-6. Copy all TXT files to "C:\Apache24\htdocs", delete the TXT extension and delete "index.html", enter "localhost" or "localhost:8080" in the browser, you will see the login window. Default username and password are "test" and "1234", they can be changed by modifying "index.php".   
+6. Rename all TXT files to PHP files and copy them to "C:\Apache24\htdocs" (you must delete "index.html" in "C:\Apache24\htdocs" before copying). enter "localhost" or "localhost:8080" in the browser, you will see the login window. Default username and password are "test" and "1234", they can be changed by modifying "index.php".   
