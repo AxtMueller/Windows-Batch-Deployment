@@ -32,7 +32,7 @@ If you want to share your server programs, please commit your programs and / or 
 4. You are a voyeur, you want to know what your spouse did on the computer [by taking screenshots](binaries/user-defined-server-program/periodic-screen-capture). 
 
 # [Screenshots](/screenshots/README.md)
-In order to optimize the page load speed in low quality network environments, I only placed 2 pictures on this page. 
+Please note: These screenshots are from the server programs (EXE version and WEB version). The client programs run in the background without user interface.  
 ![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/1.png)
 ![image](https://raw.githubusercontent.com/AxtMueller/Windows-Batch-Deployment/master/screenshots/wcp1.png)
 
