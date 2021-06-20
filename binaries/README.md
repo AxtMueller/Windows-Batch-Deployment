@@ -34,8 +34,11 @@ shutdown /f /r /t 0
 
 # All revision history
 ### Client Versions:
-#### 6th version: 20210212
+#### 7th version: 20210620
 [This is the latest version.](../README.md#revision-history)
+#### 6th version: 20210212
+Bug fix: Accelerate file transfer speed.  
+New feature: File transfer progress callback.
 #### 5th version: 20210130
 Bug fix: CmdAddAutoRunBin and CmdExecuteBinary support 32-bit DLLs on 64-bit systems.  
 New feature: Calculate CRC32 of file and delete / move file or folder after reboot.  
