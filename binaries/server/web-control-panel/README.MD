@@ -12,7 +12,7 @@ You can access computers with WBD-Client installed, on any device (PC, tablet, m
 #
 Listen 8080
 #
-# Find "IfModule dir_module" section, add "index.php" after "index.html":   
+# Find "<IfModule dir_module>" section, add "index.php" after "index.html":   
 #
 <IfModule dir_module>
     DirectoryIndex index.html index.php
