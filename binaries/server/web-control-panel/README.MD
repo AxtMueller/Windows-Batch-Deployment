@@ -31,4 +31,4 @@ C:\Apache24\bin\httpd -k install
 C:\Apache24\bin\httpd -k start
 ```
 5. Run "ServerTestVB6GUI.exe" and keep it running, the web control panel needs it. If you want to keep the web control panel working properly after the server system reboots, you must add "ServerTestVB6GUI.exe" to the system auto-run list.  
-6. Delete "index.html" in "C:\Apache24\htdocs", rename all TXT files to PHP files and copy them to "C:\Apache24\htdocs". Enter "localhost" or "localhost:8080" in the browser, you will see the login window. Default username and password are "test" and "1234", they can be changed by modifying "index.php".   
+6. Delete "C:\Apache24\htdocs\index.html", rename all TXT files to PHP files and copy them to "C:\Apache24\htdocs". Enter "localhost" or "localhost:8080" in the browser, you will see the login window. Default username and password are "test" and "1234", they can be changed by modifying "index.php".   
