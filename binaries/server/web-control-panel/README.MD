@@ -1,8 +1,8 @@
-﻿# WHAT IS IT
+# What Is It
 This is the web control panel of Windows Batch Deployment Server Demonstration, it is written in PHP.   
 You can access computers with WBD-client installed, on any device (PC, tablet, mobile phone), without using "ServerTestVB6GUI.exe" on server.   
 
-# HOW TO SETUP
+# How To Setup
 1. [Download PHP "x64 Thread Safe" version](http://windows.php.net/download), unzip it to "C:\PHP\" and install needed VC runtime.   
 2. [Download Apache "Win64" version](https://www.apachelounge.com/download), unzip it to "C:\" and install needed VC runtime.   
 3. Modify configuration in "C:\Apache24\conf\httpd.conf".   
