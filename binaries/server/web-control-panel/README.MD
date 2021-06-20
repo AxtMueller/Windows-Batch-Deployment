@@ -8,7 +8,7 @@ You can access computers with WBD-Client installed, on any device (PC, tablet, m
 3. Modify configuration in "C:\Apache24\conf\httpd.conf".   
 ```
 #
-# Replace "Listen 80" with "Listen 8080" (you must do this if port 80 is occupied by other program, such as IIS):
+# Replace "Listen 80" with "Listen 8080" (you only need to do this if port 80 is occupied by other program, such as IIS):
 #
 Listen 8080
 #
