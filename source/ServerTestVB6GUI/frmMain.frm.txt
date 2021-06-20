@@ -206,37 +206,37 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Registry Editor"
       TabPicture(1)   =   "frmMain.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "txtTempRegData"
+      Tab(1).Control(0)=   "lvReg"
       Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "btnOperate(19)"
+      Tab(1).Control(1)=   "txtRegPath"
       Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "btnOperate(18)"
       Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "txtRegPath"
+      Tab(1).Control(3)=   "btnOperate(19)"
       Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "lvReg"
+      Tab(1).Control(4)=   "txtTempRegData"
       Tab(1).Control(4).Enabled=   0   'False
       Tab(1).ControlCount=   5
       TabCaption(2)   =   "System Shell"
       TabPicture(2)   =   "frmMain.frx":0038
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "txtCmdRet"
+      Tab(2).Control(0)=   "btnOperate(3)"
       Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "txtCMD"
+      Tab(2).Control(1)=   "btnOperate(2)"
       Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "btnOperate(2)"
+      Tab(2).Control(2)=   "txtCMD"
       Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "btnOperate(3)"
+      Tab(2).Control(3)=   "txtCmdRet"
       Tab(2).Control(3).Enabled=   0   'False
       Tab(2).ControlCount=   4
       TabCaption(3)   =   "Auto-Run Management"
       TabPicture(3)   =   "frmMain.frx":0054
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Frame6"
+      Tab(3).Control(0)=   "Frame4"
       Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "Frame5"
       Tab(3).Control(1).Enabled=   0   'False
-      Tab(3).Control(2)=   "Frame4"
+      Tab(3).Control(2)=   "Frame6"
       Tab(3).Control(2).Enabled=   0   'False
       Tab(3).ControlCount=   3
       Begin VB.CommandButton btnFile 
@@ -2182,28 +2182,7 @@ Private Function HandleCommand(ByVal sz As String) As String
     Dim rv As Currency
     Dim SendCallBack As SENDRECV_CALLBACK
     Dim RecvCallBack As SENDRECV_CALLBACK
-    If LCase(sz) = "help" Then
-        HandleCommand = "[LC]" & vbCrLf & "Usage: List online clients." & vbCrLf & vbCrLf & _
-                        "[CC client_id]" & vbCrLf & "Usage: Connect client." & vbCrLf & vbCrLf & _
-                        "[DC client_id]" & vbCrLf & "Usage: Disconnect client." & vbCrLf & vbCrLf & _
-                        "[RC client_id]" & vbCrLf & "Usage: Reboot client." & vbCrLf & vbCrLf & _
-                        "[SC client_id]" & vbCrLf & "Usage: Shutdown client." & vbCrLf & vbCrLf & _
-                        "[TC client_id]" & vbCrLf & "Usage: Test client status." & vbCrLf & vbCrLf & _
-                        "[UC client_id file_on_server]" & vbCrLf & "Usage: Update or uninstall client program." & vbCrLf & "Remark: If the second parameter is empty, an uninstallation will be performed." & vbCrLf & vbCrLf & _
-                        "[CONFIG client_id file_on_server]" & vbCrLf & "Usage: Set client program configuration." & vbCrLf & vbCrLf & _
-                        "[DIR client_id directory_on_client]" & vbCrLf & "Usage: Query directory." & vbCrLf & vbCrLf & _
-                        "[DLF client_id file_on_client file_on_server]" & vbCrLf & "Usage: Download file." & vbCrLf & "Remark: Short path must be used if the full path contains one or more blanks." & vbCrLf & vbCrLf & _
-                        "[UPF client_id file_on_server file_on_client]" & vbCrLf & "Usage: Upload file." & vbCrLf & "Remark: Short path must be used if the full path contains one or more blanks." & vbCrLf & vbCrLf & _
-                        "[EXE client_id file_on_client_can_be_with_parameters]" & vbCrLf & "Usage: Run program or load driver." & vbCrLf & vbCrLf & _
-                        "[CMD client_id command_to_perform]" & vbCrLf & "Usage: Perform command by Windows Command Processor." & vbCrLf & vbCrLf & _
-                        "[REG client_id registry_on_client]" & vbCrLf & "Usage: Query registry." & vbCrLf & vbCrLf & _
-                        "[FO]" & vbCrLf & "Usage: Perform file opreations." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
-                        "[RO]" & vbCrLf & "Usage: Perform registry opreations." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
-                        "[ADDBIN client_id type name program parameters]" & vbCrLf & "Usage: Add auto-run item." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
-                        "[DELBIN client_id type name]" & vbCrLf & "Usage: Delete auto-run item." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
-                        "[QRYBIN client_id type]" & vbCrLf & "Usage: Query auto-run items." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
-                        "[CLRBIN client_id type]" & vbCrLf & "Usage: Delete all auto-run items." & vbCrLf & "Remark: The Web Control Panel currently does not support this function."
-    ElseIf LCase(sz) = "lc" Then
+    If LCase(sz) = "lc" Then
         Call btnClient_Click(7)
         If lvClient.ListItems.count <> 0 Then
             Dim ctsa0() As String
