@@ -5,6 +5,42 @@ Public Function CodePtr(ByVal p As Long) As Long
     CodePtr = p
 End Function
 
+Public Function LoadText(ByVal szType As String, ByVal szFileName As String) As String
+    On Error GoTo ErrX
+    Dim ados As Object
+    Set ados = CreateObject("adodb.stream")
+    With ados
+        .Charset = szType '"utf-8" or "unicode" or "unicodefffe"
+        .Type = 2 'adTypeText
+        .Mode = 3 'adModeReadWrite
+        .Open
+        .Position = 0
+        .LoadFromFile szFileName
+        LoadText = .ReadText
+        .Close
+    End With
+ErrX:
+    Set ados = Nothing
+End Function
+
+Public Sub SaveText(ByVal szType As String, ByVal szFileName As String, ByVal szContent As String)
+    On Error GoTo ErrX
+    Dim ados As Object
+    Set ados = CreateObject("adodb.stream")
+    With ados
+        .Charset = szType '"utf-8" or "unicode" or "unicodefffe"
+        .Type = 2 'adTypeText
+        .Mode = 3 'adModeReadWrite
+        .Open
+        .Position = 0
+        .WriteText IIf(szContent = "", vbNullString, szContent)
+        .SaveToFile szFileName, 2 'adSaveCreateOverWrite
+        .Close
+    End With
+ErrX:
+    Set ados = Nothing
+End Sub
+
 Public Function SendProgress(ByVal count As Long, ByVal current As Long, ByVal all As Long, ByVal id As Long) As Long
     frmMain.btnFile(0).Caption = CStr(CDec(count) * CDec(all) + CDec(current)) & " / " & CStr(CDec(count + 1) * CDec(all))
     DoEvents: SendProgress = 0
@@ -13,4 +49,14 @@ End Function
 Public Function RecvProgress(ByVal count As Long, ByVal current As Long, ByVal all As Long, ByVal id As Long) As Long
     frmMain.btnFile(1).Caption = CStr(CDec(count) * CDec(all) + CDec(current)) & " / " & CStr(CDec(count + 1) * CDec(all))
     DoEvents: RecvProgress = 0
+End Function
+
+Public Function SendProgressForWCP(ByVal count As Long, ByVal current As Long, ByVal all As Long, ByVal id As Long) As Long
+    SaveText "utf-8", "c:\progress." & CStr(frmMain.Tag), CStr(CDec(count) * CDec(all) + CDec(current)) & " / " & CStr(CDec(count + 1) * CDec(all))
+    DoEvents: SendProgressForWCP = 0
+End Function
+
+Public Function RecvProgressForWCP(ByVal count As Long, ByVal current As Long, ByVal all As Long, ByVal id As Long) As Long
+    SaveText "utf-8", "c:\progress." & CStr(frmMain.Tag), CStr(CDec(count) * CDec(all) + CDec(current)) & " / " & CStr(CDec(count + 1) * CDec(all))
+    DoEvents: RecvProgressForWCP = 0
 End Function

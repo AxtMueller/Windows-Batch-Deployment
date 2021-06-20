@@ -14,6 +14,11 @@ Begin VB.Form frmMain
    ScaleHeight     =   8535
    ScaleWidth      =   11895
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Timer Timer2 
+      Interval        =   100
+      Left            =   0
+      Top             =   0
+   End
    Begin VB.Timer Timer1 
       Interval        =   1000
       Left            =   240
@@ -30,80 +35,80 @@ Begin VB.Form frmMain
          Caption         =   "Uninstall"
          Height          =   255
          Index           =   5
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   5
          Top             =   2160
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Update"
          Height          =   255
          Index           =   4
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   4
          Top             =   1920
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Configure"
          Height          =   255
          Index           =   6
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   39
          Top             =   1680
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Reboot"
          Height          =   255
          Index           =   3
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   3
          Top             =   1440
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Shutdown"
          Height          =   255
          Index           =   2
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   2
          Top             =   1200
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Disconnect"
          Height          =   255
          Index           =   1
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   1
          ToolTipText     =   "You cannot perform any operation after disconnecting the client."
          Top             =   960
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Connect"
          Height          =   255
          Index           =   0
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   0
          ToolTipText     =   "You must connect to the client before performing any operation."
          Top             =   720
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CommandButton btnClient 
          Caption         =   "Refresh List"
          Height          =   255
          Index           =   7
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   41
          Top             =   240
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.CheckBox Check1 
          Caption         =   "Automatically"
          Height          =   195
-         Left            =   10320
+         Left            =   10200
          TabIndex        =   40
          Top             =   510
          Value           =   1  'Checked
@@ -114,8 +119,8 @@ Begin VB.Form frmMain
          Left            =   120
          TabIndex        =   10
          Top             =   240
-         Width           =   10095
-         _ExtentX        =   17806
+         Width           =   9975
+         _ExtentX        =   17595
          _ExtentY        =   3836
          View            =   3
          LabelEdit       =   1
@@ -138,7 +143,7 @@ Begin VB.Form frmMain
             Key             =   ""
             Object.Tag             =   ""
             Text            =   "IP"
-            Object.Width           =   3528
+            Object.Width           =   3352
          EndProperty
          BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             SubItemIndex    =   2
@@ -152,7 +157,7 @@ Begin VB.Form frmMain
             Key             =   ""
             Object.Tag             =   ""
             Text            =   "Name"
-            Object.Width           =   3882
+            Object.Width           =   3706
          EndProperty
          BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             SubItemIndex    =   4
@@ -202,25 +207,37 @@ Begin VB.Form frmMain
       TabPicture(1)   =   "frmMain.frx":001C
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "txtTempRegData"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "btnOperate(19)"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "btnOperate(18)"
+      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "txtRegPath"
+      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).Control(4)=   "lvReg"
+      Tab(1).Control(4).Enabled=   0   'False
       Tab(1).ControlCount=   5
       TabCaption(2)   =   "System Shell"
       TabPicture(2)   =   "frmMain.frx":0038
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "txtCmdRet"
+      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "txtCMD"
+      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).Control(2)=   "btnOperate(2)"
+      Tab(2).Control(2).Enabled=   0   'False
       Tab(2).Control(3)=   "btnOperate(3)"
+      Tab(2).Control(3).Enabled=   0   'False
       Tab(2).ControlCount=   4
       TabCaption(3)   =   "Auto-Run Management"
       TabPicture(3)   =   "frmMain.frx":0054
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Frame6"
+      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "Frame5"
+      Tab(3).Control(1).Enabled=   0   'False
       Tab(3).Control(2)=   "Frame4"
+      Tab(3).Control(2).Enabled=   0   'False
       Tab(3).ControlCount=   3
       Begin VB.CommandButton btnFile 
          Caption         =   "Upload"
@@ -484,7 +501,7 @@ Begin VB.Form frmMain
             Caption         =   "create new file"
             Height          =   255
             Index           =   11
-            Left            =   5520
+            Left            =   6000
             TabIndex        =   37
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4680
@@ -495,7 +512,7 @@ Begin VB.Form frmMain
             Caption         =   "CRC32"
             Height          =   255
             Index           =   9
-            Left            =   4800
+            Left            =   5280
             TabIndex        =   35
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4680
@@ -506,7 +523,7 @@ Begin VB.Form frmMain
             Caption         =   "Get Attr"
             Height          =   255
             Index           =   7
-            Left            =   4080
+            Left            =   4560
             TabIndex        =   29
             Top             =   4680
             Visible         =   0   'False
@@ -516,7 +533,7 @@ Begin VB.Form frmMain
             Caption         =   "delay move/del"
             Height          =   255
             Index           =   10
-            Left            =   5520
+            Left            =   6000
             TabIndex        =   36
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4440
@@ -527,7 +544,7 @@ Begin VB.Form frmMain
             Caption         =   "Rename"
             Height          =   255
             Index           =   5
-            Left            =   3360
+            Left            =   3840
             TabIndex        =   31
             Top             =   4680
             Visible         =   0   'False
@@ -537,7 +554,7 @@ Begin VB.Form frmMain
             Caption         =   "HTTP"
             Height          =   255
             Index           =   8
-            Left            =   4800
+            Left            =   5280
             TabIndex        =   28
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4440
@@ -548,7 +565,7 @@ Begin VB.Form frmMain
             Caption         =   "Set Attr"
             Height          =   255
             Index           =   6
-            Left            =   4080
+            Left            =   4560
             TabIndex        =   30
             Top             =   4440
             Visible         =   0   'False
@@ -558,7 +575,7 @@ Begin VB.Form frmMain
             Caption         =   "Delete"
             Height          =   255
             Index           =   4
-            Left            =   3360
+            Left            =   3840
             TabIndex        =   32
             Top             =   4440
             Visible         =   0   'False
@@ -568,7 +585,7 @@ Begin VB.Form frmMain
             Caption         =   "Copy"
             Height          =   255
             Index           =   3
-            Left            =   2640
+            Left            =   3120
             TabIndex        =   33
             Top             =   4680
             Visible         =   0   'False
@@ -578,7 +595,7 @@ Begin VB.Form frmMain
             Caption         =   "new dir"
             Height          =   255
             Index           =   2
-            Left            =   2640
+            Left            =   3120
             TabIndex        =   34
             Top             =   4440
             Visible         =   0   'False
@@ -851,64 +868,37 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '################################################################################
-' WIN32API CONSTANT
-'################################################################################
-Private Const SW_SHOW As Long = 5
-Private Const LVM_FIRST As Long = &H1000
-Private Const LVS_EX_FULLROWSELECT As Long = &H20
-Private Const LVM_SETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 54
-Private Const LVM_GETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 55
-
-'################################################################################
-' WIN32API DECLARATION
-'################################################################################
-Private Declare Sub ExitProcess Lib "kernel32" (ByVal dwExitCode As Long)
-Private Declare Sub memcpy Lib "kernel32" Alias "RtlMoveMemory" (ByVal Destination As Long, ByVal Source As Long, ByVal Length As Long)
-Private Declare Function VirtualAlloc Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flAllocationType As Long, ByVal flNewProtect As Long) As Long
-Private Declare Function VirtualFree Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal dwType As Long) As Long
-Private Declare Function VirtualProtect Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
-Private Declare Function lstrlenA Lib "kernel32" (ByVal lpString As Long) As Long
-Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Long) As Long
-Private Declare Function lstrcpyA Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
-Private Declare Function lstrcpyW Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
-Private Declare Function SendMessageA Lib "user32" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Private Declare Function MessageBoxA Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
-Private Declare Function MessageBoxW Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
-Private Declare Function LoadLibraryA Lib "kernel32.dll" (ByVal lpModuleName As String) As Long
-Private Declare Function GetProcAddress Lib "kernel32.dll" (ByVal hModule As Long, ByVal lpProcName As String) As Long
-
-'################################################################################
 ' WINDOWS BATCH DEPLOYMENT CONSTANT
 '################################################################################
-Const SERVER_MAX_CLIENTS As Long = 4096
-Const CLIENT_CONFIG_SERVER As Long = 0
-Const CLIENT_STATUS_ONLINE As String = "online"
-Const CLIENT_STATUS_OFFLINE As String = "offline"
-Const CLIENT_STATUS_CONNECTED As String = "connected"
-Const CLIENT_AUTORUN_EMPTY As String = "((LEER))"
-Const CLIENT_AUTORUN_TYPE_SYS As Long = 0
-Const CLIENT_AUTORUN_TYPE_EXE As Long = 1
-Const CLIENT_AUTORUN_TYPE_DLL As Long = 2
-Const CLIENT_RUN_DLL_P1 As Byte = &HFE
-Const CLIENT_RUN_DLL_P2 As Long = &HFFFFFFFF
-Const CLIENT_RUN_SYS_P1 As Byte = &HFF
-Const CLIENT_RUN_SYS_P2 As Long = &HFFFFFFFF
-Const CLIENT_FSO_CREATE_FILE As Long = 0
-Const CLIENT_FSO_CREATE_DIRECTORY As Long = 1
-Const CLIENT_FSO_COPY As Long = 2
-Const CLIENT_FSO_DELETE As Long = 3
-Const CLIENT_FSO_RENAME As Long = 4
-Const CLIENT_FSO_SET_ATTRIB As Long = 5
-Const CLIENT_FSO_GET_ATTRIB As Long = 6
-Const CLIENT_FSO_HTTP_DOWNLOAD As Long = 7
-Const CLIENT_FSO_GET_CRC32 As Long = 8
-Const CLIENT_FSO_DELAY_MOV_DEL As Long = 9
-Const CLIENT_REG_CREATE_KEY As Long = 0
-Const CLIENT_REG_DELETE_KEY As Long = 1
-Const CLIENT_REG_RENAME_KEY As Long = 2
-Const CLIENT_REG_DELETE_VALUE As Long = 3
-Const CLIENT_REG_QUERY_VALUE As Long = 4
-Const CLIENT_REG_SET_VALUE As Long = 5
+Private Const SERVER_MAX_CLIENTS As Long = 4096
+Private Const CLIENT_CONFIG_SERVER As Long = 0
+Private Const CLIENT_STATUS_ONLINE As String = "online"
+Private Const CLIENT_STATUS_OFFLINE As String = "offline"
+Private Const CLIENT_STATUS_CONNECTED As String = "connected"
+Private Const CLIENT_AUTORUN_EMPTY As String = "((LEER))"
+Private Const CLIENT_AUTORUN_TYPE_SYS As Long = 0
+Private Const CLIENT_AUTORUN_TYPE_EXE As Long = 1
+Private Const CLIENT_AUTORUN_TYPE_DLL As Long = 2
+Private Const CLIENT_RUN_DLL_P1 As Byte = &HFE
+Private Const CLIENT_RUN_DLL_P2 As Long = &HFFFFFFFF
+Private Const CLIENT_RUN_SYS_P1 As Byte = &HFF
+Private Const CLIENT_RUN_SYS_P2 As Long = &HFFFFFFFF
+Private Const CLIENT_FSO_CREATE_FILE As Long = 0
+Private Const CLIENT_FSO_CREATE_DIRECTORY As Long = 1
+Private Const CLIENT_FSO_COPY As Long = 2
+Private Const CLIENT_FSO_DELETE As Long = 3
+Private Const CLIENT_FSO_RENAME As Long = 4
+Private Const CLIENT_FSO_SET_ATTRIB As Long = 5
+Private Const CLIENT_FSO_GET_ATTRIB As Long = 6
+Private Const CLIENT_FSO_HTTP_DOWNLOAD As Long = 7
+Private Const CLIENT_FSO_GET_CRC32 As Long = 8
+Private Const CLIENT_FSO_DELAY_MOV_DEL As Long = 9
+Private Const CLIENT_REG_CREATE_KEY As Long = 0
+Private Const CLIENT_REG_DELETE_KEY As Long = 1
+Private Const CLIENT_REG_RENAME_KEY As Long = 2
+Private Const CLIENT_REG_DELETE_VALUE As Long = 3
+Private Const CLIENT_REG_QUERY_VALUE As Long = 4
+Private Const CLIENT_REG_SET_VALUE As Long = 5
 
 '################################################################################
 ' WINDOWS BATCH DEPLOYMENT STRUCTURE DECLARATION
@@ -983,6 +973,33 @@ Private Declare Function UpdateClient Lib "Server32.dll" (ByVal LastestVersion A
 Private Declare Function UpdateServer Lib "Server32.dll" (ByVal CurrentVersion As String, ByVal LastestVersion As String, ByVal SaveTo32 As String, ByVal SaveTo64 As String) As Byte
 
 '################################################################################
+' WIN32API CONSTANT
+'################################################################################
+Private Const SW_SHOW As Long = 5
+Private Const LVM_FIRST As Long = &H1000
+Private Const LVS_EX_FULLROWSELECT As Long = &H20
+Private Const LVM_SETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 54
+Private Const LVM_GETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 55
+
+'################################################################################
+' WIN32API DECLARATION
+'################################################################################
+Private Declare Sub ExitProcess Lib "kernel32" (ByVal dwExitCode As Long)
+Private Declare Sub memcpy Lib "kernel32" Alias "RtlMoveMemory" (ByVal Destination As Long, ByVal Source As Long, ByVal Length As Long)
+Private Declare Function VirtualAlloc Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flAllocationType As Long, ByVal flNewProtect As Long) As Long
+Private Declare Function VirtualFree Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal dwType As Long) As Long
+Private Declare Function VirtualProtect Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
+Private Declare Function lstrlenA Lib "kernel32" (ByVal lpString As Long) As Long
+Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Long) As Long
+Private Declare Function lstrcpyA Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
+Private Declare Function lstrcpyW Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
+Private Declare Function SendMessageA Lib "user32" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function MessageBoxA Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
+Private Declare Function MessageBoxW Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
+Private Declare Function LoadLibraryA Lib "kernel32.dll" (ByVal lpModuleName As String) As Long
+Private Declare Function GetProcAddress Lib "kernel32.dll" (ByVal hModule As Long, ByVal lpProcName As String) As Long
+
+'################################################################################
 ' DEMONSTRATION PROGRAM STRUCTURE
 '################################################################################
 Private Type mDec
@@ -1042,20 +1059,6 @@ Private Function StrFromPtr(ByVal lpString As Long, Optional bUnicode As Boolean
         lstrcpyA ByVal StrFromPtr, ByVal lpString
     End If
 End Function
-
-Private Function ReadText(ByVal szFileName As String) As String
-    Dim szTextCodes As String
-    Open szFileName For Binary As #1
-        szTextCodes = StrConv(InputB(LOF(1), 1), vbUnicode)
-    Close #1
-    ReadText = szTextCodes
-End Function
-
-Private Sub SaveText(ByVal szFileName As String, ByVal sz As String)
-    Open szFileName For Output As #1
-        Print #1, sz
-    Close #1
-End Sub
 
 Private Function GetParentDirectory(ByVal szPath As String) As String
     Dim i As Long
@@ -1344,30 +1347,57 @@ Private Sub btnClient_Click(Index As Integer)
             End If
         Case 4
             Dim szNewFile As String
+            Dim dwVersion(1) As Long
+            Dim bForceUpdate As Boolean: bForceUpdate = False
+            Const szUpdateTips As String = "Do you want to use an unknown version of file to update?"
+            'get current client version
+            ClientTest CLng(lvClient.SelectedItem.Text), ByVal VarPtr(dwVersion(0))
+            'check client file update and download the latest file
             If dwLatestClientVersion = 0 Then
                 If UpdateClient(szLatestClientVersion, App.Path & "\Latest32.sys", App.Path & "\Latest64.sys") Then
                     dwLatestClientVersion = CLng(szLatestClientVersion)
                     MsgBox "Latest Client Version: " & CStr(dwLatestClientVersion), vbInformation
+                    If InStr(1, lvClient.SelectedItem.SubItems(2), "WIN32-", vbTextCompare) Then
+                        szNewFile = App.Path & "\Latest32.sys"
+                    Else
+                        szNewFile = App.Path & "\Latest64.sys"
+                    End If
                 Else
-                    MsgBox "Check update unsuccessfully.", vbCritical
-                    Exit Sub
+                    If vbYes = MsgBox("Check update unsuccessfully." & vbCrLf & vbCrLf & szUpdateTips, vbCritical + vbYesNo) Then
+                        bForceUpdate = True
+                    End If
                 End If
             End If
-            If InStr(1, lvClient.SelectedItem.SubItems(2), "WIN32-", vbTextCompare) Then
-                szNewFile = App.Path & "\Latest32.sys"
-            Else
-                szNewFile = App.Path & "\Latest64.sys"
-            End If
-            Dim dwVersion(1) As Long
-            ClientTest CLng(lvClient.SelectedItem.Text), ByVal VarPtr(dwVersion(0))
-            If dwVersion(0) = dwLatestClientVersion Then
-                MsgBox "The client is up to date: " & CStr(dwVersion(0)), vbExclamation
-            Else
-                b = ClientUpdate(CLng(lvClient.SelectedItem.Text), StrPtr(szNewFile))
-                If b = 0 Then
-                    MsgBox "Update client unsuccessfully. Current version: " & CStr(dwVersion(0)), vbCritical
+            'if check update failed, go to force update, otherwise go to normal update.
+            If bForceUpdate = False Then
+                If dwVersion(0) = dwLatestClientVersion Then
+                    If vbYes = MsgBox("The client is up to date: " & CStr(dwVersion(0)) & vbCrLf & vbCrLf & szUpdateTips, vbExclamation + vbYesNo) Then
+                        bForceUpdate = True
+                    End If
                 Else
-                    MsgBox "Update client successfully. Old version: " & CStr(dwVersion(0)), vbInformation
+                    b = ClientUpdate(CLng(lvClient.SelectedItem.Text), StrPtr(szNewFile))
+                    If b = 0 Then
+                        MsgBox "Update client unsuccessfully. Current version: " & CStr(dwVersion(0)), vbCritical
+                    Else
+                        MsgBox "Update client successfully. Old version: " & CStr(dwVersion(0)), vbInformation
+                    End If
+                End If
+            End If
+            If bForceUpdate Then
+                Dim szUnknownNewFile As String
+                If InStr(1, lvClient.SelectedItem.SubItems(2), "WIN32-", vbTextCompare) Then
+                    szNewFile = App.Path & "\UpdateTest32.sys"
+                Else
+                    szNewFile = App.Path & "\UpdateTest64.sys"
+                End If
+                szUnknownNewFile = InputBox("New File:", "Update Client", szNewFile)
+                If StrPtr(szUnknownNewFile) <> 0 Then
+                    b = ClientUpdate(CLng(lvClient.SelectedItem.Text), StrPtr(szUnknownNewFile))
+                    If b = 0 Then
+                        MsgBox "Update client unsuccessfully. Current version: " & CStr(dwVersion(0)), vbCritical
+                    Else
+                        MsgBox "Update client successfully. Old version: " & CStr(dwVersion(0)), vbInformation
+                    End If
                 End If
             End If
         Case 5
@@ -1540,24 +1570,49 @@ Private Sub btnFile_Click(Index As Integer)
     End Select
 End Sub
 
+Private Sub EnumFileProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As Boolean)
+    'A lazy way: assume the maximum file count is 16384...
+    Dim i, sc As Long: sc = 16384
+    Dim fs(16383) As BDP_FILE_INFO
+    If CmdQueryDirectory(id, StrPtr(txtFilePath.Text), VarPtr(fs(0)), sc) = 0 Then
+        txtFilePath.Text = GetParentDirectory(txtFilePath.Text)
+        If bShowMsgIfErrorHappens = True Then
+            MsgBox "Query directory unsuccessfully.", vbCritical
+        End If
+    Else
+        lvFile.ListItems.Clear
+        For i = 0 To sc - 1
+            AddFileInfo lvFile, fs(i)
+        Next
+    End If
+End Sub
+
+Private Sub EnumRegistryProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As Boolean)
+    'A lazy way: assume the maximum file count is 16384...
+    Dim i, sc As Long: sc = 16384: sc = 16384
+    Dim rg(16383) As BDP_REG_INFO
+    If CmdQueryRegistry(id, StrPtr(txtRegPath.Text), VarPtr(rg(0)), sc) = 0 Then
+        If LCase(txtRegPath.Text) <> "\registry" Then
+            txtRegPath.Text = GetParentDirectory(txtRegPath.Text)
+        End If
+        If bShowMsgIfErrorHappens = True Then
+            MsgBox "Query registry unsuccessfully.", vbCritical
+        End If
+    Else
+        lvReg.ListItems.Clear
+        For i = 0 To sc - 1
+            AddRegInfo lvReg, rg(i), txtRegPath.Text
+        Next
+    End If
+End Sub
+
 Private Sub btnOperate_Click(Index As Integer)
     Dim b As Byte
+    Dim i, sc As Long: sc = 16384
     If lvClient.ListItems.count = 0 Then Exit Sub
     Select Case Index
         Case 0
-            'A lazy way: assume the maximum file count is 16384...
-            Dim i, sc As Long: sc = 16384
-            Dim fs(16383) As BDP_FILE_INFO
-            b = CmdQueryDirectory(CLng(lvClient.SelectedItem.Text), StrPtr(txtFilePath.Text), VarPtr(fs(0)), sc)
-            If b = 0 Then
-                txtFilePath.Text = GetParentDirectory(txtFilePath.Text)
-                MsgBox "Query directory unsuccessfully.", vbCritical
-            Else
-                lvFile.ListItems.Clear
-                For i = 0 To sc - 1
-                    AddFileInfo lvFile, fs(i)
-                Next
-            End If
+            EnumFileProc CLng(lvClient.SelectedItem.Text), True
         Case 1
             txtFilePath.Text = GetParentDirectory(txtFilePath.Text)
             btnOperate_Click 0
@@ -1684,21 +1739,7 @@ Private Sub btnOperate_Click(Index As Integer)
                 MsgBox "Clear auto-run unsuccessfully.", vbCritical
             End If
         Case 18
-            'A lazy way: assume the maximum file count is 16384...
-            sc = 16384
-            Dim rg(16383) As BDP_REG_INFO
-            b = CmdQueryRegistry(CLng(lvClient.SelectedItem.Text), StrPtr(txtRegPath.Text), VarPtr(rg(0)), sc)
-            If b = 0 Then
-                If LCase(txtRegPath.Text) <> "\registry" Then
-                    txtRegPath.Text = GetParentDirectory(txtRegPath.Text)
-                End If
-                MsgBox "Query registry unsuccessfully.", vbCritical
-            Else
-                lvReg.ListItems.Clear
-                For i = 0 To sc - 1
-                    AddRegInfo lvReg, rg(i), txtRegPath.Text
-                Next
-            End If
+            EnumRegistryProc CLng(lvClient.SelectedItem.Text), True
         Case 19
             If LCase(txtRegPath.Text) <> "\registry" Then
                 txtRegPath.Text = GetParentDirectory(txtRegPath.Text)
@@ -1738,11 +1779,16 @@ Private Sub File1_MouseDown(Button As Integer, Shift As Integer, x As Single, y 
 End Sub
 
 Private Sub Form_Initialize()
+    On Error Resume Next
     Dim b As Byte
     Dim port As Long: port = 9999
     If IsNumeric(Command$) Then
         port = CLng(Command$)
     End If
+    Me.Tag = CStr(port)
+    Kill "c:\input." & CStr(Me.Tag)
+    Kill "c:\output." & CStr(Me.Tag)
+    Kill "c:\progress." & CStr(Me.Tag)
     b = init(port)
     If b = 0 Then
         MsgBox "Initialization failed.", vbCritical
@@ -1808,7 +1854,11 @@ Private Sub lvFile_DblClick()
                 If CmdExecuteBinary(CLng(lvClient.SelectedItem.Text), StrPtr(szRemoteFile), SW_SHOW, 0, rv) = 0 Then
                     MsgBox "Run program unsuccessfully.", vbCritical
                 Else
-                    MsgBox "Run program successfully.", vbInformation, "PID = " & CStr(CLng("&H" & i64toa(rv)))
+                    If rv <> 0 Then
+                        MsgBox "Run program successfully.", vbInformation, "PID = " & CStr(CDec("&H" & i64toa(rv)))
+                    Else
+                         MsgBox "Run program unsuccessfully.", vbCritical
+                    End If
                 End If
             End If
         ElseIf LCase$(Right$(lvFile.SelectedItem.Text, 4)) = ".sys" Then
@@ -1816,7 +1866,11 @@ Private Sub lvFile_DblClick()
                 If CmdExecuteBinary(CLng(lvClient.SelectedItem.Text), StrPtr(szRemoteFile), CLIENT_RUN_SYS_P1, CLIENT_RUN_SYS_P2, rv) = 0 Then
                     MsgBox "Load driver unsuccessfully.", vbCritical
                 Else
-                    MsgBox "Load driver successfully.", vbInformation, "DriverObject = " & i64toa(rv)
+                    If rv <> 0 Then
+                        MsgBox "Load driver successfully.", vbInformation, "DriverObject = " & i64toa(rv)
+                    Else
+                        MsgBox "Load driver unsuccessfully.", vbCritical
+                    End If
                 End If
             End If
         ElseIf LCase$(Right$(lvFile.SelectedItem.Text, 4)) = ".dll" Then
@@ -1829,7 +1883,11 @@ Private Sub lvFile_DblClick()
                 If CmdExecuteBinary(CLng(lvClient.SelectedItem.Text), StrPtr(szRemoteFile), CLIENT_RUN_DLL_P1, CLIENT_RUN_DLL_P2, rv) = 0 Then
                     MsgBox "Load DLL unsuccessfully.", vbCritical
                 Else
-                    MsgBox "Load DLL successfully.", vbInformation, "RunDll32-PID = " & CStr(CLng("&H" & i64toa(rv)))
+                    If rv <> 0 Then
+                        MsgBox "Load DLL successfully.", vbInformation, "RunDll32-PID = " & CStr(CDec("&H" & i64toa(rv)))
+                    Else
+                        MsgBox "Load DLL unsuccessfully.", vbCritical
+                    End If
                 End If
             End If
         End If
@@ -1840,15 +1898,9 @@ Private Sub lvFile_MouseUp(Button As Integer, Shift As Integer, x As Single, y A
     If Button = 2 Then PopupMenu mnuFile
 End Sub
 
-Private Sub SetRegValueProc()
+Private Function SetRegValueInternal(ByVal ClientId As Long, ByVal KeyName As String, ByVal ValueName As String, ByVal ValueType As Long, ByVal szValueData As String) As Boolean
     On Error GoTo exx
-    If txtTempRegData.Tag = "" Then Exit Sub
-    Dim KeyName As String: KeyName = txtRegPath.Text
-    Dim ValueName As String: ValueName = txtTempRegData.ToolTipText
-    Dim ValueType As Long: ValueType = GetRegStringType(txtTempRegData.Tag)
-    Dim szValueData As String: szValueData = txtTempRegData.Text
     Dim pValueData As Long, dwValueDataLength As Long
-    Dim b As Boolean
     If ValueType = 1 Or ValueType = 2 Then
         '//REG_SZ or REG_EXPAND_SZ
         pValueData = StrPtr(szValueData)
@@ -1876,7 +1928,7 @@ Private Sub SetRegValueProc()
             Call memcpy(VarPtr(qw) + 0, VarPtr(dw2), 4)
             Call memcpy(VarPtr(qw) + 4, VarPtr(dw1), 4)
         Else
-            MsgBox "You must use hexadecimal number for REG_QWORD.", vbCritical
+            'MsgBox "You must use hexadecimal number for REG_QWORD.", vbCritical
             GoTo exx
         End If
         pValueData = VarPtr(qw)
@@ -1900,13 +1952,26 @@ Private Sub SetRegValueProc()
         pValueData = VarPtr(ba(0))
         dwValueDataLength = UBound(ba) + 1
     End If
-    b = CmdRegistryOperation(CLng(lvClient.SelectedItem.Text), CLIENT_REG_SET_VALUE, StrPtr(KeyName), StrPtr(ValueName), ValueType, pValueData, dwValueDataLength)
+    SetRegValueInternal = CmdRegistryOperation(ClientId, CLIENT_REG_SET_VALUE, StrPtr(KeyName), StrPtr(ValueName), ValueType, pValueData, dwValueDataLength)
+    Exit Function
+exx:
+    SetRegValueInternal = False
+End Function
+
+Private Sub SetRegValueProc()
+    If txtTempRegData.Tag = "" Then Exit Sub
+    Dim ClientId As Long: ClientId = CLng(lvClient.SelectedItem.Text)
+    Dim KeyName As String: KeyName = txtRegPath.Text
+    Dim ValueName As String: ValueName = txtTempRegData.ToolTipText
+    Dim ValueType As Long: ValueType = GetRegStringType(txtTempRegData.Tag)
+    Dim szValueData As String: szValueData = txtTempRegData.Text
+    Dim b As Boolean
+    b = SetRegValueInternal(ClientId, KeyName, ValueName, ValueType, szValueData)
     If b = 0 Then
         MsgBox "Edit value unsuccessfully.", vbCritical
     Else
         btnOperate_Click 18
     End If
-exx:
 End Sub
 
 Private Sub lvReg_DblClick()
@@ -2055,3 +2120,755 @@ Private Sub Timer1_Timer()
     End If
 End Sub
 
+'################################################################################
+' CODE FOR WEB CONTROL PANEL
+'################################################################################
+Private Function IsStringArrayElementValid(ByRef sa() As String, ByVal id As Long) As Boolean
+    On Error GoTo exx
+    Dim s As String: s = sa(id)
+    IsStringArrayElementValid = True
+    Exit Function
+exx:
+    IsStringArrayElementValid = False
+End Function
+
+Private Function LenX(ByVal sz As String) As Long
+    Dim s As String
+    Dim i As Long, l As Long
+    For i = 1 To Len(sz)
+        s = Mid(sz, i, 1)
+        l = AscW(s)
+        If l > 255 Or l < 0 Then
+            LenX = LenX + 2
+        Else
+            LenX = LenX + 1
+        End If
+    Next
+End Function
+
+Private Function GetArrayStringsMaxLen(ByRef sa() As String) As Long
+    On Error GoTo exx
+    Dim i As Long, max As Long
+    For i = 0 To UBound(sa)
+        If max < LenX(sa(i)) Then
+            max = LenX(sa(i))
+        End If
+    Next
+exx:
+    GetArrayStringsMaxLen = max
+End Function
+
+Private Sub AddBlanksForStringArray(ByRef sa() As String)
+    On Error GoTo exx
+    Dim i As Long, maxlen As Long
+    maxlen = GetArrayStringsMaxLen(sa)
+    For i = 0 To UBound(sa)
+        sa(i) = sa(i) & String(maxlen - LenX(sa(i)), " ")
+    Next
+exx:
+End Sub
+
+Private Sub TryDelete(ByVal szFile As String)
+    On Error Resume Next
+    Kill szFile
+End Sub
+
+Private Function HandleCommand(ByVal sz As String) As String
+    On Error GoTo exx
+    Dim i As Long
+    Dim bRet As Byte
+    Dim iType As Byte
+    Dim sa() As String
+    Dim rv As Currency
+    Dim SendCallBack As SENDRECV_CALLBACK
+    Dim RecvCallBack As SENDRECV_CALLBACK
+    If LCase(sz) = "help" Then
+        HandleCommand = "[LC]" & vbCrLf & "Usage: List online clients." & vbCrLf & vbCrLf & _
+                        "[CC client_id]" & vbCrLf & "Usage: Connect client." & vbCrLf & vbCrLf & _
+                        "[DC client_id]" & vbCrLf & "Usage: Disconnect client." & vbCrLf & vbCrLf & _
+                        "[RC client_id]" & vbCrLf & "Usage: Reboot client." & vbCrLf & vbCrLf & _
+                        "[SC client_id]" & vbCrLf & "Usage: Shutdown client." & vbCrLf & vbCrLf & _
+                        "[TC client_id]" & vbCrLf & "Usage: Test client status." & vbCrLf & vbCrLf & _
+                        "[UC client_id file_on_server]" & vbCrLf & "Usage: Update or uninstall client program." & vbCrLf & "Remark: If the second parameter is empty, an uninstallation will be performed." & vbCrLf & vbCrLf & _
+                        "[CONFIG client_id file_on_server]" & vbCrLf & "Usage: Set client program configuration." & vbCrLf & vbCrLf & _
+                        "[DIR client_id directory_on_client]" & vbCrLf & "Usage: Query directory." & vbCrLf & vbCrLf & _
+                        "[DLF client_id file_on_client file_on_server]" & vbCrLf & "Usage: Download file." & vbCrLf & "Remark: Short path must be used if the full path contains one or more blanks." & vbCrLf & vbCrLf & _
+                        "[UPF client_id file_on_server file_on_client]" & vbCrLf & "Usage: Upload file." & vbCrLf & "Remark: Short path must be used if the full path contains one or more blanks." & vbCrLf & vbCrLf & _
+                        "[EXE client_id file_on_client_can_be_with_parameters]" & vbCrLf & "Usage: Run program or load driver." & vbCrLf & vbCrLf & _
+                        "[CMD client_id command_to_perform]" & vbCrLf & "Usage: Perform command by Windows Command Processor." & vbCrLf & vbCrLf & _
+                        "[REG client_id registry_on_client]" & vbCrLf & "Usage: Query registry." & vbCrLf & vbCrLf & _
+                        "[FO]" & vbCrLf & "Usage: Perform file opreations." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
+                        "[RO]" & vbCrLf & "Usage: Perform registry opreations." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
+                        "[ADDBIN client_id type name program parameters]" & vbCrLf & "Usage: Add auto-run item." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
+                        "[DELBIN client_id type name]" & vbCrLf & "Usage: Delete auto-run item." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
+                        "[QRYBIN client_id type]" & vbCrLf & "Usage: Query auto-run items." & vbCrLf & "Remark: The Web Control Panel currently does not support this function." & vbCrLf & vbCrLf & _
+                        "[CLRBIN client_id type]" & vbCrLf & "Usage: Delete all auto-run items." & vbCrLf & "Remark: The Web Control Panel currently does not support this function."
+    ElseIf LCase(sz) = "lc" Then
+        Call btnClient_Click(7)
+        If lvClient.ListItems.count <> 0 Then
+            Dim ctsa0() As String
+            Dim ctsa1() As String
+            Dim ctsa2() As String
+            Dim ctsa3() As String
+            Dim ctsa4() As String
+            Dim ctsa5() As String
+            ReDim ctsa0(lvClient.ListItems.count + 1)
+            ReDim ctsa1(lvClient.ListItems.count + 1)
+            ReDim ctsa2(lvClient.ListItems.count + 1)
+            ReDim ctsa3(lvClient.ListItems.count + 1)
+            ReDim ctsa4(lvClient.ListItems.count + 1)
+            ReDim ctsa5(lvClient.ListItems.count + 1)
+            ctsa0(0) = "ID"
+            ctsa1(0) = "IP"
+            ctsa2(0) = "System"
+            ctsa3(0) = "Name"
+            ctsa4(0) = "Status"
+            ctsa5(0) = "Hash"
+            ctsa0(1) = String(Len(ctsa0(0)), "=")
+            ctsa1(1) = String(Len(ctsa1(0)), "=")
+            ctsa2(1) = String(Len(ctsa2(0)), "=")
+            ctsa3(1) = String(Len(ctsa3(0)), "=")
+            ctsa4(1) = String(Len(ctsa4(0)), "=")
+            ctsa5(1) = String(Len(ctsa5(0)), "=")
+            For i = 1 To lvClient.ListItems.count
+                ctsa0(i + 1) = lvClient.ListItems(i).Text
+                ctsa1(i + 1) = Trim$(lvClient.ListItems(i).SubItems(1))
+                ctsa2(i + 1) = lvClient.ListItems(i).SubItems(2)
+                ctsa3(i + 1) = lvClient.ListItems(i).SubItems(3)
+                ctsa4(i + 1) = lvClient.ListItems(i).SubItems(4)
+                ctsa5(i + 1) = lvClient.ListItems(i).SubItems(5)
+            Next
+            AddBlanksForStringArray ctsa0
+            AddBlanksForStringArray ctsa1
+            AddBlanksForStringArray ctsa2
+            AddBlanksForStringArray ctsa3
+            AddBlanksForStringArray ctsa4
+            AddBlanksForStringArray ctsa5
+            For i = 0 To lvClient.ListItems.count + 1
+                HandleCommand = HandleCommand & ctsa0(i) & " " & _
+                                                 ctsa1(i) & " " & _
+                                                 ctsa2(i) & " " & _
+                                                 ctsa3(i) & " " & _
+                                                 ctsa4(i) & " " & _
+                                                 ctsa5(i) & vbCrLf
+            Next
+            If Len(HandleCommand) > 2 Then
+                HandleCommand = Mid(HandleCommand, 1, Len(HandleCommand) - 2)
+            End If
+        Else
+            HandleCommand = "No client is online."
+        End If
+    ElseIf Left$(LCase(sz), 2) = "cc" Then
+        sa = Split(sz, vbCrLf) 'cc 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                bRet = ClientConnect(CLng(sa(1)))
+                HandleCommand = IIf(bRet, "Connection request is sent successfully.", "Failed to send connection request.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 2) = "dc" Then
+        sa = Split(sz, vbCrLf) 'dc 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                bRet = ClientDisconnect(CLng(sa(1)))
+                HandleCommand = IIf(bRet, "Disconnection request is sent successfully.", "Failed to send disconnection request.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 2) = "tc" Then
+        sa = Split(sz, vbCrLf) 'tc 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                Dim dwVersion(1) As Long
+                bRet = ClientTest(CLng(sa(1)), ByVal VarPtr(dwVersion(0)))
+                HandleCommand = IIf(bRet, "Version: " & CStr(dwVersion(0)), "Failed to test specific client.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 2) = "sc" Then
+        sa = Split(sz, vbCrLf) 'sc 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                bRet = ClientShutdown(CLng(sa(1)))
+                HandleCommand = IIf(bRet, "Shutdown request is sent successfully.", "Failed to send shutdown request.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 2) = "rc" Then
+        sa = Split(sz, vbCrLf) 'rc 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                bRet = ClientReboot(CLng(sa(1)))
+                HandleCommand = IIf(bRet, "Reboot request is sent successfully.", "Failed to send reboot request.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 2) = "uc" Then
+        sa = Split(sz, vbCrLf) 'uc 1234 || uc 1234 xxx.sys
+        If IsStringArrayElementValid(sa, 1) = True Then
+            If IsNumeric(sa(1)) Then
+                If IsStringArrayElementValid(sa, 2) = True Then
+                    bRet = ClientUpdate(CLng(sa(1)), StrPtr(sa(2)))
+                    HandleCommand = IIf(bRet, "Update request is sent successfully.", "Failed to send update request.")
+                Else
+                    bRet = ClientUpdate(CLng(sa(1)), 0)
+                    HandleCommand = IIf(bRet, "Uninstall request is sent successfully.", "Failed to send uninstall request.")
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "config" Then
+        sa = Split(sz, vbCrLf) 'config 1234 xxx.cfg
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                bRet = ClientConfig(CLng(sa(1)), CLIENT_CONFIG_SERVER, StrPtr(sa(2)))
+                HandleCommand = IIf(bRet, "Configuration is set successfully.", "Failed to set configuration.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    ElseIf Left$(LCase(sz), 3) = "dir" Then
+        sa = Split(sz, vbCrLf) 'dir 1234 c:\xxx
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                txtFilePath.Text = sa(2)
+                EnumFileProc CLng(sa(1)), False
+                If lvFile.ListItems.count <> 0 Then
+                    Dim tsa0() As String
+                    Dim tsa1() As String
+                    Dim tsa2() As String
+                    ReDim tsa0(lvFile.ListItems.count + 1)
+                    ReDim tsa1(lvFile.ListItems.count + 1)
+                    ReDim tsa2(lvFile.ListItems.count + 1)
+                    tsa0(0) = "Name"
+                    tsa1(0) = "Size"
+                    tsa2(0) = "Date Modified"
+                    tsa0(1) = String(Len(tsa0(0)), "=")
+                    tsa1(1) = String(Len(tsa1(0)), "=")
+                    tsa2(1) = String(Len(tsa2(0)), "=")
+                    For i = 1 To lvFile.ListItems.count
+                        tsa0(i + 1) = lvFile.ListItems(i).Text
+                        tsa1(i + 1) = lvFile.ListItems(i).SubItems(1)
+                        tsa2(i + 1) = lvFile.ListItems(i).SubItems(2)
+                    Next
+                    AddBlanksForStringArray tsa0
+                    AddBlanksForStringArray tsa1
+                    AddBlanksForStringArray tsa2
+                    For i = 0 To lvFile.ListItems.count + 1
+                        HandleCommand = HandleCommand & tsa0(i) & " " & _
+                                                        tsa1(i) & " " & _
+                                                        tsa2(i) & vbCrLf
+                    Next
+                Else
+                    HandleCommand = "Failed to query directory."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 3) = "upf" Then
+        sa = Split(sz, vbCrLf) 'upf 1234 c:\local.exe c:\remote.exe
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                SendCallBack.callback = CodePtr(AddressOf SendProgressForWCP)
+                SendCallBack.id = CLng(sa(1))
+                bRet = CmdUploadFileTo(CLng(sa(1)), StrPtr(sa(2)), StrPtr(sa(3)), VarPtr(SendCallBack))
+                HandleCommand = IIf(bRet, "File is uploaded successfully.", "Failed to upload file.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 3) = "dlf" Then
+        sa = Split(sz, vbCrLf) 'dlf 1234 c:\remote.exe c:\local.exe
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                RecvCallBack.callback = CodePtr(AddressOf RecvProgressForWCP)
+                RecvCallBack.id = CLng(sa(1))
+                bRet = CmdDownloadFileFrom(CLng(sa(1)), StrPtr(sa(2)), StrPtr(sa(3)), VarPtr(RecvCallBack))
+                HandleCommand = IIf(bRet, "File is downloaded successfully.", "Failed to download file.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 3) = "exe" Then
+        sa = Split(sz, vbCrLf) 'exe 1234 xxxx
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                Dim pn_pm() As String: pn_pm = Split(sa(2), " ")
+                If LCase$(Right$(pn_pm(0), 4)) = ".exe" Then 'c:\xxx.exe p1 p2 p3
+                    bRet = CmdExecuteBinary(CLng(sa(1)), StrPtr(sa(2)), SW_SHOW, 0, rv)
+                    HandleCommand = IIf(bRet, "PID = " & CStr(CDec("&H" & i64toa(rv))), "Execute program unsuccessfully.")
+                ElseIf LCase$(Right$(pn_pm(0), 4)) = ".sys" Then 'c:\xxx.sys
+                    bRet = CmdExecuteBinary(CLng(sa(1)), StrPtr(sa(2)), CLIENT_RUN_SYS_P1, CLIENT_RUN_SYS_P2, rv)
+                    HandleCommand = IIf(bRet, "DriverObject = " & i64toa(rv), "Load driver unsuccessfully.")
+                ElseIf LCase$(Right$(pn_pm(0), 4)) = ".dll" Then 'shell32.dll Control_RunDLL
+                    bRet = CmdExecuteBinary(CLng(sa(1)), StrPtr(sa(2)), CLIENT_RUN_DLL_P1, CLIENT_RUN_DLL_P2, rv)
+                    HandleCommand = IIf(bRet, "RunDll32-PID = " & CStr(CDec("&H" & i64toa(rv))), "Execute unsuccessfully.")
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 3) = "cmd" Then
+        sa = Split(sz, vbCrLf) 'cmd 1234 netstat -a -n
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                Dim baReturn(16383) As Byte
+                bRet = CmdSystemShell(CLng(sa(1)), StrPtr(sa(2)), VarPtr(baReturn(0)), 16383)
+                HandleCommand = IIf(bRet, Replace(sz2bstr(baReturn), vbNullChar, ""), "Execute system shell unsuccessfully.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 3) = "reg" Then
+        sa = Split(sz, vbCrLf) 'reg 1234 \registry\machine
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                txtRegPath.Text = sa(2)
+                EnumRegistryProc CLng(sa(1)), False
+                If lvReg.ListItems.count <> 0 Then
+                    Dim rtsa0() As String
+                    Dim rtsa1() As String
+                    Dim rtsa2() As String
+                    Dim rtsa3() As String
+                    ReDim rtsa0(lvReg.ListItems.count + 1)
+                    ReDim rtsa1(lvReg.ListItems.count + 1)
+                    ReDim rtsa2(lvReg.ListItems.count + 1)
+                    ReDim rtsa3(lvReg.ListItems.count + 1)
+                    rtsa0(0) = "Type"
+                    rtsa1(0) = "Name"
+                    rtsa2(0) = "Data"
+                    rtsa3(0) = "Length"
+                    rtsa0(1) = String(Len(rtsa0(0)), "=")
+                    rtsa1(1) = String(Len(rtsa1(0)), "=")
+                    rtsa2(1) = String(Len(rtsa2(0)), "=")
+                    rtsa3(1) = String(Len(rtsa3(0)), "=")
+                    For i = 1 To lvReg.ListItems.count
+                        rtsa0(i + 1) = lvReg.ListItems(i).Text
+                        rtsa1(i + 1) = lvReg.ListItems(i).SubItems(1)
+                        rtsa2(i + 1) = lvReg.ListItems(i).SubItems(2)
+                        rtsa3(i + 1) = lvReg.ListItems(i).SubItems(3)
+                    Next
+                    AddBlanksForStringArray rtsa0
+                    AddBlanksForStringArray rtsa1
+                    AddBlanksForStringArray rtsa2
+                    AddBlanksForStringArray rtsa3
+                    For i = 0 To lvReg.ListItems.count + 1
+                        HandleCommand = HandleCommand & rtsa0(i) & " " & _
+                                                        rtsa1(i) & " " & _
+                                                        rtsa2(i) & " " & _
+                                                        rtsa3(i) & vbCrLf
+                    Next
+                Else
+                    HandleCommand = "Failed to query registry."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    ElseIf Left$(LCase(sz), 6) = "addbin" Then
+        sa = Split(sz, vbCrLf) 'addbin 1234 CLIENT_AUTORUN_TYPE_EXE notepad notepad.exe [c:\boot.ini]
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) And IsStringArrayElementValid(sa, 4) Then
+            If IsNumeric(sa(1)) Then
+                sa(2) = LCase$(Trim$(sa(2)))
+                If sa(2) = "SYS" Or sa(2) = "0" Then
+                    iType = 0
+                ElseIf sa(2) = "EXE" Or sa(2) = "1" Then
+                    iType = 1
+                ElseIf sa(2) = "DLL" Or sa(2) = "2" Then
+                    iType = 2
+                Else
+                    iType = 255
+                End If
+                If iType <> 255 Then
+                    bRet = CmdAddAutoRunBin(CLng(sa(1)), iType, StrPtr(sa(3)), StrPtr(sa(4)), IIf(IsStringArrayElementValid(sa, 5), StrPtr(sa(5)), StrPtr("")))
+                    HandleCommand = IIf(bRet, "Auto-Run item is added successfully.", "Failed to add Auto-Run item.")
+                Else
+                    HandleCommand = "Type is invalid."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "delbin" Then
+        sa = Split(sz, vbCrLf) 'addbin 1234 CLIENT_AUTORUN_TYPE_EXE notepad
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                sa(2) = LCase$(Trim$(sa(2)))
+                If sa(2) = "SYS" Or sa(2) = "0" Then
+                    iType = 0
+                ElseIf sa(2) = "EXE" Or sa(2) = "1" Then
+                    iType = 1
+                ElseIf sa(2) = "DLL" Or sa(2) = "2" Then
+                    iType = 2
+                Else
+                    iType = 255
+                End If
+                If iType <> 255 Then
+                    bRet = CmdDelAutoRunBin(CLng(sa(1)), iType, StrPtr(sa(3)))
+                    HandleCommand = IIf(bRet, "Auto-Run item is deleted successfully.", "Failed to delete Auto-Run item.")
+                Else
+                    HandleCommand = "Type is invalid."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "clrbin" Then
+        sa = Split(sz, vbCrLf) 'clrbin 1234 CLIENT_AUTORUN_TYPE_EXE
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                sa(2) = LCase$(Trim$(sa(2)))
+                If sa(2) = "SYS" Or sa(2) = "0" Then
+                    iType = 0
+                ElseIf sa(2) = "EXE" Or sa(2) = "1" Then
+                    iType = 1
+                ElseIf sa(2) = "DLL" Or sa(2) = "2" Then
+                    iType = 2
+                Else
+                    iType = 255
+                End If
+                If iType <> 255 Then
+                    bRet = CmdClearAutoRunBin(CLng(sa(1)), iType)
+                    HandleCommand = IIf(bRet, "All Auto-Run items are deleted successfully.", "Failed to delete all Auto-Run items.")
+                Else
+                    HandleCommand = "Type is invalid."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "qrybin" Then
+        sa = Split(sz, vbCrLf) 'clrbin 1234 CLIENT_AUTORUN_TYPE_EXE
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                sa(2) = LCase$(Trim$(sa(2)))
+                If sa(2) = "SYS" Or sa(2) = "0" Then
+                    iType = 0
+                ElseIf sa(2) = "EXE" Or sa(2) = "1" Then
+                    iType = 1
+                ElseIf sa(2) = "DLL" Or sa(2) = "2" Then
+                    iType = 2
+                Else
+                    iType = 255
+                End If
+                If iType <> 255 Then
+                    Dim ppNames As Long
+                    Dim CurrentName As String
+                    If CmdQueryAutoRunBin(CLng(sa(1)), iType, VarPtr(ppNames)) Then
+                        CurrentName = StrFromPtr(ppNames, True)
+                        If CurrentName <> CLIENT_AUTORUN_EMPTY Then
+                            Do While 1
+                                CurrentName = StrFromPtr(ppNames, True)
+                                If Len(CurrentName) = 0 Then Exit Do
+                                HandleCommand = HandleCommand & CurrentName & vbCrLf
+                                ppNames = ppNames + Len(CurrentName) * 2 + 2
+                            Loop
+                        Else
+                            HandleCommand = "(No auto-run items in this type.)"
+                        End If
+                    Else
+                        HandleCommand = "Query auto-run information unsuccessfully."
+                    End If
+                Else
+                    HandleCommand = "Type is invalid."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    ElseIf Left$(LCase(sz), 6) = "rgo_ck" Then
+        sa = Split(sz, vbCrLf) 'rgo_ck 1234 \\Registry\\Machine\\System\\123456
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdRegistryOperation(CLng(sa(1)), CLIENT_REG_CREATE_KEY, StrPtr(sa(2)), 0, 0, 0, 0)
+                HandleCommand = IIf(bRet, "Registry key is created successfully.", "Failed to create registry key.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "rgo_dk" Then
+        sa = Split(sz, vbCrLf) 'rgo_dk 1234 \\Registry\\Machine\\System\\123456
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdRegistryOperation(CLng(sa(1)), CLIENT_REG_DELETE_KEY, StrPtr(sa(2)), 0, 0, 0, 0)
+                HandleCommand = IIf(bRet, "Registry key is deleted successfully.", "Failed to delete registry key.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "rgo_rk" Then
+        sa = Split(sz, vbCrLf) 'rgo_rk 1234 \\Registry\\Machine\\System\\123456 789
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdRegistryOperation(CLng(sa(1)), CLIENT_REG_RENAME_KEY, StrPtr(sa(2)), StrPtr(sa(3)), 0, 0, 0)
+                HandleCommand = IIf(bRet, "Registry key is renamed successfully.", "Failed to rename registry key.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "rgo_dv" Then
+        sa = Split(sz, vbCrLf) 'rgo_dv 1234 \\Registry\\Machine\\System\\123456 789
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdRegistryOperation(CLng(sa(1)), CLIENT_REG_DELETE_VALUE, StrPtr(sa(2)), StrPtr(sa(3)), 0, 0, 0)
+                HandleCommand = IIf(bRet, "Registry value is deleted successfully.", "Failed to delete registry value.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "rgo_qv" Then
+        sa = Split(sz, vbCrLf) 'rgo_dv 1234 \\Registry\\Machine\\System\\123456 789
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                Dim ba() As Byte
+                Dim dwDatLen As Long, dwRegValType As Long
+                If CmdRegistryOperation(CLng(sa(1)), CLIENT_REG_QUERY_VALUE, StrPtr(sa(2)), StrPtr(sa(3)), 0, 0, dwDatLen) Then
+                    ReDim ba(dwDatLen - 1)
+                    If CmdRegistryOperation(CLng(sa(1)), CLIENT_REG_QUERY_VALUE, StrPtr(sa(2)), StrPtr(sa(3)), dwRegValType, VarPtr(ba(0)), dwDatLen) Then
+                        If dwRegValType = 1 Or dwRegValType = 2 Then
+                            HandleCommand = StrFromPtr(VarPtr(ba(0)), True)
+                        ElseIf dwRegValType = 4 Then
+                            Dim dw As Long
+                            Call memcpy(VarPtr(dw), VarPtr(ba(0)) + 8 + 512, 4)
+                            HandleCommand = "0x" & Hex(dw)
+                        ElseIf dwRegValType = 11 Then
+                            Dim qw As Currency
+                            Call memcpy(VarPtr(qw), VarPtr(ba(0)) + 8 + 512, 8)
+                            HandleCommand = "0x" & i64toa(qw)
+                        ElseIf dwRegValType = 7 Then
+                            HandleCommand = MultiWideCharStringToVBString(VarPtr(ba(0)), dwDatLen)
+                        Else
+                            HandleCommand = BinaryToString(VarPtr(ba(0)), dwDatLen)
+                        End If
+                    End If
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "rgo_sv" Then
+        sa = Split(sz, vbCrLf) 'rgo_sv 1234 \\Registry\\Machine\\System\\123456 789 REG_SZ string
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) And _
+            IsStringArrayElementValid(sa, 4) And IsStringArrayElementValid(sa, 5) Then
+            If IsNumeric(sa(1)) Then
+                Dim dwKeyType As Long
+                If IsNumeric(sa(4)) = False Then
+                    dwKeyType = GetRegStringType(sa(4))
+                Else
+                    dwKeyType = CLng(sa(4))
+                End If
+                If dwKeyType = 2 Then   'REG_EXPEND_SZ
+                    sa(5) = Replace(sa(5), "|", "%")
+                ElseIf dwKeyType = 7 Then   'REG_MULTI_SZ
+                    sa(5) = Replace(sa(5), "||", vbCrLf)
+                End If
+                bRet = SetRegValueInternal(CLng(sa(1)), sa(2), sa(3), dwKeyType, sa(5))
+                HandleCommand = IIf(bRet, "Registry value is set successfully.", "Failed to set registry value.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    ElseIf Left$(LCase(sz), 7) = "fso_c_f" Then
+        sa = Split(sz, vbCrLf) 'fso_c_f 1234 c:\123.txt HelloWorld
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                If IsStringArrayElementValid(sa, 3) Then
+                    sa(3) = Replace(sa(3), "<br>", vbCrLf)
+                    bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_CREATE_FILE, StrPtr(sa(2)), StrPtr(sa(3)), 0)
+                Else
+                    bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_CREATE_FILE, StrPtr(sa(2)), StrPtr(""), 0)
+                End If
+                HandleCommand = IIf(bRet, "File is created successfully.", "Failed to create file.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_c_d" Then
+        sa = Split(sz, vbCrLf) 'fso_c_d 1234 c:\123
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_CREATE_DIRECTORY, StrPtr(sa(2)), StrPtr(""), 0)
+                HandleCommand = IIf(bRet, "Directory is created successfully.", "Failed to create directory.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_cpy" Then
+        sa = Split(sz, vbCrLf) 'fso_cpy 1234 c:\windows\win.ini c:\win.txt
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_COPY, StrPtr(sa(2)), StrPtr(sa(3)), 0)
+                HandleCommand = IIf(bRet, "File / Directory is copied successfully.", "Failed to copy file / directory.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_del" Then
+        sa = Split(sz, vbCrLf)  'fso_del 1234 c:\windows\win.ini
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_DELETE, StrPtr(sa(2)), StrPtr(""), 0)
+                HandleCommand = IIf(bRet, "File / Directory is deleted successfully.", "Failed to delete file / directory.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_ren" Then
+        sa = Split(sz, vbCrLf) 'fso_ren 1234 c:\windows\win.ini win.txt
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_RENAME, StrPtr(sa(2)), StrPtr(sa(3)), 0)
+                HandleCommand = IIf(bRet, "File / Directory is renamed successfully.", "Failed to rename file / directory.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_s_a" Then
+        sa = Split(sz, vbCrLf) 'fso_s_a 1234 c:\boot.ini 128
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_SET_ATTRIB, StrPtr(sa(2)), StrPtr(sa(3)), 0)
+                HandleCommand = IIf(bRet, "Attribute is set successfully.", "Failed to set attribute.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_g_a" Then
+        sa = Split(sz, vbCrLf) 'fso_s_a 1234 c:\boot.ini
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                Dim fav As Long
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_GET_ATTRIB, StrPtr(sa(2)), StrPtr(""), fav)
+                HandleCommand = IIf(bRet, "Attribute: " & CStr(fav), "Failed to query attribute.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_h_d" Then
+        sa = Split(sz, vbCrLf) 'fso_s_a 1234 http://www.xxx.de/xxx.exe c:\xxx.exe
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_HTTP_DOWNLOAD, StrPtr(sa(2)), StrPtr(sa(3)), 0)
+                HandleCommand = IIf(bRet, "File (from HTTP link) is downloaded successfully.", "Failed to download file (from HTTP link).")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_gfc" Then
+        sa = Split(sz, vbCrLf) 'fso_gfc 1234 c:\boot.ini
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                Dim fhv As Long
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_GET_CRC32, StrPtr(sa(2)), StrPtr(""), fhv)
+                HandleCommand = IIf(bRet, "CRC32: " & "0x" & Hex(fhv), "Failed to get file CRC32.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "fso_mfx" Then
+        sa = Split(sz, vbCrLf) 'fso_mfx 1234 c:\windows\win.ini c:\win.txt
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_DELAY_MOV_DEL, StrPtr(sa(2)), StrPtr(sa(3)), 0)
+                HandleCommand = IIf(bRet, "Delay file operation is set successfully.", "Failed to set delay file operation")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    Else
+        HandleCommand = "Unknown command: " & CStr(Date) & " " & CStr(Time)
+    End If
+    Exit Function
+exx:
+    HandleCommand = "An error occurred during command execution."
+End Function
+
+Private Sub Timer2_Timer()
+    Dim InputFile As String: InputFile = "c:\input." & CStr(Me.Tag)
+    Dim OutputFile As String: OutputFile = "c:\output." & CStr(Me.Tag)
+    Dim ProgressFile As String: ProgressFile = "c:\progress." & CStr(Me.Tag)
+    If Dir(InputFile, vbNormal) <> "" Then
+        SaveText "utf-8", OutputFile, HandleCommand(Trim$(LoadText("utf-8", InputFile)))
+        TryDelete InputFile
+        TryDelete ProgressFile
+    End If
+End Sub
