@@ -1,6 +1,6 @@
 # What Is It
 This is the web control panel of Windows Batch Deployment Server Demonstration, it is written in PHP.   
-You can access computers with WBD-client installed, on any device (PC, tablet, mobile phone), without using "ServerTestVB6GUI.exe" on server.   
+You can access computers with WBD-Client installed, on any device (PC, tablet, mobile phone), without using "ServerTestVB6GUI.exe" on server.   
 
 # How To Set Up
 1. [Download PHP "x64 Thread Safe" version](http://windows.php.net/download), unzip it to "C:\PHP\" and install needed VC runtime.   
@@ -30,5 +30,5 @@ PHPIniDir "c:/php"
 C:\Apache24\bin\httpd -k install
 C:\Apache24\bin\httpd -k start
 ```
-5. Run "ServerTestVB6GUI.exe" and keep it running, the web control panel needs it.   
+5. Run "ServerTestVB6GUI.exe" and keep it running, the web control panel needs it. If you want to keep the web control panel working properly after the server system reboots, you must add "ServerTestVB6GUI.exe" to the system auto-run list.  
 6. Rename all TXT files to PHP files and copy them to "C:\Apache24\htdocs" (you must delete "index.html" in "C:\Apache24\htdocs" before copying). enter "localhost" or "localhost:8080" in the browser, you will see the login window. Default username and password are "test" and "1234", they can be changed by modifying "index.php".   
