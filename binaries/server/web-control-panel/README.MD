@@ -1,4 +1,4 @@
-# What Is It
+# What Is This
 This is the web control panel of Windows Batch Deployment Server Demonstration, it is written in PHP.   
 You can access computers with WBD-Client installed, on any device (PC, tablet, mobile phone), without using "ServerTestVB6GUI.exe" on server.   
 
