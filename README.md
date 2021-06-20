@@ -49,8 +49,7 @@ In order to optimize the page load speed in low quality network environments, I 
 4. Source code customization: Add features to WBD according to your needs. This service is only available to customers who have purchased the WBD source code.
 
 # [Revision History](/binaries/README.md#all-revision-history)
-### Client Version: 20210212
-Bug fix: Accelerate file transfer speed.  
-New feature: File transfer progress callback.
+### Client Version: 20210620
+Bug fix: The server address cannot be configured after installation (before reboot).  
 ### Server Version: 20210212
 New feature: File transfer progress callback.
