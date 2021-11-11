@@ -52,6 +52,6 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210620
 Bug fix: The server address cannot be configured after installation (before reboot).  
-New upload: I signed the client programs with another digital certificate on Nov 11, 2021.
+New file: I re-uploaded the client programs on November 11, 2021 because I signed the client programs with another digital certificate.
 ### Server Version: 20210212
 New feature: File transfer progress callback.
