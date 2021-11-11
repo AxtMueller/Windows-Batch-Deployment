@@ -19,6 +19,14 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 1. Call the uninstallation function from WBD server DLL (read sample source code for details).
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
+### About client programs cannot be loaded
+##### If you see a message like "StartService FAILED 87" while running "InstallClient.bat", there may be the following reasons:
+1. HVCI is enabled.  
+2. Anti-Virus software prevents the driver from loading.  
+##### Solutions:
+1. Restart the system, "InstallClient.bat" contains the code to turn off HVCI, it will take effect after reboot.
+2. Add the files of WKE to the white list of Anti-Virus software.  
+
 ### About digital signature and negative comment from Anti-Virus software
 Because I don't have a digital certificate, I have to use a leaked digital certificate to sign WBD client drivers. As for negative comment, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
