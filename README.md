@@ -1,6 +1,3 @@
-## [Temporary] About the program cannot be used on the latest WINDOWS 10: 
-After installing KB5004237, WINDOWS internally blacklisted "HT SRL" certificate. If you want to use the program, you have to sign the driver with your own certificate. When I release next version, I will use a new certificate from an enthusiastic fan. As to why I did not update the program as soon as possible: I am following 2021 German federal election and international news recently, I am excited about the Afghan people successfully drove out of the American invaders and I am also saddened by the fact that American troops are still stationed on German territory. The United States is not an ally of the German people, it is just an ally of corrupt German politicians. Therefore, I need some time to better my mood. I will update the program after the official version of Windows 11 is released.
-
 # Introduction
 Windows Batch Deployment (you can simply call it as "WBD") is a programmable and rootkit-like remote access tool, it supports from Windows XP to Windows 10 (32-bit and 64-bit). Compared with other remote access software, WBD does not have a server program in the traditional sense. WBD provides a server DLL, and users need to write server programs according to their needs. Therefore, WBD maximally meets the individual needs of users. WBD client is a kernel-mode driver, it hides its traces as much as possible, and the goal is to keep the user's attention as little as possible. WBD client can run user-defined programs when system starts, user-defined programs do not store on the disk in the form of files, and there are no startup entries in the registry. As WBD may be used illegally, when WBD client starts, it outputs a text file to the desktop or the root of system drive to inform its existence and how to uninstall it manually. Disclaimer: You can only use WBD on your computers or computers which you are allowed to access, I will not be responsible for any consequences and losses caused by the abuse of it. Until you fully understand how to use WBD, please test it in virtual machines only.
 
@@ -23,7 +20,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
 ### About digital signature and negative comment from Anti-Virus software
-Because I don't have a digital certificate, I have to use the leaked digital certificate from HT SRL to sign WBD client drivers. As for negative comment, any program of this type is considered a virus by Anti-Virus software, so who cares.
+Because I don't have a digital certificate, I have to use a leaked digital certificate to sign WBD client drivers. As for negative comment, any program of this type is considered a virus by Anti-Virus software, so who cares.
 
 ### Share your server programs
 If you want to share your server programs, please commit your programs and / or source code to "Issues" with brief description. I will add your programs to the "User-defined server program" directory if I think they are useful.
@@ -55,5 +52,6 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210620
 Bug fix: The server address cannot be configured after installation (before reboot).  
+New upload: I signed the client programs with another digital certificate on Nov 11, 2021.
 ### Server Version: 20210212
 New feature: File transfer progress callback.
