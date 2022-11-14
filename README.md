@@ -52,10 +52,10 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 4. In order to reduce the impact of the Internet on real life, I also do not use Facebook, Twitter, etc. Please don't ask me for such information via E-MAIL.
 
 ### Paid services:
-1. Binary customization I: Remove or modify all obvious characteristics of the public client program.
-2. Binary customization II: More powerful self-protection for the client program.
-3. Source code: All source code of WBD, including client and server.
-4. Source code customization: Add features to WBD according to your needs. This service is only available to customers who have purchased the WBD source code.
+1. Binary customization (Basic): Remove or modify all obvious characteristics of the public client program.
+2. Binary customization (Extra): The services of the previous entry, and more powerful self-protection for the client program.
+3. Source code (WBD only): All source code of WBD, including client and server.
+4. Source code (WBD & Client Installer): The services of the previous entry, and an installer that can install WBD client without triggering Windows Defender security warnings.
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20210620
