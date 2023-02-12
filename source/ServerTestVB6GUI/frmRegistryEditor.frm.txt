@@ -6,6 +6,15 @@ Begin VB.Form frmRegistryEditor
    ClientLeft      =   105
    ClientTop       =   435
    ClientWidth     =   7095
+   BeginProperty Font 
+      Name            =   "Tahoma"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    Icon            =   "frmRegistryEditor.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
@@ -36,7 +45,7 @@ Begin VB.Form frmRegistryEditor
       Left            =   120
       TabIndex        =   8
       Top             =   840
-      Width           =   4815
+      Width           =   4935
       Begin VB.TextBox Text2 
          Height          =   1935
          Left            =   120
@@ -44,16 +53,16 @@ Begin VB.Form frmRegistryEditor
          ScrollBars      =   3  'Both
          TabIndex        =   9
          Top             =   240
-         Width           =   4575
+         Width           =   4695
       End
    End
    Begin VB.Frame Frame3 
       Caption         =   "Type"
       Height          =   1815
-      Left            =   5040
+      Left            =   5160
       TabIndex        =   1
       Top             =   840
-      Width           =   1935
+      Width           =   1815
       Begin VB.OptionButton Option1 
          Caption         =   "REG_SZ"
          Height          =   255
@@ -70,7 +79,7 @@ Begin VB.Form frmRegistryEditor
          TabIndex        =   6
          ToolTipText     =   "Write string directly."
          Top             =   480
-         Width           =   1695
+         Width           =   1575
       End
       Begin VB.OptionButton Option3 
          Caption         =   "REG_MULTI_SZ"
@@ -112,10 +121,10 @@ Begin VB.Form frmRegistryEditor
    Begin VB.CommandButton Command1 
       Caption         =   "OK"
       Height          =   375
-      Left            =   5040
+      Left            =   5160
       TabIndex        =   0
       Top             =   2760
-      Width           =   1935
+      Width           =   1815
    End
 End
 Attribute VB_Name = "frmRegistryEditor"

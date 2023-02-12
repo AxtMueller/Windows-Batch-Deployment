@@ -1,0 +1,334 @@
+Attribute VB_Name = "mdlUINT64"
+'//This module is copied from the internet.
+Option Explicit
+
+Private Declare Sub RtlFillMemory Lib "kernel32.dll" (ByVal Destination As Long, ByVal Length As Long, ByVal Fill As Byte)
+Private Declare Sub RtlMoveMemory Lib "kernel32.dll" (ByVal Dst As Long, ByVal Src As Long, ByVal Length As Long)
+
+Public Function UnsignedAdd32(ByVal lX As Long, ByVal lY As Long) As Long
+    Dim lX4 As Long
+    Dim lY4 As Long
+    Dim lX8 As Long
+    Dim lY8 As Long
+    Dim lResult As Long
+    lX8 = lX And &H80000000
+    lY8 = lY And &H80000000
+    lX4 = lX And &H40000000
+    lY4 = lY And &H40000000
+    lResult = (lX And &H3FFFFFFF) + (lY And &H3FFFFFFF)
+    If lX4 And lY4 Then
+        lResult = lResult Xor &H80000000 Xor lX8 Xor lY8
+    ElseIf lX4 Or lY4 Then
+        If lResult And &H40000000 Then
+            lResult = lResult Xor &HC0000000 Xor lX8 Xor lY8
+        Else
+            lResult = lResult Xor &H40000000 Xor lX8 Xor lY8
+        End If
+    Else
+        lResult = lResult Xor lX8 Xor lY8
+    End If
+    UnsignedAdd32 = lResult
+End Function
+
+Public Function DisplayULONG(ByVal dw As Long) As String
+    If dw < 0 Then
+        DisplayULONG = CStr(CDec(dw) + CDec("&H7fffffff") * 2 + 2)
+    Else
+        DisplayULONG = CStr(dw)
+    End If
+End Function
+
+Public Function Dec64Add(ByVal szDec1 As String, ByVal szDec2 As String) As String
+    Dec64Add = CStr(CDec(szDec1) + CDec(szDec2))
+End Function
+
+Public Function Dec64Sub(ByVal szDec1 As String, ByVal szDec2 As String) As String
+    Dec64Sub = CStr(CDec(szDec1) - CDec(szDec2))
+End Function
+
+Public Function Dec64Mul(ByVal szDec1 As String, ByVal szDec2 As String) As String
+    Dec64Mul = CStr(CDec(szDec1) * CDec(szDec2))
+End Function
+
+Public Function Dec64Div(ByVal szDec1 As String, ByVal szDec2 As String) As String
+    Dec64Div = CStr(CDec(szDec1) / CDec(szDec2))
+    If Left$(Dec64Div, 1) = "." Then
+        Dec64Div = 0
+    Else
+        Dim dotpos As Long
+        dotpos = InStr(1, Dec64Div, ".")
+        If dotpos Then
+            Dec64Div = Left$(Dec64Div, dotpos - 1)
+        End If
+    End If
+End Function
+
+Public Function Dec64ToHex64(ByVal szDec64 As String) As String
+    Dec64ToHex64 = A2B(szDec64, "0123456789", "0123456789ABCDEF")
+End Function
+
+Public Function Hex64ToDec64(ByVal szHex64WithoutPrefix As String) As String
+    Hex64ToDec64 = A2B(szHex64WithoutPrefix, "0123456789ABCDEF", "0123456789")
+End Function
+
+Public Function UInt64ToHex64(ByVal num As Currency) As String
+    Dim ba(7) As Byte, i As Integer, hx As String
+    RtlMoveMemory VarPtr(ba(0)), VarPtr(num), 8
+    For i = 7 To 0 Step -1
+        UInt64ToHex64 = UInt64ToHex64 & IIf(ba(i) < 16, "0" & Hex$(ba(i)), Hex$(ba(i)))
+    Next
+    If UInt64ToHex64 = "0000000000000000" Then
+        UInt64ToHex64 = "0"
+    Else
+        Do While 1
+            If Left$(UInt64ToHex64, 1) = "0" Then
+                UInt64ToHex64 = Mid$(UInt64ToHex64, 2)
+            Else
+                Exit Do
+            End If
+        Loop
+    End If
+End Function
+
+Public Function Hex64ToUInt64(ByVal szHex64WithoutPrefix As String) As Currency
+    If Len(szHex64WithoutPrefix) < 16 Then
+        szHex64WithoutPrefix = String(16 - Len(szHex64WithoutPrefix), "0") & szHex64WithoutPrefix ': MsgBox szHex64WithoutPrefix
+    End If
+    Dim i As Byte, ba(7) As Byte
+    For i = 0 To 7
+        ba(7 - i) = CByte("&H" & Mid$(szHex64WithoutPrefix, i * 2 + 1, 2)) ': Print Hex(ba(7 - i))
+    Next
+    RtlMoveMemory VarPtr(Hex64ToUInt64), VarPtr(ba(0)), 8
+End Function
+
+Public Function UInt64ToDec64(ByVal num As Currency) As String
+    UInt64ToDec64 = Hex64ToDec64(UInt64ToHex64(num))
+End Function
+
+Public Function Dec64ToUInt64(ByVal szDec64 As String) As Currency
+    Dec64ToUInt64 = Hex64ToUInt64(Dec64ToHex64(szDec64))
+End Function
+
+Private Sub Swap(a As String, b As String)
+    Dim s As String
+    s = a
+    a = b
+    b = s
+End Sub
+
+Private Function NoLead0(ByVal a As String, ByVal d As String) As String
+    Dim s As String
+    a = Trim$(a)
+    s = Left$(a, 1)
+    If s = "-" Then
+        a = Trim$(Mid$(a, 2))
+    Else
+        s = ""
+    End If
+    a = Replace$(LTrim$(Replace$(a, Left$(d, 1), " ")), " ", Left$(d, 1))
+    NoLead0 = IIf(a = "", Left$(d, 1), s & a)
+End Function
+
+Private Function ADDS(ByVal b As String, ByVal c As String, d As String) As String
+    Dim n As Long, of As Long, i As Long, f As Long, f1 As Long, a As String, ppp As String
+    n = Len(d)
+    of = Len(c) - Len(b)
+    If of < 0 Then
+        Swap b, c
+        of = -of
+    End If
+    a = ""
+    f = 0
+    For i = Len(b) To 1 Step -1
+        f1 = f + InStr(d, Mid$(b, i, 1)) + InStr(d, Mid$(c, of + i, 1)) - 2
+        If f1 >= n Then
+            f = 1
+            f1 = f1 - n
+        Else
+            f = 0
+        End If
+        a = Mid$(d, 1 + f1, 1) & a
+    Next
+    If of Then
+        For i = of To 1 Step -1
+            If f Then
+                f1 = f + InStr(d, Mid$(c, i, 1)) - 1
+                If f1 >= n Then
+                    f = 1
+                    f1 = f1 - n
+                Else
+                    f = 0
+                End If
+                a = Mid$(d, 1 + f1, 1) & a
+            Else
+                a = Mid$(c, 1, i) & a
+                Exit For
+            End If
+        Next
+    End If
+    If f Then ADDS = Mid$(d, 2, 1) & a Else ADDS = a
+End Function
+
+Private Function MULS(ByVal b As String, ByVal c As String, d As String) As String
+    Dim i As Long, j As Long, n As Long, f As Long, f1 As Long
+    Dim m As Long, a As String, p As String, nul As String
+    n = Len(d)
+    If Len(b) > Len(c) Then Swap b, c
+    a = Left$(d, 1)
+    nul = ""
+    For i = Len(b) To 1 Step -1
+        m = InStr(d, Mid$(b, i, 1)) - 1
+        p = ""
+        f = 0
+        For j = Len(c) To 1 Step -1
+            f1 = f + m * (InStr(d, Mid$(c, j, 1)) - 1)
+            If f1 >= n Then
+                f = f1 \ n
+                f1 = f1 Mod n
+            Else
+                f = 0
+            End If
+            p = Mid$(d, 1 + f1, 1) & p
+        Next
+        If f Then p = Mid$(d, 1 + f, 1) & p
+        p = p & nul
+        nul = nul & Left$(d, 1)
+        a = ADDS(a, p, d)
+    Next
+    MULS = a
+End Function
+
+Private Function NoLead0F(ByVal a As String) As String
+    Dim b As String
+    a = Trim$(a)
+    b = Left$(a, 1)
+    If b = "-" Then a = Trim$(Mid$(a, 2)) Else b = ""
+    a = Replace$(LTrim$(Replace$(a, "0", " ")), " ", "0")
+    NoLead0F = IIf(a = "", "0", b & a)
+End Function
+
+Private Function NormLength(ByVal a As String, ssss As Long)
+    a = Replace$(LTrim$(Replace$(Trim$(a), "0", " ")), " ", "0")
+    If a = "" Then a = "0"
+    NormLength = String$(ssss - (Len(a) Mod ssss), "0") & a
+End Function
+
+Private Sub NormLengthAdd(a As String, b As String, ssss As Long)
+    Dim l As String
+    a = NoLead0F(a)
+    b = NoLead0F(b)
+    l = Len(a) - Len(b)
+    If l Then
+        If l > 0 Then
+            b = String$(l, "0") & b
+        Else
+            a = String$(-l, "0") & a
+        End If
+    End If
+    l = String$(ssss - (Len(b) Mod ssss), "0")
+    a = l & a
+    b = l & b
+End Sub
+
+Private Function ADDSF(ByVal a As String, ByVal b As String) As String
+    Dim c As String, i As Long, dd As String, l As Long
+    NormLengthAdd a, b, 14
+    ADDSF = ""
+    dd = "0"
+    For i = Len(a) - 14 + 1 To 1 Step -14
+        dd = CStr(CDec(Mid$(a, i, 14)) + CDec(Mid$(b, i, 14)) + CDec(dd))
+        l = Len(dd) - 14
+        If l > 0 Then
+            ADDSF = Mid$(dd, l + 1) & ADDSF
+            dd = Left$(dd, l)
+        Else
+            ADDSF = String$(-l, "0") & dd & ADDSF
+            dd = "0"
+        End If
+    Next
+    ADDSF = Replace$(LTrim$(Replace$(ADDSF, "0", " ")), " ", "0")
+    If ADDSF = "" Then ADDSF = "0"
+End Function
+
+Private Function MULSF(ByVal b As String, ByVal c As String) As String
+    Dim m As Variant, f As Variant, f1 As Variant, cc As Variant, a As String
+    Dim i As Long, j As Long, p As String, ss As String, nul As String
+    b = NormLength(b, 14)
+    c = NormLength(c, 14)
+    If Len(b) > Len(c) Then Swap b, c
+    cc = CDec("1" & String$(14, "0"))
+    nul = ""
+    a = "0"
+    For i = Len(b) - 14 + 1 To 1 Step -14
+        m = CDec(Mid$(b, i, 14))
+        f = CDec(0)
+        p = ""
+        For j = Len(c) - 14 + 1 To 1 Step -14
+            f1 = f + m * CDec(Mid$(c, j, 14))
+            If f1 >= cc Then
+                f = CDec(Fix(f1 / cc))
+                f1 = f1 - f * cc
+            Else
+                f = CDec(0)
+            End If
+            ss = CStr(f1)
+            p = String$(14 - Len(ss), "0") & ss & p
+        Next
+        If f > CDec(0) Then
+            ss = CStr(f)
+            p = String$(14 - Len(ss), "0") & ss & p
+        End If
+        p = p & nul
+        nul = nul & String$(14, "0")
+        a = ADDSF(a, p)
+    Next
+    MULSF = a
+End Function
+
+Private Function A2B(ByVal a As String, da As String, db As String) As String
+    Const Dec As String = "0123456789"
+    Dim sg As String, s As String, m As String, i As Long, ppp As String
+    If da = db Then
+        A2B = a
+    ElseIf db = Dec Then
+        ReDim n(0 To Len(da)) As String
+        If Left$(a, 1) = "-" Then
+            sg = "-"
+            a = Mid$(a, 2)
+        Else
+            sg = ""
+        End If
+        a = NoLead0(UCase$(a), da)
+        m = "1"
+        s = "0"
+        n(0) = s
+        For i = 1 To Len(da)
+            n(i) = ADDSF(m, n(i - 1))
+        Next
+        For i = Len(a) To 2 Step -1
+            s = ADDSF(s, MULSF(n(InStr(da, Mid$(a, i, 1)) - 1), m))
+            m = MULSF(n(Len(da)), m)
+        Next
+        A2B = sg & ADDSF(s, MULSF(n(InStr(da, Mid$(a, i, 1)) - 1), m))
+    Else
+        ReDim n(0 To Len(da)) As String
+        If Left$(a, 1) = "-" Then
+            sg = "-"
+            a = Mid$(a, 2)
+        Else
+            sg = ""
+        End If
+        a = NoLead0(UCase$(a), da)
+        m = Mid$(db, 2, 1)
+        s = Left$(db, 1)
+        n(0) = s
+        For i = 1 To Len(da)
+            n(i) = ADDS(m, n(i - 1), db)
+        Next
+        For i = Len(a) To 2 Step -1
+            s = ADDS(s, MULS(n(InStr(da, Mid$(a, i, 1)) - 1), m, db), db)
+            m = MULS(n(Len(da)), m, db)
+        Next
+        A2B = sg & ADDS(s, MULS(n(InStr(da, Mid$(a, i, 1)) - 1), m, db), db)
+    End If
+End Function

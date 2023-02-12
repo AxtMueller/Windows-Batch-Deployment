@@ -8,6 +8,15 @@ Begin VB.Form frmMain
    ClientLeft      =   45
    ClientTop       =   390
    ClientWidth     =   11895
+   BeginProperty Font 
+      Name            =   "Tahoma"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    LinkMode        =   1  'Source
    LinkTopic       =   "frmMain"
    MaxButton       =   0   'False
@@ -54,7 +63,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   6
          Left            =   10200
-         TabIndex        =   39
+         TabIndex        =   35
          Top             =   1680
          Width           =   1335
       End
@@ -101,7 +110,7 @@ Begin VB.Form frmMain
          Height          =   255
          Index           =   7
          Left            =   10200
-         TabIndex        =   41
+         TabIndex        =   37
          Top             =   240
          Width           =   1335
       End
@@ -109,7 +118,7 @@ Begin VB.Form frmMain
          Caption         =   "Automatically"
          Height          =   195
          Left            =   10200
-         TabIndex        =   40
+         TabIndex        =   36
          Top             =   510
          Value           =   1  'Checked
          Width           =   1260
@@ -131,6 +140,15 @@ Begin VB.Form frmMain
          BackColor       =   -2147483643
          BorderStyle     =   1
          Appearance      =   1
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
          NumItems        =   6
          BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             Key             =   ""
@@ -184,10 +202,19 @@ Begin VB.Form frmMain
       _ExtentX        =   20558
       _ExtentY        =   9975
       _Version        =   393216
-      Tabs            =   4
-      TabsPerRow      =   4
+      Tabs            =   6
+      TabsPerRow      =   6
       TabHeight       =   520
-      TabCaption(0)   =   "File Browser"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      TabCaption(0)   =   "File"
       TabPicture(0)   =   "frmMain.frx":0000
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "cmdFile(3)"
@@ -203,245 +230,243 @@ Begin VB.Form frmMain
       Tab(0).Control(5)=   "btnFile(0)"
       Tab(0).Control(5).Enabled=   0   'False
       Tab(0).ControlCount=   6
-      TabCaption(1)   =   "Registry Editor"
+      TabCaption(1)   =   "Registry"
       TabPicture(1)   =   "frmMain.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lvReg"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "txtRegPath"
-      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(0)=   "txtTempRegData"
+      Tab(1).Control(1)=   "btnOperate(19)"
       Tab(1).Control(2)=   "btnOperate(18)"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "btnOperate(19)"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "txtTempRegData"
-      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(3)=   "txtRegPath"
+      Tab(1).Control(4)=   "lvReg"
       Tab(1).ControlCount=   5
-      TabCaption(2)   =   "System Shell"
+      TabCaption(2)   =   "Process"
       TabPicture(2)   =   "frmMain.frx":0038
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "btnOperate(3)"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "btnOperate(2)"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "txtCMD"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "txtCmdRet"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).ControlCount=   4
-      TabCaption(3)   =   "Auto-Run Management"
+      Tab(2).Control(0)=   "lvProc"
+      Tab(2).Control(1)=   "lvMod"
+      Tab(2).ControlCount=   2
+      TabCaption(3)   =   "Disk"
       TabPicture(3)   =   "frmMain.frx":0054
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Frame4"
-      Tab(3).Control(0).Enabled=   0   'False
-      Tab(3).Control(1)=   "Frame5"
-      Tab(3).Control(1).Enabled=   0   'False
-      Tab(3).Control(2)=   "Frame6"
-      Tab(3).Control(2).Enabled=   0   'False
-      Tab(3).ControlCount=   3
-      Begin VB.CommandButton btnFile 
-         Caption         =   "Upload"
-         Height          =   495
-         Index           =   0
-         Left            =   120
+      Tab(3).Control(0)=   "Frame10"
+      Tab(3).Control(1)=   "Frame9"
+      Tab(3).Control(2)=   "Frame8"
+      Tab(3).Control(3)=   "Frame7"
+      Tab(3).Control(4)=   "txtDiskInfo"
+      Tab(3).ControlCount=   5
+      TabCaption(4)   =   "Terminal"
+      TabPicture(4)   =   "frmMain.frx":0070
+      Tab(4).ControlEnabled=   0   'False
+      Tab(4).Control(0)=   "txtCmdRet"
+      Tab(4).Control(1)=   "txtCMD"
+      Tab(4).Control(2)=   "btnOperate(2)"
+      Tab(4).Control(3)=   "btnOperate(3)"
+      Tab(4).ControlCount=   4
+      TabCaption(5)   =   "Auto-Run"
+      TabPicture(5)   =   "frmMain.frx":008C
+      Tab(5).ControlEnabled=   0   'False
+      Tab(5).Control(0)=   "Frame4"
+      Tab(5).Control(1)=   "Frame5"
+      Tab(5).Control(2)=   "Frame6"
+      Tab(5).ControlCount=   3
+      Begin VB.Frame Frame10 
+         Caption         =   "Text Box"
+         Height          =   1095
+         Left            =   -65040
+         TabIndex        =   79
+         Top             =   420
+         Width           =   1575
+         Begin VB.CheckBox Check2 
+            Caption         =   "Read Only"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   82
+            Top             =   780
+            Value           =   1  'Checked
+            Width           =   1215
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Clear"
+            Height          =   495
+            Index           =   25
+            Left            =   840
+            TabIndex        =   81
+            Top             =   240
+            Width           =   615
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Copy"
+            Height          =   495
+            Index           =   24
+            Left            =   120
+            TabIndex        =   80
+            Top             =   240
+            Width           =   615
+         End
+      End
+      Begin VB.Frame Frame9 
+         Caption         =   "Partition Information"
+         Height          =   1095
+         Left            =   -74880
+         TabIndex        =   77
+         Top             =   420
+         Width           =   1815
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Query"
+            Height          =   795
+            Index           =   4
+            Left            =   120
+            TabIndex        =   78
+            Top             =   210
+            Width           =   1575
+         End
+      End
+      Begin VB.Frame Frame8 
+         Caption         =   "Read Write Disk: Disk_Id | LB_Address | LB_Count | LB_Size"
+         Height          =   1095
+         Left            =   -69840
+         TabIndex        =   66
+         Top             =   420
+         Width           =   4695
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "-"
+            Height          =   255
+            Index           =   23
+            Left            =   2040
+            TabIndex        =   76
+            ToolTipText     =   "LBA-1"
+            Top             =   240
+            Width           =   255
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "+"
+            Height          =   255
+            Index           =   22
+            Left            =   1800
+            TabIndex        =   75
+            ToolTipText     =   "LBA+1"
+            Top             =   240
+            Width           =   255
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Write"
+            Height          =   375
+            Index           =   21
+            Left            =   2400
+            TabIndex        =   74
+            ToolTipText     =   "Only allowed to write 1 logical block for testing, parameter ""LB_Count"" is ignored."
+            Top             =   600
+            Width           =   2175
+         End
+         Begin VB.TextBox txtLBS 
+            Height          =   285
+            Left            =   3600
+            TabIndex        =   73
+            Text            =   "512"
+            Top             =   240
+            Width           =   975
+         End
+         Begin VB.TextBox txtLBC 
+            Height          =   285
+            Left            =   2400
+            TabIndex        =   72
+            Text            =   "1"
+            Top             =   240
+            Width           =   1095
+         End
+         Begin VB.TextBox txtLBA 
+            Height          =   285
+            Left            =   600
+            TabIndex        =   71
+            Text            =   "0"
+            Top             =   240
+            Width           =   1215
+         End
+         Begin VB.TextBox txtDiskId 
+            Height          =   285
+            Left            =   120
+            TabIndex        =   70
+            Text            =   "0"
+            Top             =   240
+            Width           =   375
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Read"
+            Height          =   375
+            Index           =   20
+            Left            =   120
+            TabIndex        =   69
+            Top             =   600
+            Width           =   2175
+         End
+      End
+      Begin VB.Frame Frame7 
+         Caption         =   "File Layout Information"
+         Height          =   1095
+         Left            =   -72960
+         TabIndex        =   65
+         Top             =   420
+         Width           =   3015
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Query"
+            Height          =   375
+            Index           =   5
+            Left            =   120
+            TabIndex        =   68
+            Top             =   600
+            Width           =   2775
+         End
+         Begin VB.TextBox txtFileForPos 
+            Height          =   285
+            Left            =   120
+            TabIndex        =   67
+            Text            =   "C:\WINDOWS\NOTEPAD.EXE"
+            Top             =   240
+            Width           =   2775
+         End
+      End
+      Begin VB.TextBox txtDiskInfo 
+         BeginProperty Font 
+            Name            =   "Courier New"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   3975
+         Left            =   -74880
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   3  'Both
+         TabIndex        =   64
+         Top             =   1560
+         Width           =   11415
+      End
+      Begin VB.CommandButton btnOperate 
+         Caption         =   "Clear"
+         Height          =   255
+         Index           =   3
+         Left            =   -64320
          TabIndex        =   61
-         Top             =   5010
-         Width           =   1815
-      End
-      Begin VB.CommandButton btnFile 
-         Caption         =   "Download"
-         Height          =   495
-         Index           =   1
-         Left            =   2040
-         TabIndex        =   60
-         Top             =   5010
-         Width           =   1815
-      End
-      Begin VB.Frame Frame6 
-         Caption         =   "Program (DLL)"
-         Height          =   5055
-         Left            =   -67200
-         TabIndex        =   54
          Top             =   420
-         Width           =   3735
-         Begin VB.ListBox lstDLL 
-            Height          =   4350
-            Left            =   120
-            TabIndex        =   59
-            Top             =   240
-            Width           =   3495
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Refresh"
-            Height          =   255
-            Index           =   14
-            Left            =   120
-            TabIndex        =   58
-            Top             =   4680
-            Width           =   855
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Add"
-            Height          =   255
-            Index           =   15
-            Left            =   1080
-            TabIndex        =   57
-            Top             =   4680
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   16
-            Left            =   1920
-            TabIndex        =   56
-            Top             =   4680
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete All"
-            Height          =   255
-            Index           =   17
-            Left            =   2760
-            TabIndex        =   55
-            Top             =   4680
-            Width           =   855
-         End
-      End
-      Begin VB.Frame Frame5 
-         Caption         =   "Program (EXE)"
-         Height          =   5055
-         Left            =   -71040
-         TabIndex        =   48
-         Top             =   420
-         Width           =   3735
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete All"
-            Height          =   255
-            Index           =   13
-            Left            =   2760
-            TabIndex        =   53
-            Top             =   4680
-            Width           =   855
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   12
-            Left            =   1920
-            TabIndex        =   52
-            Top             =   4680
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Add"
-            Height          =   255
-            Index           =   11
-            Left            =   1080
-            TabIndex        =   51
-            Top             =   4680
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Refresh"
-            Height          =   255
-            Index           =   10
-            Left            =   120
-            TabIndex        =   50
-            Top             =   4680
-            Width           =   855
-         End
-         Begin VB.ListBox lstExe 
-            Height          =   4350
-            Left            =   120
-            TabIndex        =   49
-            Top             =   240
-            Width           =   3495
-         End
-      End
-      Begin VB.Frame Frame4 
-         Caption         =   "Driver"
-         Height          =   5055
-         Left            =   -74880
-         TabIndex        =   42
-         Top             =   420
-         Width           =   3735
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete All"
-            Height          =   255
-            Index           =   9
-            Left            =   2760
-            TabIndex        =   47
-            Top             =   4680
-            Width           =   855
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Delete"
-            Height          =   255
-            Index           =   8
-            Left            =   1920
-            TabIndex        =   46
-            Top             =   4680
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Add"
-            Height          =   255
-            Index           =   7
-            Left            =   1080
-            TabIndex        =   45
-            Top             =   4680
-            Width           =   735
-         End
-         Begin VB.CommandButton btnOperate 
-            Caption         =   "Refresh"
-            Height          =   255
-            Index           =   6
-            Left            =   120
-            TabIndex        =   44
-            Top             =   4680
-            Width           =   855
-         End
-         Begin VB.ListBox lstDrv 
-            Height          =   4350
-            Left            =   120
-            TabIndex        =   43
-            Top             =   240
-            Width           =   3495
-         End
-      End
-      Begin VB.TextBox txtTempRegData 
-         Height          =   285
-         Left            =   -65400
-         TabIndex        =   38
-         Top             =   960
-         Visible         =   0   'False
-         Width           =   1815
+         Width           =   855
       End
       Begin VB.CommandButton btnOperate 
-         Caption         =   "Go To P.D"
+         Caption         =   "Execute"
          Height          =   255
-         Index           =   19
-         Left            =   -64560
-         TabIndex        =   27
-         ToolTipText     =   "Return to the parent directory"
-         Top             =   420
-         Width           =   1095
-      End
-      Begin VB.CommandButton btnOperate 
-         Caption         =   "Go To"
-         Height          =   255
-         Index           =   18
+         Index           =   2
          Left            =   -65280
-         TabIndex        =   26
+         TabIndex        =   60
          Top             =   420
-         Width           =   615
+         Width           =   855
       End
-      Begin VB.TextBox txtRegPath 
+      Begin VB.TextBox txtCMD 
          Height          =   285
          Left            =   -74880
-         TabIndex        =   25
-         Text            =   "\Registry"
+         TabIndex        =   59
+         Text            =   "ipconfig"
          Top             =   420
          Width           =   9495
       End
@@ -455,40 +480,220 @@ Begin VB.Form frmMain
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   4695
+         Height          =   4785
          Left            =   -74880
          Locked          =   -1  'True
          MultiLine       =   -1  'True
          ScrollBars      =   3  'Both
-         TabIndex        =   23
-         Top             =   780
+         TabIndex        =   58
+         Top             =   750
          Width           =   11415
       End
-      Begin VB.TextBox txtCMD 
+      Begin VB.Frame Frame4 
+         Caption         =   "Driver"
+         Height          =   5055
+         Left            =   -74880
+         TabIndex        =   52
+         Top             =   420
+         Width           =   3735
+         Begin VB.ListBox lstDrv 
+            Height          =   4350
+            Left            =   120
+            TabIndex        =   57
+            Top             =   240
+            Width           =   3495
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Refresh"
+            Height          =   255
+            Index           =   6
+            Left            =   120
+            TabIndex        =   56
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Add"
+            Height          =   255
+            Index           =   7
+            Left            =   1080
+            TabIndex        =   55
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   8
+            Left            =   1920
+            TabIndex        =   54
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete All"
+            Height          =   255
+            Index           =   9
+            Left            =   2760
+            TabIndex        =   53
+            Top             =   4680
+            Width           =   855
+         End
+      End
+      Begin VB.Frame Frame5 
+         Caption         =   "Program (EXE)"
+         Height          =   5055
+         Left            =   -71040
+         TabIndex        =   46
+         Top             =   420
+         Width           =   3735
+         Begin VB.ListBox lstExe 
+            Height          =   4350
+            Left            =   120
+            TabIndex        =   51
+            Top             =   240
+            Width           =   3495
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Refresh"
+            Height          =   255
+            Index           =   10
+            Left            =   120
+            TabIndex        =   50
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Add"
+            Height          =   255
+            Index           =   11
+            Left            =   1080
+            TabIndex        =   49
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   12
+            Left            =   1920
+            TabIndex        =   48
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete All"
+            Height          =   255
+            Index           =   13
+            Left            =   2760
+            TabIndex        =   47
+            Top             =   4680
+            Width           =   855
+         End
+      End
+      Begin VB.Frame Frame6 
+         Caption         =   "Program (DLL)"
+         Height          =   5055
+         Left            =   -67200
+         TabIndex        =   40
+         Top             =   420
+         Width           =   3735
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete All"
+            Height          =   255
+            Index           =   17
+            Left            =   2760
+            TabIndex        =   45
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   16
+            Left            =   1920
+            TabIndex        =   44
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Add"
+            Height          =   255
+            Index           =   15
+            Left            =   1080
+            TabIndex        =   43
+            Top             =   4680
+            Width           =   735
+         End
+         Begin VB.CommandButton btnOperate 
+            Caption         =   "Refresh"
+            Height          =   255
+            Index           =   14
+            Left            =   120
+            TabIndex        =   42
+            Top             =   4680
+            Width           =   855
+         End
+         Begin VB.ListBox lstDLL 
+            Height          =   4350
+            Left            =   120
+            TabIndex        =   41
+            Top             =   240
+            Width           =   3495
+         End
+      End
+      Begin VB.CommandButton btnFile 
+         Caption         =   "Upload"
+         Height          =   495
+         Index           =   0
+         Left            =   120
+         TabIndex        =   39
+         Top             =   4980
+         Width           =   1815
+      End
+      Begin VB.CommandButton btnFile 
+         Caption         =   "Download"
+         Height          =   495
+         Index           =   1
+         Left            =   2040
+         TabIndex        =   38
+         Top             =   4980
+         Width           =   1815
+      End
+      Begin VB.TextBox txtTempRegData 
+         Height          =   285
+         Left            =   -65400
+         TabIndex        =   34
+         Top             =   960
+         Visible         =   0   'False
+         Width           =   1815
+      End
+      Begin VB.CommandButton btnOperate 
+         Caption         =   "Go To P.D"
+         Height          =   255
+         Index           =   19
+         Left            =   -64560
+         TabIndex        =   23
+         ToolTipText     =   "Return to the parent directory"
+         Top             =   420
+         Width           =   1095
+      End
+      Begin VB.CommandButton btnOperate 
+         Caption         =   "Go To"
+         Height          =   255
+         Index           =   18
+         Left            =   -65280
+         TabIndex        =   22
+         Top             =   420
+         Width           =   615
+      End
+      Begin VB.TextBox txtRegPath 
          Height          =   285
          Left            =   -74880
-         TabIndex        =   22
-         Text            =   "ipconfig"
+         TabIndex        =   21
+         Text            =   "\Registry"
          Top             =   420
          Width           =   9495
-      End
-      Begin VB.CommandButton btnOperate 
-         Caption         =   "Execute"
-         Height          =   255
-         Index           =   2
-         Left            =   -65280
-         TabIndex        =   21
-         Top             =   420
-         Width           =   855
-      End
-      Begin VB.CommandButton btnOperate 
-         Caption         =   "Clear"
-         Height          =   255
-         Index           =   3
-         Left            =   -64320
-         TabIndex        =   20
-         Top             =   420
-         Width           =   855
       End
       Begin VB.Frame Frame3 
          Caption         =   "Remote"
@@ -502,7 +707,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   11
             Left            =   6000
-            TabIndex        =   37
+            TabIndex        =   33
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4680
             Visible         =   0   'False
@@ -513,7 +718,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   9
             Left            =   5280
-            TabIndex        =   35
+            TabIndex        =   31
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4680
             Visible         =   0   'False
@@ -524,7 +729,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   7
             Left            =   4560
-            TabIndex        =   29
+            TabIndex        =   25
             Top             =   4680
             Visible         =   0   'False
             Width           =   735
@@ -534,7 +739,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   10
             Left            =   6000
-            TabIndex        =   36
+            TabIndex        =   32
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4440
             Visible         =   0   'False
@@ -545,7 +750,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   5
             Left            =   3840
-            TabIndex        =   31
+            TabIndex        =   27
             Top             =   4680
             Visible         =   0   'False
             Width           =   735
@@ -555,7 +760,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   8
             Left            =   5280
-            TabIndex        =   28
+            TabIndex        =   24
             Tag             =   "http://libevent.org/sm-web-appnexus-logo.png"
             Top             =   4440
             Visible         =   0   'False
@@ -566,7 +771,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   6
             Left            =   4560
-            TabIndex        =   30
+            TabIndex        =   26
             Top             =   4440
             Visible         =   0   'False
             Width           =   735
@@ -576,7 +781,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   4
             Left            =   3840
-            TabIndex        =   32
+            TabIndex        =   28
             Top             =   4440
             Visible         =   0   'False
             Width           =   735
@@ -586,7 +791,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   3
             Left            =   3120
-            TabIndex        =   33
+            TabIndex        =   29
             Top             =   4680
             Visible         =   0   'False
             Width           =   735
@@ -596,7 +801,7 @@ Begin VB.Form frmMain
             Height          =   255
             Index           =   2
             Left            =   3120
-            TabIndex        =   34
+            TabIndex        =   30
             Top             =   4440
             Visible         =   0   'False
             Width           =   735
@@ -619,6 +824,15 @@ Begin VB.Form frmMain
             BackColor       =   -2147483643
             BorderStyle     =   1
             Appearance      =   1
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             NumItems        =   3
             BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                Key             =   ""
@@ -720,14 +934,14 @@ Begin VB.Form frmMain
          Width           =   1215
       End
       Begin ComctlLib.ListView lvReg 
-         Height          =   4695
+         Height          =   4815
          Left            =   -74880
-         TabIndex        =   24
+         TabIndex        =   20
          ToolTipText     =   "Double click to open key or edit value."
-         Top             =   780
+         Top             =   750
          Width           =   11415
          _ExtentX        =   20135
-         _ExtentY        =   8281
+         _ExtentY        =   8493
          View            =   3
          LabelEdit       =   1
          LabelWrap       =   -1  'True
@@ -737,6 +951,15 @@ Begin VB.Form frmMain
          BackColor       =   -2147483643
          BorderStyle     =   1
          Appearance      =   1
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
          NumItems        =   4
          BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
             Key             =   ""
@@ -765,6 +988,115 @@ Begin VB.Form frmMain
             Text            =   "Length"
             Object.Width           =   706
          EndProperty
+      End
+      Begin ComctlLib.ListView lvProc 
+         Height          =   2535
+         Left            =   -74880
+         TabIndex        =   62
+         ToolTipText     =   "Double click to view process module"
+         Top             =   420
+         Width           =   11415
+         _ExtentX        =   20135
+         _ExtentY        =   4471
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   0   'False
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         BorderStyle     =   1
+         Appearance      =   1
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         NumItems        =   3
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "EPROCESS"
+            Object.Width           =   3175
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "PID"
+            Object.Width           =   1587
+         EndProperty
+         BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   2
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "PATH"
+            Object.Width           =   13229
+         EndProperty
+      End
+      Begin ComctlLib.ListView lvMod 
+         Height          =   2535
+         Left            =   -74880
+         TabIndex        =   63
+         Top             =   3000
+         Width           =   11415
+         _ExtentX        =   20135
+         _ExtentY        =   4471
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   0   'False
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         BorderStyle     =   1
+         Appearance      =   1
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         NumItems        =   3
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Base"
+            Object.Width           =   3175
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Size"
+            Object.Width           =   1587
+         EndProperty
+         BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   2
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Path"
+            Object.Width           =   13229
+         EndProperty
+      End
+   End
+   Begin VB.Menu mnuClient 
+      Caption         =   "mnuClient"
+      Visible         =   0   'False
+      Begin VB.Menu mnuCO 
+         Caption         =   "Get Time"
+         Index           =   0
+      End
+      Begin VB.Menu mnuCO 
+         Caption         =   "Set Time"
+         Index           =   1
       End
    End
    Begin VB.Menu mnuFile 
@@ -855,6 +1187,38 @@ Begin VB.Form frmMain
          Index           =   4
       End
    End
+   Begin VB.Menu mnuProc 
+      Caption         =   "mnuProc"
+      Visible         =   0   'False
+      Begin VB.Menu mnuPRO 
+         Caption         =   "Refresh"
+         Index           =   0
+      End
+      Begin VB.Menu mnuPRO 
+         Caption         =   "-"
+         Index           =   1
+      End
+      Begin VB.Menu mnuPRO 
+         Caption         =   "Kill Process..."
+         Index           =   2
+      End
+   End
+   Begin VB.Menu mnuProcMod 
+      Caption         =   "mnuProcMod"
+      Visible         =   0   'False
+      Begin VB.Menu mnuPMO 
+         Caption         =   "Refresh"
+         Index           =   0
+      End
+      Begin VB.Menu mnuPMO 
+         Caption         =   "-"
+         Index           =   1
+      End
+      Begin VB.Menu mnuPMO 
+         Caption         =   "Load Module..."
+         Index           =   2
+      End
+   End
 End
 Attribute VB_Name = "frmMain"
 Attribute VB_GlobalNameSpace = False
@@ -866,6 +1230,48 @@ Attribute VB_Exposed = False
 '    Description: Windows-Batch-Deployment Server Demonstration.
 '*/
 Option Explicit
+
+'################################################################################
+' WIN32API CONSTANT
+'################################################################################
+Private Const MEM_RELEASE As Long = &H8000
+Private Const SW_SHOW As Long = 5
+Private Const LVM_FIRST As Long = &H1000
+Private Const LVS_EX_FULLROWSELECT As Long = &H20
+Private Const LVM_SETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 54
+Private Const LVM_GETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 55
+
+'################################################################################
+' WIN32API STRUCTURE
+'################################################################################
+Private Type SYSTEMTIME
+    wYear As Integer
+    wMonth As Integer
+    wDayOfWeek As Integer
+    wDay As Integer
+    wHour As Integer
+    wMinute As Integer
+    wSecond As Integer
+    wMilliseconds As Integer
+End Type
+
+'################################################################################
+' WIN32API DECLARATION
+'################################################################################
+Private Declare Sub ExitProcess Lib "kernel32" (ByVal dwExitCode As Long)
+Private Declare Sub memcpy Lib "kernel32" Alias "RtlMoveMemory" (ByVal Destination As Long, ByVal Source As Long, ByVal Length As Long)
+Private Declare Function VirtualAlloc Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flAllocationType As Long, ByVal flNewProtect As Long) As Long
+Private Declare Function VirtualFree Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal dwType As Long) As Long
+Private Declare Function VirtualProtect Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
+Private Declare Function lstrlenA Lib "kernel32" (ByVal lpString As Long) As Long
+Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Long) As Long
+Private Declare Function lstrcpyA Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
+Private Declare Function lstrcpyW Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
+Private Declare Function SendMessageA Lib "user32" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function MessageBoxA Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
+Private Declare Function MessageBoxW Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
+Private Declare Function LoadLibraryA Lib "kernel32.dll" (ByVal lpModuleName As String) As Long
+Private Declare Function GetProcAddress Lib "kernel32.dll" (ByVal hModule As Long, ByVal lpProcName As String) As Long
 
 '################################################################################
 ' WINDOWS BATCH DEPLOYMENT CONSTANT
@@ -899,10 +1305,26 @@ Private Const CLIENT_REG_RENAME_KEY As Long = 2
 Private Const CLIENT_REG_DELETE_VALUE As Long = 3
 Private Const CLIENT_REG_QUERY_VALUE As Long = 4
 Private Const CLIENT_REG_SET_VALUE As Long = 5
+Private Const CLIENT_QSI_QUERY_TICK_TIME = 0
+Private Const CLIENT_QSI_ENUM_PROCESS = 1
+Private Const CLIENT_QSI_ENUM_PROC_MOD = 2
+Private Const CLIENT_SSI_SET_LOCAL_TIME = 100
+Private Const CLIENT_SSI_KILL_PROCESS = 101
+Private Const CLIENT_SSI_INJECT_DLL = 102
+Private Const CLIENT_DISK_QUERY_PARTITION = 0
+Private Const CLIENT_DISK_QUERY_FILE_POS = 1
+Private Const CLIENT_DISK_READ_SECTOR = 2
+Private Const CLIENT_DISK_WRITE_SECTOR = 3
 
 '################################################################################
 ' WINDOWS BATCH DEPLOYMENT STRUCTURE DECLARATION
 '################################################################################
+Private Type SENDRECV_CALLBACK
+    id As Long          'Client Id.
+    reserved As Long    'Internal use.
+    callback As Long    'User-defined function that conforms to prototype SENDRECVCALLBACK.
+End Type
+
 Private Type CLIENT_INFO
     id As Long
     hash_low As Long
@@ -938,10 +1360,71 @@ Private Type BDP_REG_INFO
     Data(503) As Byte        'If the data length is too long, nothing will be copied to this buffer.
 End Type
 
-Private Type SENDRECV_CALLBACK
-    id As Long          'Client Id.
-    reserved As Long    'Internal use.
-    callback As Long    'User-defined function that conforms to prototype SENDRECVCALLBACK.
+Private Type BDP_DISK_QUERY_READ_WRITE_FILE
+    Path(259) As Integer
+    buffer(0) As Byte
+End Type
+
+Private Type BDP_DISK_QUERY_READ_WRITE
+    PartitionId_or_DiskId As Long
+    LBA As Currency
+    CountLBA As Long
+    SectorSize As Long
+    unused(499) As Byte
+    buffer(511) As Byte
+    '"buffer" member is a dynamic array in C definition,
+    'its size can be an integer multiple of SectorSize (it would be N*512 in most cases),
+    'because it is not allowed to define a variable length structure in VB6,
+    'in order to facilitate testing, I set a fixed size to 512 bytes.
+End Type
+
+Private Type BDP_PARTITION_INFO
+    DiskId As Long
+    SectorsPerCluster As Long
+    BytesPerSector As Long
+    'there is nothing like "#pragma pack(1)" in VB6,
+    'so I have to use a 18 bytes buffer to represent following members.
+    buffer(17) As Byte
+    'DosDevice As Integer
+    'StartingOffset As Currency
+    'ExtentLength As Currency
+End Type
+
+Private Type BDP_SECTION
+    Begin As Currency
+    End As Currency
+End Type
+
+Private Type BDP_FILE_CLUSTERS
+    DiskId As Long
+    PartitionId As Long
+    SectorsPerCluster As Long
+    BytesPerSector As Long
+    SectionCount As Long
+    PartitionStartingOffset As Currency
+    MftStartingOffset As Currency
+    FileSize As Currency
+    Sections(254) As BDP_SECTION
+    '"Sections" member is a dynamic array in C definition, its size can be any amount,
+    'because it is not allowed to define a variable length structure in VB6,
+    'in order to facilitate testing, I set its size to 254*sizeof(BDP_SECTION).
+End Type
+
+Private Type BDP_SI_SYSTEM_TIME
+    TickCount As Currency
+    LocalTime As SYSTEMTIME
+End Type
+
+Private Type BDP_SI_PROCESS_INFO
+    Object As Currency
+    id As Currency
+    Path(259) As Integer
+End Type
+
+Private Type BDP_SI_PROCESS_MOD_INFO
+    Base As Currency
+    Size As Currency
+    Path(259) As Integer
 End Type
 
 '################################################################################
@@ -969,80 +1452,22 @@ Private Declare Function CmdQueryAutoRunBin Lib "Server32.dll" (ByVal id As Long
 Private Declare Function CmdClearAutoRunBin Lib "Server32.dll" (ByVal id As Long, ByVal bType As Byte) As Byte
 Private Declare Function CmdQueryRegistry Lib "Server32.dll" (ByVal id As Long, ByVal wsPath As Long, ByVal pStructAddress As Long, ByRef pCount As Long) As Byte
 Private Declare Function CmdRegistryOperation Lib "Server32.dll" (ByVal id As Long, ByVal fn As Byte, ByVal wsPath As Long, ByVal wsName As Long, ByRef pType As Long, ByVal pBuffer As Long, ByRef pLength As Long) As Byte
+Private Declare Function CmdQuerySetSystemInformation Lib "Server32.dll" (ByVal id As Long, ByVal fn As Byte, ByVal pIn As Long, ByVal pInLen As Long, ByVal pOut As Long, ByRef pOutLen As Long) As Byte
+Private Declare Function CmdReadWriteDisk Lib "Server32.dll" (ByVal id As Long, ByVal fn As Byte, ByVal pParam As Long, ByVal pOut As Long, ByRef pLength As Long) As Byte
 Private Declare Function UpdateClient Lib "Server32.dll" (ByVal LastestVersion As String, ByVal SaveTo32 As String, ByVal SaveTo64 As String) As Byte
 Private Declare Function UpdateServer Lib "Server32.dll" (ByVal CurrentVersion As String, ByVal LastestVersion As String, ByVal SaveTo32 As String, ByVal SaveTo64 As String) As Byte
 
 '################################################################################
-' WIN32API CONSTANT
-'################################################################################
-Private Const SW_SHOW As Long = 5
-Private Const LVM_FIRST As Long = &H1000
-Private Const LVS_EX_FULLROWSELECT As Long = &H20
-Private Const LVM_SETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 54
-Private Const LVM_GETEXTENDEDLISTVIEWSTYLE As Long = LVM_FIRST + 55
-
-'################################################################################
-' WIN32API DECLARATION
-'################################################################################
-Private Declare Sub ExitProcess Lib "kernel32" (ByVal dwExitCode As Long)
-Private Declare Sub memcpy Lib "kernel32" Alias "RtlMoveMemory" (ByVal Destination As Long, ByVal Source As Long, ByVal Length As Long)
-Private Declare Function VirtualAlloc Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flAllocationType As Long, ByVal flNewProtect As Long) As Long
-Private Declare Function VirtualFree Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal dwType As Long) As Long
-Private Declare Function VirtualProtect Lib "kernel32" (ByVal dwAddr As Long, ByVal dwSize As Long, ByVal flNewProtect As Long, ByRef lpflOldProtect As Long) As Long
-Private Declare Function lstrlenA Lib "kernel32" (ByVal lpString As Long) As Long
-Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Long) As Long
-Private Declare Function lstrcpyA Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
-Private Declare Function lstrcpyW Lib "kernel32" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
-Private Declare Function SendMessageA Lib "user32" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Private Declare Function MessageBoxA Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
-Private Declare Function MessageBoxW Lib "user32" (ByVal hWnd As Long, ByVal txt As Long, ByVal title As Long, ByVal dwType As Long) As Long
-Private Declare Function LoadLibraryA Lib "kernel32.dll" (ByVal lpModuleName As String) As Long
-Private Declare Function GetProcAddress Lib "kernel32.dll" (ByVal hModule As Long, ByVal lpProcName As String) As Long
-
-'################################################################################
-' DEMONSTRATION PROGRAM STRUCTURE
-'################################################################################
-Private Type mDec
-    lo As Long
-    hi As Long
-    hh As Long
-End Type
-
-Private Type mVar
-    ty As Integer
-    tyl As Integer
-    tt As Long
-    lo As Long
-    hi As Long
-End Type
-
-'################################################################################
 ' DEMONSTRATION PROGRAM CODE
 '################################################################################
-Private Function i64toa(ByVal sv As Variant) As String
-    Dim v As Variant: v = sv
-    Dim vDec As mDec
-    Dim vVar As mVar
-    Dim i As Integer
-    Dim ls As String
-    memcpy VarPtr(vVar.ty), VarPtr(v), 16
-    memcpy VarPtr(vDec.lo), VarPtr(vVar.lo), 8
-    vDec.hh = vVar.tt
-    ls = Hex(vDec.lo)
-    i64toa = Hex(vDec.hh) & "" & Hex(vDec.hi) & "" & String(8 - Len(ls), "0") & ls
-    For i = 1 To Len(i64toa)
-        If Left$(i64toa, 1) = "0" Then
-            i64toa = Mid$(i64toa, 2)
-        Else
-            Exit For
-        End If
-    Next
-End Function
-
-Private Function Hexx(ByVal v As Variant) As String
+Private Function Hexx(ByVal v As Variant, Optional ByVal minlen As Long = 2) As String
     Dim s As String
-    s = Hex$(v)
-    Hexx = IIf(Len(s) = 1, "0" & s, s)
+    s = Hex$(v) ':Hexx = IIf(Len(s) = 1, "0" & s, s)
+    If Len(s) < minlen Then
+        Hexx = String(minlen - Len(s), "0") & s
+    Else
+        Hexx = s
+    End If
 End Function
 
 Private Function sz2bstr(ByRef ba() As Byte) As String
@@ -1299,7 +1724,7 @@ Private Function GetRegDataString(ByRef RegInfo As BDP_REG_INFO, ByVal RegPath A
         ElseIf RegInfo.ItemType = 11 Then
             Dim qw As Currency
             Call memcpy(VarPtr(qw), VarPtr(RegInfo) + 8 + 512, 8)
-            GetRegDataString = "0x" & i64toa(qw)
+            GetRegDataString = "0x" & UInt64ToHex64(qw)
         ElseIf RegInfo.ItemType = 7 Then
             GetRegDataString = MultiWideCharStringToVBString(VarPtr(RegInfo) + 8 + 512, RegInfo.DataLength)
         Else
@@ -1571,7 +1996,7 @@ Private Sub btnFile_Click(Index As Integer)
 End Sub
 
 Private Sub EnumFileProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As Boolean)
-    'A lazy way: assume the maximum file count is 16384...
+    'A lazy way: assume the maximum item count is 16384...
     Dim i, sc As Long: sc = 16384
     Dim fs(16383) As BDP_FILE_INFO
     If CmdQueryDirectory(id, StrPtr(txtFilePath.Text), VarPtr(fs(0)), sc) = 0 Then
@@ -1588,8 +2013,8 @@ Private Sub EnumFileProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As Boole
 End Sub
 
 Private Sub EnumRegistryProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As Boolean)
-    'A lazy way: assume the maximum file count is 16384...
-    Dim i, sc As Long: sc = 16384: sc = 16384
+    'A lazy way: assume the maximum item count is 16384...
+    Dim i, sc As Long: sc = 16384
     Dim rg(16383) As BDP_REG_INFO
     If CmdQueryRegistry(id, StrPtr(txtRegPath.Text), VarPtr(rg(0)), sc) = 0 Then
         If LCase(txtRegPath.Text) <> "\registry" Then
@@ -1606,9 +2031,212 @@ Private Sub EnumRegistryProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As B
     End If
 End Sub
 
+Private Function Signed2Unsigned(ByVal dw As Variant) As Variant
+    If dw < 0 Then
+        Signed2Unsigned = CDec(dw) + CDec("&H7fffffff") * 2 + 2
+    Else
+        Signed2Unsigned = dw
+    End If
+End Function
+
+Private Sub EnumPartitionProc(ByVal id As Long)
+    Dim dqrw As BDP_DISK_QUERY_READ_WRITE
+    Dim iRet As BDP_PARTITION_INFO
+    Dim lRet As Long: lRet = LenB(iRet)
+    Dim pid As Long, fc As Long, EverSucceed As Boolean
+    txtDiskInfo.Text = ""
+    Do While 1
+        Dim wDosDevice As Integer, qStartOffset As Currency, qExtentLength As Currency
+        pid = pid + 1
+        dqrw.PartitionId_or_DiskId = pid
+        If CmdReadWriteDisk(id, CLIENT_DISK_QUERY_PARTITION, VarPtr(dqrw), VarPtr(iRet), lRet) Then
+            txtDiskInfo.Text = txtDiskInfo.Text & Replace("[HarddiskVolume%ld] (If a partition has multiple segments, only the first one is displayed.)", "%ld", CStr(pid)) & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "|-DiskId:            " & CStr(iRet.DiskId) & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "|-SectorsPerCluster: " & CStr(iRet.SectorsPerCluster) & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "|-BytesPerSector:    " & CStr(iRet.BytesPerSector) & vbCrLf
+            Call memcpy(VarPtr(wDosDevice), VarPtr(iRet.buffer(0)), 2)
+            Call memcpy(VarPtr(qStartOffset), VarPtr(iRet.buffer(2)), 8)
+            Call memcpy(VarPtr(qExtentLength), VarPtr(iRet.buffer(10)), 8)
+            txtDiskInfo.Text = txtDiskInfo.Text & "|-DosDevice:         " & IIf(wDosDevice, ChrW(wDosDevice), "(NONE)") & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "|-StartingOffset:    0x" & UInt64ToHex64(qStartOffset) & " (DiskLBA: " & CStr(Signed2Unsigned(CDec("&H" & UInt64ToHex64(qStartOffset))) / CDec(iRet.BytesPerSector)) & ")" & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "|-ExtentLength:      0x" & UInt64ToHex64(qExtentLength) & " (LogicBlockCount: " & CStr(Signed2Unsigned(CDec("&H" & UInt64ToHex64(qExtentLength))) / CDec(iRet.BytesPerSector)) & ")" & vbCrLf & vbCrLf
+            EverSucceed = True
+        Else
+            fc = fc + 1
+        End If
+        If fc >= 4 Then
+            Exit Do
+        End If
+    Loop
+    If EverSucceed = False Then
+        txtDiskInfo.Text = "Query partition information unsuccessfully."
+    End If
+End Sub
+
+Private Sub EnumFilePosProc(ByVal id As Long)
+    Dim sz As String: sz = txtFileForPos.Text
+    Dim dqrw As BDP_DISK_QUERY_READ_WRITE_FILE
+    Dim sRet As BDP_FILE_CLUSTERS
+    Dim bRet(4095) As Byte
+    Dim i As Long, lRet As Long: lRet = 4096
+    Dim PartitionStartingLBA As Variant, cc As Variant: cc = CDec(0)
+    memcpy VarPtr(dqrw.Path(0)), StrPtr(sz), Len(sz) * 2
+    If CmdReadWriteDisk(id, CLIENT_DISK_QUERY_FILE_POS, VarPtr(dqrw), VarPtr(bRet(0)), lRet) Then
+        txtDiskInfo.Text = ""
+        memcpy VarPtr(sRet), VarPtr(bRet(0)), LenB(sRet)
+        If sRet.MftStartingOffset <> 0 Or sRet.SectionCount <> 0 Then
+            txtDiskInfo.Text = txtDiskInfo.Text & "Located on Disk: " & CStr(sRet.DiskId) & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "Located on Partition: \\Device\\HarddiskVolume" & CStr(sRet.PartitionId) & vbCrLf
+            'txtDiskInfo.Text = txtDiskInfo.Text & "Sectors per Cluster: " & CStr(sRet.SectorsPerCluster) & vbCrLf
+            'txtDiskInfo.Text = txtDiskInfo.Text & "Bytes per Sector:    " & CStr(sRet.BytesPerSector) & vbCrLf
+            'txtDiskInfo.Text = txtDiskInfo.Text & "Partition Starting Offset On Disk: 0x" & UInt64ToHex64(sRet.PartitionStartingOffset) & " (DiskLBA: " & Signed2Unsigned(CDec("&H" & UInt64ToHex64(sRet.PartitionStartingOffset))) / CDec(sRet.BytesPerSector) & ")" & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "MFT Starting Offset On Partition: 0x" & UInt64ToHex64(sRet.MftStartingOffset) & " (DiskLBA: " & Signed2Unsigned(CDec("&H" & UInt64ToHex64(sRet.MftStartingOffset + sRet.PartitionStartingOffset))) / CDec(sRet.BytesPerSector) & ")" & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "File Size: " & IIf(sRet.FileSize <> 0, CStr(CDec("&H" & UInt64ToHex64(sRet.FileSize)) - 1), "Unknown") & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "Cluster Count: %lddd" & vbCrLf
+            txtDiskInfo.Text = txtDiskInfo.Text & "Cluster Fragments: " & CStr(sRet.SectionCount) & vbCrLf
+            PartitionStartingLBA = CDec("&H" & UInt64ToHex64(sRet.PartitionStartingOffset)) / sRet.BytesPerSector
+            If sRet.SectionCount > 254 Then sRet.SectionCount = 254
+            For i = 0 To sRet.SectionCount - 1
+                txtDiskInfo.Text = txtDiskInfo.Text & "PttClst[%I64d1] ~ PttClst[%I64d2]  <-->  DiskLBA[%I64d3] ~ DiskLBA[%I64d4]" & vbCrLf
+                txtDiskInfo.Text = Replace(txtDiskInfo.Text, "%I64d1", CStr(CDec("&H" & UInt64ToHex64(sRet.Sections(i).Begin))))
+                txtDiskInfo.Text = Replace(txtDiskInfo.Text, "%I64d2", CStr(CDec("&H" & UInt64ToHex64(sRet.Sections(i).End))))
+                txtDiskInfo.Text = Replace(txtDiskInfo.Text, "%I64d3", CStr(CDec("&H" & UInt64ToHex64(sRet.Sections(i).Begin)) * sRet.SectorsPerCluster + PartitionStartingLBA)) '
+                txtDiskInfo.Text = Replace(txtDiskInfo.Text, "%I64d4", CStr(CDec("&H" & UInt64ToHex64(sRet.Sections(i).End)) * sRet.SectorsPerCluster + PartitionStartingLBA))  '
+                cc = cc + CDec(CDec("&H" & UInt64ToHex64(sRet.Sections(i).End)) - CDec("&H" & UInt64ToHex64(sRet.Sections(i).Begin)) + 1)
+            Next
+            txtDiskInfo.Text = Replace(txtDiskInfo.Text, "%lddd", CStr(cc))
+        Else
+            txtDiskInfo.Text = "Query file layout information unsuccessfully."
+        End If
+    Else
+        txtDiskInfo.Text = "Query file layout information unsuccessfully."
+    End If
+End Sub
+
+Private Sub ReadDiskProc(ByVal id As Long)
+    Dim dqrw As BDP_DISK_QUERY_READ_WRITE
+    Dim ret() As Byte, lRet As Long, i As Long, szData As String, szAddr As String
+    Dim LBA As Long
+    dqrw.PartitionId_or_DiskId = CLng(txtDiskId.Text)
+    'the maxinum LBA can only be 2147483647 in VB6, if you want to read a LBA that larger than 2147483647, you must fill dqrw.LBA manually
+    txtLBA.Text = Replace$(txtLBA.Text, "(", ""): txtLBA.Text = Replace$(txtLBA.Text, ")", ""): txtLBA.Text = Trim$(txtLBA.Text)
+    txtLBA.Text = Replace$(txtLBA.Text, "[", ""): txtLBA.Text = Replace$(txtLBA.Text, "]", ""): LBA = CLng(txtLBA.Text)
+    memcpy VarPtr(dqrw.LBA), VarPtr(LBA), 4
+    dqrw.CountLBA = CLng(txtLBC.Text)
+    dqrw.SectorSize = CLng(txtLBS.Text)
+    lRet = dqrw.CountLBA * dqrw.SectorSize
+    ReDim ret(lRet - 1)
+    If CmdReadWriteDisk(id, CLIENT_DISK_READ_SECTOR, VarPtr(dqrw), VarPtr(ret(0)), lRet) Then
+        'output the first disk offset
+        If CDec(CDec(LBA) * CDec(dqrw.SectorSize)) = CDec(0) Then
+            szData = "0000" & vbTab
+        Else
+            szData = Dec64ToHex64(CStr(CDec(LBA) * CDec(dqrw.SectorSize)))
+            If Len(szData) < 4 Then
+                szData = String(4 - Len(szData), "0") & szData
+            End If
+            szData = szData & vbTab
+        End If
+        For i = 0 To lRet - 1
+            'output data
+            szData = szData & Hexx(ret(i)) & " "
+            'output other disk offsets
+            If (i + 1) Mod 16 = 0 And (i + 1) < lRet Then
+                szAddr = Dec64ToHex64(CStr(CDec(LBA) * CDec(dqrw.SectorSize) + i + 1))
+                If Len(szAddr) < 4 Then
+                    szAddr = String(4 - Len(szAddr), "0") & szAddr
+                End If
+                szData = szData & vbCrLf & szAddr & vbTab
+            End If
+        Next
+        txtDiskInfo.Text = szData
+    Else
+        txtDiskInfo.Text = "Read disk unsuccessfully."
+    End If
+End Sub
+
+Private Function GetBufferFromTextBox(ByRef ba() As Byte) As Boolean
+    On Error GoTo exx
+    Dim i As Long, sa() As String, TabPos As Long, sz As String, szba() As String
+    sa = Split(txtDiskInfo.Text, vbCrLf)
+    If UBound(sa) <> 31 Then
+        MsgBox "Data must be 512 bytes and written in 32 lines.", vbExclamation
+        Exit Function
+    End If
+    For i = 0 To 31
+        TabPos = InStr(1, sa(i), vbTab)
+        If TabPos = 0 Then
+            MsgBox Replace("Data format in line %ld is not correct.", "%ld", i + 1), vbExclamation
+            Exit Function
+        Else
+            sa(i) = Mid$(sa(i), TabPos + 1)
+            sz = sz & sa(i)
+        End If
+    Next
+    sz = Trim$(sz)
+    szba = Split(sz, " ") ': MsgBox UBound(szba)
+    If UBound(szba) <> 511 Then
+        MsgBox "Data length must be 512 bytes. Actual length: " & CStr(UBound(szba) + 1) & ".", vbExclamation
+        Exit Function
+    Else
+        sz = ""
+        For i = 0 To 511
+            ba(i) = CByte("&H" & szba(i))
+            sz = sz & Hexx(ba(i)) & " "
+            If (i + 1) Mod 16 = 0 Then
+                sz = sz & vbCrLf
+            End If
+        Next
+        If MessageBoxW(Me.hWnd, StrPtr(sz), StrPtr("Are you sure these bytes are correct?"), 4) = 7 Then
+            GetBufferFromTextBox = False
+        Else
+            GetBufferFromTextBox = True
+        End If
+        Exit Function
+    End If
+exx:
+    MsgBox "Unrecognizable input is found on position 0x" & Hexx(i) & ".", vbExclamation
+End Function
+
+Private Sub WriteDiskProc(ByVal id As Long, Optional ByVal szHexData As String = "")
+    Dim dqrw As BDP_DISK_QUERY_READ_WRITE
+    Dim iRet As Long, lRet As Long, i As Long, szData As String, szAddr As String
+    Dim LBA As Long, bFlag As Boolean, szba() As String
+    dqrw.PartitionId_or_DiskId = CLng(txtDiskId.Text)
+    'The maxinum LBA can only be 2147483647 in VB6, if you want to write a LBA that larger than 2147483647, you must fill dqrw.LBA manually.
+    txtLBA.Text = Replace$(txtLBA.Text, "(", ""): txtLBA.Text = Replace$(txtLBA.Text, ")", ""): txtLBA.Text = Trim$(txtLBA.Text)
+    txtLBA.Text = Replace$(txtLBA.Text, "[", ""): txtLBA.Text = Replace$(txtLBA.Text, "]", ""): LBA = CLng(txtLBA.Text)
+    memcpy VarPtr(dqrw.LBA), VarPtr(LBA), 4
+    'Only allow users to write one logical block to test the effect.
+    'In actual use, multiple logical blocks can be written at one time (check the sample written in C).
+    dqrw.CountLBA = 1: txtLBC.Text = "1"
+    dqrw.SectorSize = CLng(txtLBS.Text)
+    If szHexData = "" Then
+        If GetBufferFromTextBox(dqrw.buffer) Then
+            bFlag = True
+        End If
+    Else
+        szHexData = Replace(Trim$(szHexData), "  ", " ")
+        szba = Split(szHexData, " ")
+        If UBound(szba) <> 511 Then
+            txtDiskInfo.Text = "Data length must be 512 bytes. Actual length: " & CStr(UBound(szba) + 1) & "."
+        Else
+            For i = 0 To 511
+                dqrw.buffer(i) = CByte("&H" & szba(i))
+            Next
+            bFlag = True
+        End If
+    End If
+    If bFlag Then
+        If CmdReadWriteDisk(id, CLIENT_DISK_WRITE_SECTOR, VarPtr(dqrw), 0, 0) Then
+            txtDiskInfo.Text = "Write disk successfully."
+        Else
+            txtDiskInfo.Text = "Write disk unsuccessfully."
+        End If
+    End If
+End Sub
+
 Private Sub btnOperate_Click(Index As Integer)
-    Dim b As Byte
-    Dim i, sc As Long: sc = 16384
     If lvClient.ListItems.count = 0 Then Exit Sub
     Select Case Index
         Case 0
@@ -1745,6 +2373,38 @@ Private Sub btnOperate_Click(Index As Integer)
                 txtRegPath.Text = GetParentDirectory(txtRegPath.Text)
             End If
             btnOperate_Click 18
+        Case 4
+            EnumPartitionProc CLng(lvClient.SelectedItem.Text)
+        Case 5
+            EnumFilePosProc CLng(lvClient.SelectedItem.Text)
+        Case 20
+            ReadDiskProc CLng(lvClient.SelectedItem.Text)
+        Case 21
+            If MsgBox("The integrity of the partition(s) / file system(s) on the disk may be severely damaged by this operation." & vbCrLf & vbCrLf & _
+                        "Do you want to continue?", vbExclamation + vbYesNo) = vbYes Then
+                WriteDiskProc CLng(lvClient.SelectedItem.Text)
+            End If
+        Case 22
+            If IsNumeric(txtLBA.Text) Then
+                If CDec(txtLBA.Text) >= 0 And CDec(txtLBA.Text) <= &H7FFFFFFF Then
+                    If CLng(txtLBA.Text) < &H7FFFFFFF Then
+                        txtLBA.Text = CStr(CLng(txtLBA.Text) + 1)
+                    End If
+                End If
+            End If
+        Case 23
+            If IsNumeric(txtLBA.Text) Then
+                If CDec(txtLBA.Text) >= 0 And CDec(txtLBA.Text) <= &H7FFFFFFF Then
+                    If CLng(txtLBA.Text) > 0 Then
+                        txtLBA.Text = CStr(CLng(txtLBA.Text) - 1)
+                    End If
+                End If
+            End If
+        Case 24
+            Clipboard.Clear
+            Clipboard.SetText txtDiskInfo.Text
+        Case 25
+            txtDiskInfo.Text = ""
     End Select
 End Sub
 
@@ -1754,6 +2414,10 @@ Private Sub Check1_Click()
     Else
         Timer1.Enabled = False
     End If
+End Sub
+
+Private Sub Check2_Click()
+    txtDiskInfo.Locked = Check2.Value
 End Sub
 
 Private Sub Dir1_Change()
@@ -1803,6 +2467,8 @@ Private Sub Form_Load()
     SendMessageA lvClient.hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, -1
     SendMessageA lvFile.hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, -1
     SendMessageA lvReg.hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, -1
+    SendMessageA lvProc.hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, -1
+    SendMessageA lvMod.hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, -1
     Drive1.Drive = Environ("HOMEDRIVE")
     Dir1.Path = Drive1.Drive
     File1.Path = Dir1.Path
@@ -1816,6 +2482,10 @@ End Sub
 
 Private Sub lvClient_DblClick()
     btnClient_Click 0
+End Sub
+
+Private Sub lvClient_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    If Button = 2 Then PopupMenu mnuClient
 End Sub
 
 Private Sub lvFile_DblClick()
@@ -1839,6 +2509,7 @@ Private Sub lvFile_DblClick()
         btnOperate_Click 0
     Else
         Dim rv As Currency
+        Dim dwParam As Long
         Dim szParam As String
         Dim szDefault As String
         Dim szRemoteFile As String
@@ -1851,14 +2522,19 @@ Private Sub lvFile_DblClick()
             szParam = InputBox("Input program parameter(s):", lvFile.SelectedItem.Text, szDefault)
             If StrPtr(szParam) Then
                 szRemoteFile = szRemoteFile & " " & szParam
-                If CmdExecuteBinary(CLng(lvClient.SelectedItem.Text), StrPtr(szRemoteFile), SW_SHOW, 0, rv) = 0 Then
-                    MsgBox "Run program unsuccessfully.", vbCritical
+            End If
+            If vbYes = MsgBox("Do you want to run this program with SYSTEM privilege?", vbQuestion + vbYesNo + vbDefaultButton2) Then
+                dwParam = SW_SHOW + 100
+            Else
+                dwParam = SW_SHOW
+            End If
+            If CmdExecuteBinary(CLng(lvClient.SelectedItem.Text), StrPtr(szRemoteFile), dwParam, 0, rv) = 0 Then
+                MsgBox "Run program unsuccessfully.", vbCritical
+            Else
+                If rv <> 0 Then
+                    MsgBox "Run program successfully.", vbInformation, "PID = " & CStr(CDec("&H" & UInt64ToHex64(rv)))
                 Else
-                    If rv <> 0 Then
-                        MsgBox "Run program successfully.", vbInformation, "PID = " & CStr(CDec("&H" & i64toa(rv)))
-                    Else
-                         MsgBox "Run program unsuccessfully.", vbCritical
-                    End If
+                     MsgBox "Run program unsuccessfully.", vbCritical
                 End If
             End If
         ElseIf LCase$(Right$(lvFile.SelectedItem.Text, 4)) = ".sys" Then
@@ -1867,7 +2543,7 @@ Private Sub lvFile_DblClick()
                     MsgBox "Load driver unsuccessfully.", vbCritical
                 Else
                     If rv <> 0 Then
-                        MsgBox "Load driver successfully.", vbInformation, "DriverObject = " & i64toa(rv)
+                        MsgBox "Load driver successfully.", vbInformation, "DriverObject = " & UInt64ToHex64(rv)
                     Else
                         MsgBox "Load driver unsuccessfully.", vbCritical
                     End If
@@ -1884,7 +2560,7 @@ Private Sub lvFile_DblClick()
                     MsgBox "Load DLL unsuccessfully.", vbCritical
                 Else
                     If rv <> 0 Then
-                        MsgBox "Load DLL successfully.", vbInformation, "RunDll32-PID = " & CStr(CDec("&H" & i64toa(rv)))
+                        MsgBox "Load DLL successfully.", vbInformation, "RunDll32-PID = " & CStr(CDec("&H" & UInt64ToHex64(rv)))
                     Else
                         MsgBox "Load DLL unsuccessfully.", vbCritical
                     End If
@@ -2007,6 +2683,54 @@ Private Sub lvReg_MouseUp(Button As Integer, Shift As Integer, x As Single, y As
     If Button = 2 Then PopupMenu mnuReg
 End Sub
 
+Private Function GetSetClientTimeProc(ByVal id As Long, ByVal bSet As Integer, Optional ByVal szDateTime As String = "") As String
+    On Error GoTo exx
+    Dim sa() As String
+    Dim info As BDP_SI_SYSTEM_TIME
+    Dim iLen As Long: iLen = LenB(info)
+    If bSet = 0 Then
+        If CmdQuerySetSystemInformation(id, CLIENT_QSI_QUERY_TICK_TIME, 0, 0, VarPtr(info), iLen) Then
+            GetSetClientTimeProc = "TickCount: " & UInt64ToDec64(info.TickCount) & vbCrLf & _
+                                    "Local Time: " & CStr(info.LocalTime.wYear) & "-" & CStr(info.LocalTime.wMonth) & "-" & CStr(info.LocalTime.wDay) & _
+                                                    " " & CStr(info.LocalTime.wHour) & ":" & CStr(info.LocalTime.wMinute) & ":" & CStr(info.LocalTime.wSecond)
+        End If
+    Else
+        If szDateTime <> "" Then
+            szDateTime = Replace(szDateTime, "-", " ")
+            szDateTime = Replace(szDateTime, ":", " ")
+            sa = Split(szDateTime, " ")
+            If UBound(sa) = 5 Then
+                info.LocalTime.wYear = CInt(sa(0))
+                info.LocalTime.wMonth = CInt(sa(1))
+                info.LocalTime.wDay = CInt(sa(2))
+                info.LocalTime.wHour = CInt(sa(3))
+                info.LocalTime.wMinute = CInt(sa(4))
+                info.LocalTime.wSecond = CInt(sa(5))
+            End If
+            If CmdQuerySetSystemInformation(id, CLIENT_SSI_SET_LOCAL_TIME, VarPtr(info), LenB(info), 0, 0) Then
+                GetSetClientTimeProc = szDateTime
+            End If
+        End If
+    End If
+exx:
+End Function
+
+Private Sub mnuCO_Click(Index As Integer)
+    Dim szRet As String, szNewDT As String
+    If Index = 1 Then
+        szNewDT = InputBox("Input new date and time:", "Set Time", "2222-2-22 22:22:22")
+        If StrPtr(szNewDT) = 0 Then
+            Exit Sub
+        End If
+    End If
+    szRet = GetSetClientTimeProc(CLng(lvClient.SelectedItem.Text), Index, szNewDT)
+    If szRet = "" Then
+        MsgBox IIf(Index = 0, "Get", "Set") & " time unsuccessfully.", vbCritical
+    Else
+        MsgBox IIf(Index = 0, szRet, "Set time successfully."), vbInformation
+    End If
+End Sub
+
 Private Sub mnuFSO_Click(Index As Integer)
     Select Case Index
         Case 0
@@ -2029,6 +2753,111 @@ Private Sub mnuFSO_Click(Index As Integer)
             btnFile_Click 9
         Case 14
             btnFile_Click 10
+    End Select
+End Sub
+
+Private Sub lvMod_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    If Button = 2 Then PopupMenu mnuProcMod
+End Sub
+
+Private Sub EnumProcessModuleProc(ByVal id As Long, ByVal pid As Long, ByVal bShowMsgIfErrorHappens As Boolean)
+    Dim pi As BDP_SI_PROCESS_INFO
+    If pid = 4 Then pid = 0
+    memcpy VarPtr(pi.id), VarPtr(pid), 4
+    'A lazy way: assume the maximum item count is 16384...
+    Dim info(16383) As BDP_SI_PROCESS_MOD_INFO
+    Dim i, sc As Long: sc = 16384
+    Dim iLen As Long: iLen = sc * LenB(info(0))
+    If CmdQuerySetSystemInformation(id, CLIENT_QSI_ENUM_PROC_MOD, VarPtr(pi), LenB(pi), VarPtr(info(0)), iLen) = 0 Then
+        If bShowMsgIfErrorHappens = True Then
+            MsgBox "Query process module unsuccessfully.", vbCritical
+        End If
+    Else
+        lvMod.ListItems.Clear
+        sc = iLen / LenB(info(0))
+        For i = 0 To sc - 1
+            Dim ltmItem As ListItem
+            Set ltmItem = lvMod.ListItems.Add()
+            ltmItem.Text = "0x" & UInt64ToHex64(info(i).Base)
+            ltmItem.SubItems(1) = "0x" & UInt64ToHex64(info(i).Size)
+            ltmItem.SubItems(2) = StrFromPtr(VarPtr(info(i).Path(0)), True)
+        Next
+    End If
+End Sub
+
+Private Sub lvProc_DblClick()
+    EnumProcessModuleProc CLng(lvClient.SelectedItem.Text), CLng(lvProc.SelectedItem.SubItems(1)), True
+End Sub
+
+Private Sub lvProc_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    If Button = 2 Then PopupMenu mnuProc
+End Sub
+
+Private Sub EnumProcessProc(ByVal id As Long, ByVal bShowMsgIfErrorHappens As Boolean)
+    'A lazy way: assume the maximum item count is 16384...
+    Dim info(16383) As BDP_SI_PROCESS_INFO
+    Dim i, sc As Long: sc = 16384
+    Dim iLen As Long: iLen = sc * LenB(info(0))
+    If CmdQuerySetSystemInformation(id, CLIENT_QSI_ENUM_PROCESS, 0, 0, VarPtr(info(0)), iLen) = 0 Then
+        If bShowMsgIfErrorHappens = True Then
+            MsgBox "Query process unsuccessfully.", vbCritical
+        End If
+    Else
+        lvProc.ListItems.Clear
+        sc = iLen / LenB(info(0))
+        For i = 0 To sc - 1
+            Dim ltmItem As ListItem
+            Set ltmItem = lvProc.ListItems.Add()
+            ltmItem.Text = "0x" & UInt64ToHex64(info(i).Object)
+            ltmItem.SubItems(1) = CStr(CDec("&H" & UInt64ToHex64(info(i).id)))
+            ltmItem.SubItems(2) = StrFromPtr(VarPtr(info(i).Path(0)), True)
+        Next
+    End If
+End Sub
+
+Private Sub mnuPMO_Click(Index As Integer)
+    Select Case Index
+    Case 0
+        lvProc_DblClick
+    Case 2
+        Dim ProcInfo As BDP_SI_PROCESS_INFO, pid As Long, szDll As String
+        pid = CLng(lvProc.SelectedItem.SubItems(1))
+        memcpy VarPtr(ProcInfo.id), VarPtr(pid), 4
+        szDll = InputBox("Input module path:", "Load Module", IIf(pid <> 4, "c:\windows\system32\aclui.dll", "c:\windows\system32\drivers\usb8023.sys"))
+        If StrPtr(szDll) <> 0 Then
+            If pid <> 4 Then
+                memcpy VarPtr(ProcInfo.Path(0)), StrPtr(szDll), Len(szDll) * 2
+                If CmdQuerySetSystemInformation(CLng(lvClient.SelectedItem.Text), CLIENT_SSI_INJECT_DLL, VarPtr(ProcInfo), LenB(ProcInfo), 0, 0) = 0 Then
+                    MsgBox "Load module unsuccessfully.", vbCritical
+                Else
+                    mnuPMO_Click 0
+                End If
+            Else
+                If CmdExecuteBinary(CLng(lvClient.SelectedItem.Text), StrPtr(szDll), CLIENT_RUN_SYS_P1, CLIENT_RUN_SYS_P2, 0) = 0 Then
+                    MsgBox "Load driver unsuccessfully.", vbCritical
+                Else
+                    mnuPMO_Click 0
+                End If
+            End If
+        End If
+    End Select
+End Sub
+
+Private Sub mnuPRO_Click(Index As Integer)
+    Select Case Index
+    Case 0
+        EnumProcessProc CLng(lvClient.SelectedItem.Text), True
+    Case 2
+        If MsgBox("Are you sure to kill this process?", vbYesNo + vbQuestion) = vbYes Then
+            Dim KillProcInfo As BDP_SI_PROCESS_INFO, pid As Long
+            pid = CLng(lvProc.SelectedItem.SubItems(1))
+            memcpy VarPtr(KillProcInfo.id), VarPtr(pid), 4
+            If CmdQuerySetSystemInformation(CLng(lvClient.SelectedItem.Text), CLIENT_SSI_KILL_PROCESS, VarPtr(KillProcInfo), LenB(KillProcInfo), 0, 0) = 0 Then
+                MsgBox "Kill process unsuccessfully.", vbCritical
+            Else
+                mnuPRO_Click 0
+            End If
+        End If
     End Select
 End Sub
 
@@ -2404,13 +3233,13 @@ Private Function HandleCommand(ByVal sz As String) As String
                 Dim pn_pm() As String: pn_pm = Split(sa(2), " ")
                 If LCase$(Right$(pn_pm(0), 4)) = ".exe" Then 'c:\xxx.exe p1 p2 p3
                     bRet = CmdExecuteBinary(CLng(sa(1)), StrPtr(sa(2)), SW_SHOW, 0, rv)
-                    HandleCommand = IIf(bRet, "PID = " & CStr(CDec("&H" & i64toa(rv))), "Execute program unsuccessfully.")
+                    HandleCommand = IIf(bRet, "PID = " & CStr(CDec("&H" & UInt64ToHex64(rv))), "Execute program unsuccessfully.")
                 ElseIf LCase$(Right$(pn_pm(0), 4)) = ".sys" Then 'c:\xxx.sys
                     bRet = CmdExecuteBinary(CLng(sa(1)), StrPtr(sa(2)), CLIENT_RUN_SYS_P1, CLIENT_RUN_SYS_P2, rv)
-                    HandleCommand = IIf(bRet, "DriverObject = " & i64toa(rv), "Load driver unsuccessfully.")
+                    HandleCommand = IIf(bRet, "DriverObject = " & UInt64ToHex64(rv), "Load driver unsuccessfully.")
                 ElseIf LCase$(Right$(pn_pm(0), 4)) = ".dll" Then 'shell32.dll Control_RunDLL
                     bRet = CmdExecuteBinary(CLng(sa(1)), StrPtr(sa(2)), CLIENT_RUN_DLL_P1, CLIENT_RUN_DLL_P2, rv)
-                    HandleCommand = IIf(bRet, "RunDll32-PID = " & CStr(CDec("&H" & i64toa(rv))), "Execute unsuccessfully.")
+                    HandleCommand = IIf(bRet, "RunDll32-PID = " & CStr(CDec("&H" & UInt64ToHex64(rv))), "Execute unsuccessfully.")
                 End If
             Else
                 HandleCommand = "Client ID is invalid."
@@ -2666,7 +3495,7 @@ Private Function HandleCommand(ByVal sz As String) As String
                         ElseIf dwRegValType = 11 Then
                             Dim qw As Currency
                             Call memcpy(VarPtr(qw), VarPtr(ba(0)) + 8 + 512, 8)
-                            HandleCommand = "0x" & i64toa(qw)
+                            HandleCommand = "0x" & UInt64ToHex64(qw)
                         ElseIf dwRegValType = 7 Then
                             HandleCommand = MultiWideCharStringToVBString(VarPtr(ba(0)), dwDatLen)
                         Else
@@ -2826,6 +3655,210 @@ Private Function HandleCommand(ByVal sz As String) As String
             If IsNumeric(sa(1)) Then
                 bRet = CmdFileOperation(CLng(sa(1)), CLIENT_FSO_DELAY_MOV_DEL, StrPtr(sa(2)), StrPtr(sa(3)), 0)
                 HandleCommand = IIf(bRet, "Delay file operation is set successfully.", "Failed to set delay file operation")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    ElseIf Left$(LCase(sz), 9) = "disk_enum" Then
+        sa = Split(sz, vbCrLf) 'disk_enum 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                EnumPartitionProc CLng(sa(1))
+                HandleCommand = txtDiskInfo.Text
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 8) = "disk_qfp" Then
+        sa = Split(sz, vbCrLf) 'disk_qfp 1234 c:\xxx.dll
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                txtFileForPos.Text = sa(2)
+                EnumFilePosProc CLng(sa(1))
+                HandleCommand = txtDiskInfo.Text
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 9) = "disk_read" Then
+        sa = Split(sz, vbCrLf) 'disk_read 1234 0 512 0 1
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) And _
+            IsStringArrayElementValid(sa, 4) And IsStringArrayElementValid(sa, 5) Then
+            If IsNumeric(sa(1)) Then
+                txtDiskId.Text = sa(2)
+                txtLBS.Text = sa(3)
+                txtLBA.Text = sa(4)
+                txtLBC.Text = sa(5)
+                ReadDiskProc CLng(sa(1))
+                HandleCommand = txtDiskInfo.Text
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 10) = "disk_write" Then
+        sa = Split(sz, vbCrLf) 'disk_write 1234 0 512 0 AABBCCDD
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) And _
+            IsStringArrayElementValid(sa, 4) And IsStringArrayElementValid(sa, 5) Then
+            If IsNumeric(sa(1)) Then
+                txtDiskId.Text = sa(2)
+                txtLBS.Text = sa(3)
+                txtLBA.Text = sa(4)
+                txtLBC.Text = "1"
+                WriteDiskProc CLng(sa(1)), sa(5)
+                HandleCommand = txtDiskInfo.Text
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    '//-------------------------------------------------------------------------
+    ElseIf Left$(LCase(sz), 6) = "qsi_gt" Then
+        sa = Split(sz, vbCrLf) 'qsi_gt 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                Dim szDateTime As String
+                szDateTime = GetSetClientTimeProc(CLng(sa(1)), 0)
+                HandleCommand = IIf(szDateTime <> "", szDateTime, "Failed to query time.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 6) = "ssi_st" Then
+        sa = Split(sz, vbCrLf) 'fso_gfc 1234 c:\boot.ini
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                szDateTime = GetSetClientTimeProc(CLng(sa(1)), 1, sa(2))
+                HandleCommand = IIf(szDateTime <> "", "Time is set successfully", "Failed to set time.")
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "qsi_epc" Then
+        sa = Split(sz, vbCrLf) 'qsi_epc 1234
+        If IsStringArrayElementValid(sa, 1) Then
+            If IsNumeric(sa(1)) Then
+                EnumProcessProc CLng(sa(1)), False
+                If lvProc.ListItems.count <> 0 Then
+                    ReDim rtsa0(lvProc.ListItems.count + 1)
+                    ReDim rtsa1(lvProc.ListItems.count + 1)
+                    ReDim rtsa2(lvProc.ListItems.count + 1)
+                    rtsa0(0) = "EPROCESS"
+                    rtsa1(0) = "PID"
+                    rtsa2(0) = "Path"
+                    rtsa0(1) = String(Len(rtsa0(0)), "=")
+                    rtsa1(1) = String(Len(rtsa1(0)), "=")
+                    rtsa2(1) = String(Len(rtsa2(0)), "=")
+                    For i = 1 To lvProc.ListItems.count
+                        rtsa0(i + 1) = lvProc.ListItems(i).Text
+                        rtsa1(i + 1) = lvProc.ListItems(i).SubItems(1)
+                        rtsa2(i + 1) = lvProc.ListItems(i).SubItems(2)
+                    Next
+                    AddBlanksForStringArray rtsa0
+                    AddBlanksForStringArray rtsa1
+                    AddBlanksForStringArray rtsa2
+                    For i = 0 To lvProc.ListItems.count + 1
+                        HandleCommand = HandleCommand & rtsa0(i) & " " & _
+                                                        rtsa1(i) & " " & _
+                                                        rtsa2(i) & vbCrLf
+                    Next
+                Else
+                    HandleCommand = "Failed to query process."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "ssi_kpc" Then
+        sa = Split(sz, vbCrLf) 'ssi_kpc 1234 8888
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                Dim KillProcInfo As BDP_SI_PROCESS_INFO, pid As Long
+                pid = CLng(sa(2)): memcpy VarPtr(KillProcInfo.id), VarPtr(pid), 4
+                If CmdQuerySetSystemInformation(CLng(sa(1)), CLIENT_SSI_KILL_PROCESS, VarPtr(KillProcInfo), LenB(KillProcInfo), 0, 0) Then
+                    HandleCommand = "Process is killed successfully."
+                Else
+                    HandleCommand = "Failed to kill process."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "qsi_epm" Then
+        sa = Split(sz, vbCrLf) 'qsi_epm 1234 8888
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) Then
+            If IsNumeric(sa(1)) Then
+                EnumProcessModuleProc CLng(sa(1)), CLng(sa(2)), False
+                If lvMod.ListItems.count <> 0 Then
+                    ReDim rtsa0(lvMod.ListItems.count + 1)
+                    ReDim rtsa1(lvMod.ListItems.count + 1)
+                    ReDim rtsa2(lvMod.ListItems.count + 1)
+                    rtsa0(0) = "Base"
+                    rtsa1(0) = "Size"
+                    rtsa2(0) = "Path"
+                    rtsa0(1) = String(Len(rtsa0(0)), "=")
+                    rtsa1(1) = String(Len(rtsa1(0)), "=")
+                    rtsa2(1) = String(Len(rtsa2(0)), "=")
+                    For i = 1 To lvMod.ListItems.count
+                        rtsa0(i + 1) = lvMod.ListItems(i).Text
+                        rtsa1(i + 1) = lvMod.ListItems(i).SubItems(1)
+                        rtsa2(i + 1) = lvMod.ListItems(i).SubItems(2)
+                    Next
+                    AddBlanksForStringArray rtsa0
+                    AddBlanksForStringArray rtsa1
+                    AddBlanksForStringArray rtsa2
+                    For i = 0 To lvMod.ListItems.count + 1
+                        HandleCommand = HandleCommand & rtsa0(i) & " " & _
+                                                        rtsa1(i) & " " & _
+                                                        rtsa2(i) & vbCrLf
+                    Next
+                Else
+                    HandleCommand = "Failed to query process module."
+                End If
+            Else
+                HandleCommand = "Client ID is invalid."
+            End If
+        Else
+            HandleCommand = "Command format is invalid."
+        End If
+    ElseIf Left$(LCase(sz), 7) = "ssi_lpm" Then
+        sa = Split(sz, vbCrLf) 'ssi_lpm 1234 8888 c:\xxx.dll
+        If IsStringArrayElementValid(sa, 1) And IsStringArrayElementValid(sa, 2) And IsStringArrayElementValid(sa, 3) Then
+            If IsNumeric(sa(1)) Then
+                Dim ProcInfo As BDP_SI_PROCESS_INFO, szDll As String
+                pid = CLng(sa(2)): memcpy VarPtr(ProcInfo.id), VarPtr(pid), 4
+                szDll = sa(3)
+                If pid <> 4 Then
+                    memcpy VarPtr(ProcInfo.Path(0)), StrPtr(szDll), Len(szDll) * 2
+                    If CmdQuerySetSystemInformation(CLng(sa(1)), CLIENT_SSI_INJECT_DLL, VarPtr(ProcInfo), LenB(ProcInfo), 0, 0) = 0 Then
+                        HandleCommand = "Failed to load module."
+                    Else
+                        HandleCommand = "Module is loaded successfully."
+                    End If
+                Else
+                    If CmdExecuteBinary(CLng(sa(1)), StrPtr(szDll), CLIENT_RUN_SYS_P1, CLIENT_RUN_SYS_P2, 0) = 0 Then
+                        HandleCommand = "Failed to load driver."
+                    Else
+                        HandleCommand = "Driver is loaded successfully."
+                    End If
+                End If
             Else
                 HandleCommand = "Client ID is invalid."
             End If
