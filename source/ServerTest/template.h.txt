@@ -52,6 +52,18 @@
 #define CLIENT_AUTORUN_TYPE_EXE		1
 #define CLIENT_AUTORUN_TYPE_DLL		2
 
+#define CLIENT_QSI_QUERY_TICK_TIME	0
+#define CLIENT_QSI_ENUM_PROCESS		1
+#define CLIENT_QSI_ENUM_PROC_MOD	2
+#define CLIENT_SSI_SET_LOCAL_TIME	100
+#define CLIENT_SSI_KILL_PROCESS		101
+#define CLIENT_SSI_INJECT_DLL		102
+
+#define CLIENT_DISK_QUERY_PARTITION	0
+#define CLIENT_DISK_QUERY_FILE_POS	1
+#define CLIENT_DISK_READ_SECTOR		2
+#define CLIENT_DISK_WRITE_SECTOR	3
+
 //################################################################################
 // Windows-Batch-Deployment user-defined function prototypes
 //################################################################################
@@ -101,6 +113,73 @@ typedef struct _BDP_REG_INFO
 	WCHAR Name[256];  //KEY_NAME_MAX_LEN = 255, VALUE_NAME_MAX_LEN = 16383.
 	UCHAR Data[504];  //If data length is longer than the buffer, the buffer would be empty.
 }BDP_REG_INFO, *PBDP_REG_INFO;
+
+typedef struct _BDP_SI_SYSTEM_TIME
+{
+	ULONG64 TickCount;
+	SYSTEMTIME LocalTime;
+}BDP_SI_SYSTEM_TIME, *PBDP_SI_SYSTEM_TIME;
+
+typedef struct _BDP_SI_PROCESS_INFO
+{
+	ULONG64 Object;
+	ULONG64 ID;
+	WCHAR Path[260];
+}BDP_SI_PROCESS_INFO, *PBDP_SI_PROCESS_INFO;
+
+typedef struct _BDP_SI_PROCESS_MOD_INFO
+{
+	ULONG64 Base;
+	ULONG64 Size;
+	WCHAR Path[260];
+}BDP_SI_PROCESS_MOD_INFO, *PBDP_SI_PROCESS_MOD_INFO;
+
+typedef struct _BDP_DISK_QUERY_READ_WRITE
+{
+	union
+	{
+		WCHAR Path[MAX_PATH];
+		struct
+		{
+			union
+			{
+				ULONG PartitionId;
+				ULONG DiskId;
+			};
+			ULONG64 LBA;
+			ULONG CountLBA;
+			ULONG SectorSize;
+		};
+	};
+	UCHAR Buffer[1];
+}BDP_DISK_QUERY_READ_WRITE, *PBDP_DISK_QUERY_READ_WRITE;
+
+typedef struct _BDP_PARTITION_INFO
+{
+	ULONG DiskId;
+	ULONG SectorsPerCluster;
+	ULONG BytesPerSector;
+	WCHAR DosDevice;
+	ULONG64 StartOffset;
+	ULONG64 ExtentLength;
+}BDP_PARTITION_INFO, *PBDP_PARTITION_INFO;
+
+typedef struct _BDP_SECTION
+{
+	ULONG64 Begin;
+	ULONG64 End;
+}BDP_SECTION, *PBDP_SECTION;
+
+typedef struct _BDP_FILE_CLUSTERS
+{
+	ULONG DiskId;
+	ULONG PartitionId;
+	ULONG SectorsPerCluster;
+	ULONG BytesPerSector;
+	ULONG SectionCount;
+	ULONG64 PartitionStartOffset;
+	BDP_SECTION Sections[1];
+}BDP_FILE_CLUSTERS, *PBDP_FILE_CLUSTERS;
 #pragma pack()
 
 typedef struct _SENDRECV_CALLBACK
@@ -308,3 +387,41 @@ typedef BOOLEAN (__stdcall *CmdQueryRegistry)(ULONG id, PWCHAR path, PBDP_REG_IN
 //              When using CLIENT_REG_QUERY_VALUE, parameter 6 must be allocated with enough space by caller, otherwise no data will not be copied to it.
 //              The maximum length of parameter 3 is 259 characters (518 bytes). The maximum length of parameter 4 is 239 characters (478 bytes).
 typedef BOOLEAN (__stdcall *CmdRegistryOperation)(ULONG id, BYTE fn, PWCHAR path, PWCHAR name, PULONG pType, PVOID pBuffer, PULONG pLength);
+
+//Usage:        Query or set system information on the specific client.
+//Parameters:   Client Id, Sub function Id, Input data, Input data length, Output data buffer, Output data length
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      [Sub function Id feature]
+//              CLIENT_QSI_QUERY_TICK_TIME:  Query tick count and local time.
+//              CLIENT_QSI_ENUM_PROCESS:     Enumerate process.
+//              CLIENT_QSI_ENUM_PROC_MOD:    Enumerate process module.
+//              CLIENT_SSI_SET_LOCAL_TIME:   Set local time.
+//              CLIENT_SSI_KILL_PROCESS:     Kill process.
+//              CLIENT_SSI_INJECT_DLL:       Inject process module.
+//              [Sub function Id parameters]
+//              CLIENT_QSI_GET_TICK_TIME:    pIn = NULL,                 dwInLen = 0,                           pOut = &BDP_SI_SYSTEM_TIME,      pdwOutLen = &(sizeof(BDP_SI_SYSTEM_TIME))
+//              CLIENT_QSI_QUERY_PROCESS:    pIn = NULL,                 dwInLen = 0,                           pOut = &BDP_SI_PROCESS_INFO,     pdwOutLen = &(sizeof(BDP_SI_PROCESS_INFO) * N)
+//              CLIENT_QSI_ENUM_PROC_MOD:    pIn = &BDP_SI_PROCESS_INFO, dwInLen = sizeof(BDP_SI_PROCESS_INFO), pOut = &BDP_SI_PROCESS_MOD_INFO, pdwOutLen = &(sizeof(BDP_SI_PROCESS_MOD_INFO) * N)
+//              CLIENT_SSI_SET_LOCAL_TIME:   pIn = &BDP_SI_SYSTEM_TIME,  dwInLen = sizeof(BDP_SI_SYSTEM_TIME)
+//              CLIENT_SSI_KILL_PROCESS:     pIn = &BDP_SI_PROCESS_INFO, dwInLen = sizeof(BDP_SI_PROCESS_INFO)
+//              CLIENT_SSI_INJECT_DLL:       pIn = &BDP_SI_PROCESS_INFO, dwInLen = sizeof(BDP_SI_PROCESS_INFO)
+//              [About pdwBufferLength]
+//              Set the buffer size of "pOut" (in bytes), if the function returns TRUE, it will be corrected to the actual returned bytes.
+typedef BOOLEAN (__stdcall *CmdQuerySetSystemInformation)(ULONG id, BYTE fn, PVOID pIn, ULONG dwInLen, PVOID pOut, PULONG pdwOutLen);
+
+//Usage:        Read write disk on the specific client.
+//Parameters:   Client Id, Sub function Id, Operation parameters, Output data buffer, Output data length
+//Return value: Success or fail (TRUE or FALSE).
+//Remarks:      [Sub function Id feature]
+//              CLIENT_DISK_QUERY_PARTITION: Query partition information.
+//              CLIENT_DISK_QUERY_FILE_POS:  Query file data layout on the disk.
+//              CLIENT_DISK_READ_SECTOR:     Read data from sector(s).
+//              CLIENT_DISK_WRITE_SECTOR:    Write data to sector(s).
+//              [Sub function Id parameters]
+//              CLIENT_DISK_QUERY_PARTITION: pParam = (PartitionId),                    pOut = &BDP_PARTITION_INFO, pdwOutLen = &(sizeof(BDP_PARTITION_INFO))
+//              CLIENT_DISK_QUERY_FILE_POS:  pParam = (Path),                           pOut = &BDP_FILE_CLUSTERS,  pdwOutLen = &(sizeof(BDP_FILE_CLUSTERS) + sizeof(BDP_SECTION) * N)
+//              CLIENT_DISK_READ_SECTOR:     pParam = (DiskId|LBA|CountLBA|SectorSize), pOut = &UCHAR[],            pdwOutLen = &(sizeof(UCHAR) * N)
+//              CLIENT_DISK_WRITE_SECTOR:    pParam = (DiskId|LBA|CountLBA|SectorSize)
+//              [About pdwBufferLength]
+//              Set the buffer size of "pOut" (in bytes), if the function returns TRUE, it will be corrected to the actual returned bytes.
+typedef BOOLEAN (__stdcall *CmdReadWriteDisk)(ULONG id, BYTE fn, PBDP_DISK_QUERY_READ_WRITE pParam, PVOID pOut, PULONG pdwOutLen);
