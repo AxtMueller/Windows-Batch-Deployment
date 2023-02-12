@@ -34,8 +34,11 @@ shutdown /f /r /t 0
 
 # All revision history
 ### Client Versions:
-#### 7th version: 20210620
+#### 8th version: 20230213
 [This is the latest version.](../README.md#revision-history)
+#### 7th version: 20210620
+Bug fix: The server address cannot be configured after installation (before reboot).  
+New file: I re-uploaded the client programs on November 11, 2021 because I signed the client programs with another digital certificate.
 #### 6th version: 20210212
 Bug fix: Accelerate file transfer speed.  
 New feature: File transfer progress callback.
