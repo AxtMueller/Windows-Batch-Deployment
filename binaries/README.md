@@ -56,8 +56,10 @@ Bug fix: Enhanced stability.
 #### 1st version: 20200202
 This is the first public version.
 ### Server Versions:
-#### 3nd version: 20210212
+#### 4th version: 20230213
 [This is the latest version.](../README.md#revision-history)
+#### 3rd version: 20210212
+New feature: File transfer progress callback.
 #### 2nd version: 20210130
 New feature: Functions of registry operation.
 #### 1st version: 20200202
