@@ -61,6 +61,6 @@ This is the first public version.
 #### 3rd version: 20210212
 New feature: File transfer progress callback.
 #### 2nd version: 20210130
-New feature: Functions of registry operation.
+New feature: Functions of registry operations.
 #### 1st version: 20200202
 This is the first public version.
