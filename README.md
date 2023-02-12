@@ -58,8 +58,8 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 4. Source code (WBD & Client Installer): The services of the previous entry, and an installer that can install WBD client without triggering Windows Defender security warnings.
 
 # [Revision History](/binaries/README.md#all-revision-history)
-### Client Version: 20210620
-Bug fix: The server address cannot be configured after installation (before reboot).  
-New file: I re-uploaded the client programs on November 11, 2021 because I signed the client programs with another digital certificate.
-### Server Version: 20210212
-New feature: File transfer progress callback.
+### Client Version: 20230213
+New feature: Process operations.
+New feature: Disk operations.
+### Server Version: 20230213
+Functions of process and disk operations.
