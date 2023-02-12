@@ -59,7 +59,7 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 
 # [Revision History](/binaries/README.md#all-revision-history)
 ### Client Version: 20230213
-New feature: Process operations.
+New feature: Process operations.  
 New feature: Disk operations.
 ### Server Version: 20230213
 Functions of process and disk operations.
