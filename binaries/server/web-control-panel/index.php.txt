@@ -23,9 +23,9 @@ function fill_test_account()
 {
 	document.frmLogin.commport.value = "9999";
 	//you can enable auto-login here.
-	//document.frmLogin.username.value = "test";
-	//document.frmLogin.password.value = "1234";
-	//document.frmLogin.btnLogin.click();
+	document.frmLogin.username.value = "test";
+	document.frmLogin.password.value = "1234";
+	document.frmLogin.btnLogin.click();
 }
 </script>
 <html>

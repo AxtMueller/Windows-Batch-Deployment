@@ -260,6 +260,56 @@ if($_SESSION["g_username"]!="" && $_SESSION["g_commport"]!="")
 		$sa = explode(" ", $_POST['btnTest']);
 		echo HandleCommand("tc\r\n" . $sa[0]);
 	}
+	else if(!empty($_POST['btnGetTime']))
+	{
+		$sa = explode(" ", $_POST['btnGetTime']);
+		echo HandleCommand("qsi_gt\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnSetTime']))
+	{
+		$sa = explode(" ", $_POST['btnSetTime']);
+		echo HandleCommand("ssi_st\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnEnumProc']))
+	{
+		$sa = explode(" ", $_POST['btnEnumProc']);
+		echo HandleCommand("qsi_epc\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnKillProc']))
+	{
+		$sa = explode(" ", $_POST['btnKillProc']);
+		echo HandleCommand("ssi_kpc\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnEnumProcMod']))
+	{
+		$sa = explode(" ", $_POST['btnEnumProcMod']);
+		echo HandleCommand("qsi_epm\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnLoadProcMod']))
+	{
+		$sa = explode(" ", $_POST['btnLoadProcMod']);
+		echo HandleCommand("ssi_lpm\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2']);
+	}
+	else if(!empty($_POST['btnDiskEnum']))
+	{
+		$sa = explode(" ", $_POST['btnDiskEnum']);
+		echo HandleCommand("disk_enum\r\n" . $sa[0]);
+	}
+	else if(!empty($_POST['btnDiskQFP']))
+	{
+		$sa = explode(" ", $_POST['btnDiskQFP']);
+		echo HandleCommand("disk_qfp\r\n" . $sa[0] . "\r\n" . $_POST['p1']);
+	}
+	else if(!empty($_POST['btnDiskRead']))
+	{
+		$sa = explode(" ", $_POST['btnDiskRead']);
+		echo HandleCommand("disk_read\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2'] . "\r\n" . $_POST['p3'] . "\r\n" . $_POST['p4']);
+	}
+	else if(!empty($_POST['btnDiskWrite']))
+	{
+		$sa = explode(" ", $_POST['btnDiskWrite']);
+		echo HandleCommand("disk_write\r\n" . $sa[0] . "\r\n" . $_POST['p1'] . "\r\n" . $_POST['p2'] . "\r\n" . $_POST['p3'] . "\r\n" . $_POST['p4']);
+	}
 }
 else
 {
@@ -429,6 +479,46 @@ function handle_client_request(action)
 			else if(action==33)
 			{
 				result = post_request("main.php","btnTest=" + items[i].value);
+			}
+			else if(action==34)
+			{
+				result = post_request("main.php","btnGetTime=" + items[i].value);
+			}
+			else if(action==35)
+			{
+				result = post_request("main.php","btnSetTime=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==36)
+			{
+				result = post_request("main.php","btnEnumProc=" + items[i].value);
+			}
+			else if(action==37)
+			{
+				result = post_request("main.php","btnKillProc=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==38)
+			{
+				result = post_request("main.php","btnEnumProcMod=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==39)
+			{
+				result = post_request("main.php","btnLoadProcMod=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value);
+			}
+			else if(action==40)
+			{
+				result = post_request("main.php","btnDiskEnum=" + items[i].value);
+			}
+			else if(action==41)
+			{
+				result = post_request("main.php","btnDiskQFP=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value);
+			}
+			else if(action==42)
+			{
+				result = post_request("main.php","btnDiskRead=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value + "&p3=" + document.frmFunction.txtP3.value + "&p4=" + document.frmFunction.txtP4.value);
+			}
+			else if(action==43)
+			{
+				result = post_request("main.php","btnDiskWrite=" + items[i].value + "&p1=" + document.frmFunction.txtP1.value + "&p2=" + document.frmFunction.txtP2.value + "&p3=" + document.frmFunction.txtP3.value + "&p4=" + document.frmFunction.txtP4.value);
 			}
 			result = result.substr(0,result.search("<script type=\"text/javascript\">"));
 			var client_title = items[i].value.replace("Connected ","");
@@ -713,6 +803,76 @@ function cmbFunction_change(obj)
 		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
 		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
 	}
+	else if(val=="CLIENT_QSI_GT")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_SSI_ST")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="new date and time (yyyy-mm-dd hh:mm:ss)";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_QSI_PROC")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_SSI_PROC_KILL")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="PID";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_QSI_PROC_MOD")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="PID";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_SSI_PROC_MOD_LOAD")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="PID";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="module file";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_DISK_ENUM")
+	{
+		document.frmFunction.txtP1.disabled=true;document.frmFunction.txtP1.title="";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_DISK_QFP")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="file";
+		document.frmFunction.txtP2.disabled=true;document.frmFunction.txtP2.title="";
+		document.frmFunction.txtP3.disabled=true;document.frmFunction.txtP3.title="";
+		document.frmFunction.txtP4.disabled=true;document.frmFunction.txtP4.title="";
+	}
+	else if(val=="CLIENT_DISK_READ")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="disk id";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="size of one logical block";document.frmFunction.txtP2.value = "512";
+		document.frmFunction.txtP3.disabled=false;document.frmFunction.txtP3.title="logical block address";
+		document.frmFunction.txtP4.disabled=false;document.frmFunction.txtP4.title="logical block count";
+	}
+	else if(val=="CLIENT_DISK_WRITE")
+	{
+		document.frmFunction.txtP1.disabled=false;document.frmFunction.txtP1.title="disk id";
+		document.frmFunction.txtP2.disabled=false;document.frmFunction.txtP2.title="size of one logical block";document.frmFunction.txtP2.value = "512";
+		document.frmFunction.txtP3.disabled=false;document.frmFunction.txtP3.title="logical block address";
+		document.frmFunction.txtP4.disabled=false;document.frmFunction.txtP4.title="data in hexadecimal (example: 11 AA ... bb Dd, the length must be 512 bytes)";
+	}
 	//document.frmFunction.txtP1.placeholder = document.frmFunction.txtP1.title;
 	//document.frmFunction.txtP2.placeholder = document.frmFunction.txtP2.title;
 	//document.frmFunction.txtP3.placeholder = document.frmFunction.txtP3.title;
@@ -893,6 +1053,46 @@ function btnPerform_click()
 	{
 		handle_client_request(32);
 	}
+	else if(val=="CLIENT_QSI_GT")
+	{
+		handle_client_request(34);
+	}
+	else if(val=="CLIENT_SSI_ST")
+	{
+		handle_client_request(35);
+	}
+	else if(val=="CLIENT_QSI_PROC")
+	{
+		handle_client_request(36);
+	}
+	else if(val=="CLIENT_SSI_PROC_KILL")
+	{
+		handle_client_request(37);
+	}
+	else if(val=="CLIENT_QSI_PROC_MOD")
+	{
+		handle_client_request(38);
+	}
+	else if(val=="CLIENT_SSI_PROC_MOD_LOAD")
+	{
+		handle_client_request(39);
+	}
+	else if(val=="CLIENT_DISK_ENUM")
+	{
+		handle_client_request(40);
+	}
+	else if(val=="CLIENT_DISK_QFP")
+	{
+		handle_client_request(41);
+	}
+	else if(val=="CLIENT_DISK_READ")
+	{
+		handle_client_request(42);
+	}
+	else if(val=="CLIENT_DISK_WRITE")
+	{
+		handle_client_request(43);
+	}
 }
 </script>
 <html>
@@ -918,6 +1118,8 @@ function btnPerform_click()
 <option value="CLIENT_UC1">Update</option>
 <option value="CLIENT_UC2">Uninstall</option>
 <option value="CLIENT_CONFIG">Configure</option>
+<option value="CLIENT_QSI_GT">Get Time</option>
+<option value="CLIENT_SSI_ST">Set Time</option>
 </optgroup>
 <optgroup label="Program & Auto-Run">
 <option value="CLIENT_EXE">Execute Program</option>
@@ -950,6 +1152,18 @@ function btnPerform_click()
 <option value="CLIENT_REG_DELETE_VALUE">Delete Value</option>
 <option value="CLIENT_REG_QUERY_VALUE">Query Value</option>
 <option value="CLIENT_REG_SET_VALUE">Set Value</option>
+</optgroup>
+<optgroup label="Process">
+<option value="CLIENT_QSI_PROC">Enumerate Process</option>
+<option value="CLIENT_SSI_PROC_KILL">Kill Process</option>
+<option value="CLIENT_QSI_PROC_MOD">Enumerate Process Module</option>
+<option value="CLIENT_SSI_PROC_MOD_LOAD">Load Process Module</option>
+</optgroup>
+<optgroup label="Disk">
+<option value="CLIENT_DISK_ENUM">Enumerate Partitions</option>
+<option value="CLIENT_DISK_QFP">Query File Layout</option>
+<option value="CLIENT_DISK_READ">Read LBA</option>
+<option value="CLIENT_DISK_WRITE">Write LBA</option>
 </optgroup>
 </select>
 <p><input type="radio" name="optTips[]" id="optTips0" onclick="Radio_click(this)" checked></input><label for="optTips0" style="width:100%;height:50px;font-size:25px">Keep the text in parameter text-boxes after selecting a new operation.</label><br></p>
