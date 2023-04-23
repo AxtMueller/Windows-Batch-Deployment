@@ -13,14 +13,9 @@ Binary files of Windows Batch Deployment. [Click here to download the entire pac
 4. Select a client, then click the "Connect" button. When the status changes to "Connected", you can submit operations.
 5. Advanced users will replace "ServerTestVB6GUI.EXE" with custom server programs based on needs.
 
-# Turn off DeviceGuard, SmartScreen and Windows Defender
-Microsoft SmartScreen and Windows Defender prevent downloading files that containing suspicious digital signatures, so you have to turn off Microsoft SmartScreen and Windows Defender before downloading. If the files cannot be downloaded, or you cannot access the downloaded files, please paste the following code into a text editor, save the code as a batch file and execute it as administrator. After restarting, this page will be opened again. If this batch file cannot help you, you have to [manually turn Tamper Protection off](https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/prevent-changes-to-security-settings-with-tamper-protection#manage-tamper-protection-on-an-individual-device) and restart the system before using this batch file. Drivers protected by VMProtect cannot be loaded on a system with DeviceGuard enabled, so DeviceGuard must also be disabled.
+# Turn off Microsoft SmartScreen and Windows Defender
+Microsoft SmartScreen and Windows Defender prevent downloading files that containing suspicious digital signatures, so you have to turn off Microsoft SmartScreen and Windows Defender before downloading. If the files cannot be downloaded, or you cannot access the downloaded files, please paste the following code into a text editor, save the code as a batch file and execute it as administrator. After restarting, this page will be opened again. If this batch file cannot help you, you have to [manually turn Tamper Protection off](https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/prevent-changes-to-security-settings-with-tamper-protection#manage-tamper-protection-on-an-individual-device) and restart the system before using this batch file.
 ```
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v RequireMicrosoftSignedBootChain /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v HypervisorEnforcedCodeIntegrity /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v DisableAntiVirus /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableIOAVProtection /t REG_DWORD /d 1 /f
