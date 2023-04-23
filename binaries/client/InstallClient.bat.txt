@@ -5,7 +5,7 @@ if exist %windir%\syswow64 (
     copy "%~dp0\client32.sys" %windir%\system32\drivers\WBDC.sys
 )
 sc create WBDC binpath= "system32\drivers\WBDC.sys" type= kernel start= auto
-::Disable Device Guard, otherwise the driver may not be loaded.
+::Disable HVCI, otherwise the driver may not be loaded.
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v RequireMicrosoftSignedBootChain /t REG_DWORD /d 0 /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 0 /f
