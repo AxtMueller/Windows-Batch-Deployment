@@ -14,7 +14,7 @@ Windows Batch Deployment (you can simply call it as "WBD") is a programmable and
 2. Enable system debug mode, then reboot, and then delete the service of WBD client.
 
 ### About digital signature and negative comments from Anti-Virus software
-Because I don't have a digital certificate, I have to use a leaked digital certificate to sign WBD client drivers. As for negative comments, any such program will be considered as a virus by Anti-Virus software, so who cares.
+Because I don't have a digital certificate, I have to use a leaked digital certificate to sign my drivers. Signing files with leaked digital certificates has a side effect: many Anti-Virus software infer files with leaked digital signature are suspicious, because many hackers use leaked digital certificates to sign malware. I don't care about any negative comments from any Anti-Virus software, the rule is simple: if you don't trust a program, just don't use it.
 
 ### About sharing server programs
 If you want to share your server programs, please commit your programs and / or source code to "Issues" with brief description. I will add your programs to the "User-defined server program" directory if I think they are useful.
