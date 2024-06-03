@@ -46,7 +46,7 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 
 # Contact
 ### E-MAIL: AxtMueller#gmx.de (Replace # with @)
-1. If you find bugs, have constructive suggestions or would like to purchase a paid service, please let me know. You'd better write E-MAIL in English or German, I only reply to E-MAILs that I am interested in.  
+1. If you find bugs, have constructive suggestions or would like to purchase a paid service, please let me know. You'd better write E-MAIL in English or German, I only reply to E-MAILs that I am interested in.
 2. In order to disclose as little personal information as possible (IP address, online time, etc.), I do not use instant messaging and social media. Please write what you want in the E-MAIL.
 
 ### Paid services:
