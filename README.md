@@ -51,7 +51,7 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 
 ### Paid services:
 1. Binary customization (Basic): A client program without copyright information and digital signature, its functionality is exactly the same as the public version, you have to sign it with your own digital certificate.
-2. Binary customization (Extra): The services of the previous entry, and more powerful self-protection for the client program. The customized version of WBD is without VMP, so it can be run on 64-bit Windows with HVCI enabled.
+2. Binary customization (Advanced): The services of the previous entry, and more powerful self-protection for the client program. The advanced customized version of WBD is without VMP, so it can be run on 64-bit Windows with HVCI enabled.
 3. Source code (WBD only): Complete source code of WBD, including client and server.
 4. Source code (WBD & Client Installer): The services of the previous entry, and an installer that can install WBD client without triggering Windows Defender security warnings.
 
