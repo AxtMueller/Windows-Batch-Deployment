@@ -25,7 +25,7 @@ If you see a message like "StartService FAILED 87" while running "InstallClient.
 ###### 2. Anti-Virus software prevents the driver from loading.  
 ##### Solutions:
 ###### 1. Restart the system, "InstallClient.bat" contains the code to turn off HVCI, it will take effect after reboot.
-###### 2. Add the files of WKE to the white list of Anti-Virus software.  
+###### 2. Add the files of WBD to the whitelist of the Anti-Virus software.
 
 # Main Features
 1. File, registry and power management.
