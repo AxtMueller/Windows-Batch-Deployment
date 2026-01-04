@@ -6,8 +6,8 @@ Binary files of Windows Batch Deployment. [Click here to download the entire pac
 2. Run "ServerTestVB6GUI.EXE", you will see the local host in the client list (its IP would be 127.0.0.1 and its status would be "Online").
 3. Select the local host in the client list, then click the "Connect" button. When the status changes to "Connected", you can submit operations.
 
-### How to use?
-1. Edit "InstallClient.bat.txt", replace 127.0.0.1:9999 with your server list (such as "server.domain.com:9999;11.22.33.44:12345;abc.xyz.io:8888", quotes are not needed. The client program will try to access each server in the list in turn until it finds one that is available).
+### How to use on LAN / WAN?
+1. Edit "InstallClient.bat.txt", replace 127.0.0.1:9999 with your server list (such as "server.domain.com:9999;11.22.33.44:8888;abc.xyz.io:7777;192.168.1.1:6666", quotes are not needed. The client program will try to access each server in the list in turn until it finds one that is available).
 2. Rename "InstallClient.bat.txt" to "InstallClient.bat", run it as administrator on the computers that need to be controlled.
 3. Run "ServerTestVB6GUI.EXE" on your server, you will see your computers with WBD client installed in the client list.
 4. Select a client, then click the "Connect" button. When the status changes to "Connected", you can submit operations.
