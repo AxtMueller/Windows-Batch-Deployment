@@ -36,8 +36,11 @@ shutdown /f /r /t 0
 
 # All revision history
 ### Client Versions:
-#### 8th version: 20230213
+#### 9th version: 20260106
 [This is the latest version.](../README.md#revision-history)
+#### 8th version: 20230213
+New feature: Process operations.  
+New feature: Disk operations.
 #### 7th version: 20210620
 Bug fix: The server address cannot be configured after installation (before reboot).  
 New file: I re-uploaded the client programs on November 11, 2021 because I signed the client programs with another digital certificate.
@@ -58,8 +61,10 @@ Bug fix: Enhanced stability.
 #### 1st version: 20200202
 This is the first public version.
 ### Server Versions:
-#### 4th version: 20230213
+#### 5th version: 20260106
 [This is the latest version.](../README.md#revision-history)
+#### 4th version: 20230213
+Functions of process and disk operations.
 #### 3rd version: 20210212
 New feature: File transfer progress callback.
 #### 2nd version: 20210130
