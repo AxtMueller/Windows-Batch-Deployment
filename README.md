@@ -55,7 +55,7 @@ These screenshots are from the server programs (EXE edition and WEB edition). Th
 3. Source code (WBD only): Complete source code of WBD, including client and server.
 4. Source code (WBD & Client Installer): The services of the previous entry, and an installer that can install WBD client without triggering Windows Defender security warnings.
 
-# [Revision History](/binaries/README.md#all-revision-history)
+# [Revision History](/binaries/README.md#revision-history)
 ### Client Version: 20260106
 Bug fix: Self protection does not work on the latest Windows.
 ### Server Version: 20260106
