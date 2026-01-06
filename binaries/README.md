@@ -64,7 +64,7 @@ This is the first public version.
 #### 5th version: 20260106
 [This is the latest version.](../README.md#revision-history)
 #### 4th version: 20230213
-Functions of process and disk operations.
+New feature: Functions of process and disk operations.
 #### 3rd version: 20210212
 New feature: File transfer progress callback.
 #### 2nd version: 20210130
